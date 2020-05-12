@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+// Apollo
+import { useMutation } from '@apollo/react-hooks';
+import { MUTAION_UPDATEUSER } from '../../apollo/mutation';
 
 // Redux
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateClient } from '../../redux/actions/clientActions';
 
 // Moment
 import moment from 'moment';
@@ -15,6 +20,7 @@ import Head from 'next/head';
 import MaterialTable from 'material-table';
 
 const MbClient = () => {
+  const action = useDispatch();
   const columnTitle = [
     {
       title: 'รูปภาพ',
@@ -25,14 +31,19 @@ const MbClient = () => {
           style={{ width: 40, borderRadius: '50%' }}
         />
       ),
+      editable: 'never',
     },
     { title: 'ชื่อ', field: 'firstName' },
     { title: 'นามสกุล', field: 'lastName' },
     {
+      title: 'อีเมล',
+      field: 'email',
+    },
+    {
       title: 'เบอร์',
       field: 'phone',
     },
-    { title: 'เป็นสมาชิกเมื่อ', field: 'createdAt' },
+    { title: 'เป็นสมาชิกเมื่อ', field: 'createdAt', editable: 'never' },
     {
       title: 'สถานะ',
       field: 'state',
@@ -69,6 +80,30 @@ const MbClient = () => {
     return clientData;
   });
 
+  const [updateUser, { loading, data }] = useMutation(MUTAION_UPDATEUSER, {
+    onCompleted: async (data) => {
+      await action(updateClient(data.updateUser));
+      await setState(() => {
+        let clientData = [];
+        newestClients.map((client) => {
+          let formUserData = {
+            id: client.id,
+            lineId: client.lineId,
+            pictureUrl: client.pictureUrl,
+            firstName: client.firstName,
+            lastName: client.lastName,
+            phone: client.phone,
+            email: client.email,
+            createdAt: moment(client.createdAt).format('DD/MMM/YY'),
+            state: client.state,
+          };
+          clientData.push(formUserData);
+        });
+        return clientData;
+      });
+    },
+  });
+
   return (
     <React.Fragment>
       <Head>
@@ -95,25 +130,34 @@ const MbClient = () => {
         editable={{
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve) => {
-              setTimeout(() => {
-                resolve();
-                if (oldData) {
-                  setState((prevState) => {
-                    const data = [...prevState.data];
-                    data[data.indexOf(oldData)] = newData;
-                    return { ...prevState, data };
-                  });
-                }
-              }, 600);
+              resolve();
+              if (!oldData || newData === oldData) {
+                return;
+              }
+              updateUser({
+                variables: {
+                  id: newData.id,
+                  lineId: newData.lineId,
+                  firstName: newData.firstName
+                    ? newData.firstName
+                    : oldData.firstName,
+                  lastName: newData.lastName
+                    ? newData.lastName
+                    : oldData.lastName,
+                  phone: newData.phone ? newData.phone : oldData.phone,
+                  email: newData.email ? newData.email : oldData.email,
+                },
+              });
             }),
         }}
         actions={[
           {
-            tooltip: 'ส่งข้อความ',
+            tooltip: 'ส่งข้อความ LINE',
             icon: 'send',
             onClick: (evt, data) => {
-              console.log(evt);
-              console.log(data);
+              // TODO: send line msg
+              console.log('send evt', evt);
+              console.log('send data', data);
             },
           },
         ]}

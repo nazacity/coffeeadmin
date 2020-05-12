@@ -278,7 +278,7 @@ const TopNavbar = () => {
                   fontSize="small"
                 />
               </ListItemIcon>
-              <Typography variant="inherit">USER INFOMATION</Typography>
+              <Typography variant="inherit">พนักงาน</Typography>
             </Link>
           </MenuItem>
           <Divider style={{ width: '60%', margin: '00px auto' }} />

@@ -1,6 +1,38 @@
 require('dotenv').config();
+const withOffline = require('next-offline');
 
-module.exports = {
+const nextConfig = {
+  generateInDevMode: true,
+  workboxOpts: {
+    maximumFileSizeToCacheInBytes: 10000000,
+    swDest: process.env.NEXT_EXPORT
+      ? 'service-worker.js'
+      : 'static/service-worker.js',
+    runtimeCaching: [
+      {
+        urlPattern: /.*(?:googleapis)\.com.*$/,
+        handler: 'CacheFirst',
+      },
+      {
+        urlPattern: /.*(?:profile)\.line.*$/,
+        handler: 'CacheFirst',
+      },
+      {
+        urlPattern: /\.(?:png|jpg|jpeg|svg|css)$/,
+        handler: 'CacheFirst',
+      },
+    ],
+  },
+  experimental: {
+    async rewrites() {
+      return [
+        {
+          source: '/service-worker.js',
+          destination: '/_next/static/service-worker.js',
+        },
+      ];
+    },
+  },
   env: {
     APOLLO_URL: process.env.APOLLO_URL,
     LINE_CLIENT_KEY: process.env.LINE_CLIENT_KEY,
@@ -10,3 +42,5 @@ module.exports = {
     OMISE_PUBLIC_KEY: process.env.OMISE_PUBLIC_KEY,
   },
 };
+
+module.exports = withOffline(nextConfig);

@@ -82,20 +82,22 @@ const NewClientReport = () => {
       users();
     }
     let clientData = [];
-    newestClients.slice(0, 5).map((client) => {
-      let formUserData = {
-        id: client.id,
-        lineId: client.lineId,
-        pictureUrl: client.pictureUrl,
-        firstName: client.firstName,
-        lastName: client.lastName,
-        phone: client.phone,
-        email: client.email,
-        createdAt: moment(client.createdAt).format('DD/MMM/YY'),
-        state: client.state,
-      };
-      clientData.push(formUserData);
-    });
+    newestClients
+      .slice(newestClients.length - 5, newestClients.length)
+      .map((client) => {
+        let formUserData = {
+          id: client.id,
+          lineId: client.lineId,
+          pictureUrl: client.pictureUrl,
+          firstName: client.firstName,
+          lastName: client.lastName,
+          phone: client.phone,
+          email: client.email,
+          createdAt: moment(client.createdAt).format('DD/MMM/YY'),
+          state: client.state,
+        };
+        clientData.push(formUserData);
+      });
     return clientData;
   });
 
@@ -113,7 +115,7 @@ const NewClientReport = () => {
         />
       </Head>
       <MaterialTable
-        title=""
+        title="สมาชิกใหม่"
         columns={columnTitle}
         data={state}
         options={{

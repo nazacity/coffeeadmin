@@ -111,7 +111,7 @@ const Chart = () => {
       <Card>
         <CardContent>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Typography>สินค้าขายดี</Typography>
+            <Typography>สินค้าขายดีประจำเดือน</Typography>
           </div>
         </CardContent>
         <div>

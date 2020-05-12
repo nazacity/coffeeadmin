@@ -54,7 +54,9 @@ export const QUERY_USERS = gql`
 export const QUERY_CATALOGS = gql`
   query QUERY_CATALOGS {
     catalogs {
+      id
       name
+      th
     }
   }
 `;
