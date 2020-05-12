@@ -9,10 +9,56 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           {/* PWA primary color */}
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
+          <meta name="application-name" content="PWA App" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="default"
+          />
+          <meta name="apple-mobile-web-app-title" content="Line Admin Page" />
+          <meta
+            name="description"
+            content="Full System Admin Page with Line sample"
+          />
+          <meta name="format-detection" content="telephone=no" />
+          <meta name="mobile-web-app-capable" content="yes" />
+
+          <meta name="msapplication-TileColor" content="#2B5797" />
+          <meta name="msapplication-tap-highlight" content="no" />
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+          />
+
+          <link
+            rel="apple-touch-icon"
+            sizes="256x256"
+            href="/icons/icon_256x256.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/icons/icon_96x96.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/icons/icon_96x96.png"
+          />
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="mask-icon" href="/images/logo/logo.png" color="#5bbad5" />
+          <link rel="shortcut icon" href="/images/logo/logo.png" />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
           />
         </Head>
         <body style={{ margin: 0 }}>

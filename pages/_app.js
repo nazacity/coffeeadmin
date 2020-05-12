@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import apolloClient from '../apollo/apolloClient';
-import fetch from 'isomorphic-unfetch';
 
 // Framer-motion
 import { AnimatePresence } from 'framer-motion';

@@ -1,5 +1,3 @@
-import fetch from 'isomorphic-unfetch';
-
 export const getData = async (METHOD) => {
   const uri = process.env.APOLLO_URL;
   const response = await fetch(uri, {
