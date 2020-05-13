@@ -59,20 +59,22 @@ const NewClientReport = () => {
     onCompleted: (data) => {
       action(setClient(data.users));
       let clientData = [];
-      data.users.slice(0, 5).map((client) => {
-        let formUserData = {
-          id: client.id,
-          lineId: client.lineId,
-          pictureUrl: client.pictureUrl,
-          firstName: client.firstName,
-          lastName: client.lastName,
-          phone: client.phone,
-          email: client.email,
-          createdAt: moment(client.createdAt).format('DD/MMM/YY'),
-          state: client.state,
-        };
-        clientData.push(formUserData);
-      });
+      data.users
+        .slice(data.users.length - 5, data.users.length)
+        .map((client) => {
+          let formUserData = {
+            id: client.id,
+            lineId: client.lineId,
+            pictureUrl: client.pictureUrl,
+            firstName: client.firstName,
+            lastName: client.lastName,
+            phone: client.phone,
+            email: client.email,
+            createdAt: moment(client.createdAt).format('DD/MMM/YY'),
+            state: client.state,
+          };
+          clientData.push(formUserData);
+        });
       setState(clientData);
     },
   });
@@ -82,22 +84,20 @@ const NewClientReport = () => {
       users();
     }
     let clientData = [];
-    newestClients
-      .slice(newestClients.length - 5, newestClients.length)
-      .map((client) => {
-        let formUserData = {
-          id: client.id,
-          lineId: client.lineId,
-          pictureUrl: client.pictureUrl,
-          firstName: client.firstName,
-          lastName: client.lastName,
-          phone: client.phone,
-          email: client.email,
-          createdAt: moment(client.createdAt).format('DD/MMM/YY'),
-          state: client.state,
-        };
-        clientData.push(formUserData);
-      });
+    newestClients.slice(0, 5).map((client) => {
+      let formUserData = {
+        id: client.id,
+        lineId: client.lineId,
+        pictureUrl: client.pictureUrl,
+        firstName: client.firstName,
+        lastName: client.lastName,
+        phone: client.phone,
+        email: client.email,
+        createdAt: moment(client.createdAt).format('DD/MMM/YY'),
+        state: client.state,
+      };
+      clientData.push(formUserData);
+    });
     return clientData;
   });
 

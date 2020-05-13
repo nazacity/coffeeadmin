@@ -4,7 +4,7 @@ const withOffline = require('next-offline');
 const nextConfig = {
   generateInDevMode: true,
   workboxOpts: {
-    maximumFileSizeToCacheInBytes: 10000000,
+    maximumFileSizeToCacheInBytes: 15000000,
     swDest: process.env.NEXT_EXPORT
       ? 'service-worker.js'
       : 'static/service-worker.js',

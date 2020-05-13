@@ -17,12 +17,12 @@ const clientReducer = (state = INITIAL_STATE, action) => {
   let newProducts;
   switch (action.type) {
     case SET_PRODUCT:
-      if (action.payload === null) {
+      if (action.payload === undefined) {
         return state;
       }
       return { ...state, products: [...action.payload] };
     case SET_CATALOG:
-      if (action.payload === null) {
+      if (action.payload === undefined) {
         return state;
       }
       return { ...state, catalogs: [...action.payload] };

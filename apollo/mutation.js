@@ -128,3 +128,34 @@ export const MUTAION_DELETEPRODUCT = gql`
     }
   }
 `;
+
+export const MUTAION_CREATEPROMOTION = gql`
+  mutation MUTAION_CREATEPROMOTION(
+    $title: String
+    $detail: String
+    $products: [String]!
+    $price: Float
+  ) {
+    createPromotion(
+      title: $title
+      detail: $detail
+      products: $products
+      price: $price
+    ) {
+      id
+      title
+      detail
+      pictureUrl
+      products {
+        id
+        name
+        description
+        price
+        pictureUrl
+        catalog
+        createdAt
+      }
+      price
+    }
+  }
+`;

@@ -140,25 +140,15 @@ const QUERY_USERS = {
   `,
 };
 
-export const getServerSideProps = async ({ req, res }) => {
-  const { headers } = req;
+MyApp.getInitialProps = async ({ ctx, router }) => {
+  if (process.browser) {
+    return __NEXT_DATA__.props.pageProps;
+  }
+  const { headers } = ctx.req;
 
   const cookies = headers && cookie.parse(headers.cookie || '');
 
   const accessToken = cookies && cookies.accessToken;
-
-  if (!accessToken) {
-    if (
-      router.pathname === '/client' ||
-      router.pathname === '/product' ||
-      router.pathname === '/report' ||
-      router.pathname === '/promotion'
-    ) {
-      res.writeHead(302, { Location: '/' });
-      res.end();
-      return null;
-    }
-  }
 
   const uri = process.env.APOLLO_URL;
   if (accessToken) {
@@ -182,7 +172,7 @@ export const getServerSideProps = async ({ req, res }) => {
       const user = await responseUser.json();
       const users = await responeUsers.json();
 
-      return { prop: { user: user.data.user, client: users.data.users } };
+      return { user: user.data.user, client: users.data.users };
     } else {
       if (
         router.pathname === '/client' ||
@@ -190,8 +180,8 @@ export const getServerSideProps = async ({ req, res }) => {
         router.pathname === '/report' ||
         router.pathname === '/promotion'
       ) {
-        res.writeHead(302, { Location: '/' });
-        res.end();
+        ctx.res.writeHead(302, { Location: '/' });
+        ctx.res.end();
         return null;
       }
       return null;

@@ -40,3 +40,26 @@ export const QUERY_CATALOGS = {
   }
   `,
 };
+
+export const QUERY_PROMOTIONS = {
+  query: `
+  query{
+    promotion{
+      id
+      title
+      detail
+      pictureUrl
+      products{
+        id
+        name
+        description
+        price
+        pictureUrl
+        catalog
+        createdAt
+      }
+      price
+    }
+  }
+  `,
+};
