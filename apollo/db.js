@@ -1,5 +1,6 @@
 export const getData = async (METHOD) => {
   const uri = process.env.APOLLO_URL;
+
   const response = await fetch(uri, {
     method: 'post',
     headers: {
@@ -59,6 +60,31 @@ export const QUERY_PROMOTIONS = {
         createdAt
       }
       price
+    }
+  }
+  `,
+};
+
+export const QUERY_EMPLOYEES = {
+  query: `
+  query{
+    employees{
+      id
+      user{
+        id
+        firstName
+        lastName
+        phone
+        email
+        pictureUrl
+        lineId
+        state
+      }
+      state
+      position
+      pin
+      IDcardPictureUrl
+      createdAt
     }
   }
   `,

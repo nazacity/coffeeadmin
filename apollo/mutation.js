@@ -159,3 +159,38 @@ export const MUTAION_CREATEPROMOTION = gql`
     }
   }
 `;
+
+export const MUTAION_UPDATEEMPLOYEE = gql`
+  mutation MUTAION_CREATEPROMOTION(
+    $id: ID!
+    $IDcardPictureUrl: String
+    $state: String
+    $pin: String
+    $position: String
+  ) {
+    updateEmployee(
+      id: $id
+      IDcardPictureUrl: $IDcardPictureUrl
+      state: $state
+      pin: $pin
+      position: $position
+    ) {
+      id
+      user {
+        id
+        firstName
+        lastName
+        phone
+        email
+        pictureUrl
+        lineId
+        state
+      }
+      state
+      position
+      pin
+      IDcardPictureUrl
+      createdAt
+    }
+  }
+`;

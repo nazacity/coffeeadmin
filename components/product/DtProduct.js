@@ -30,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     marginBottom: '10px',
   },
-  TextFieldRoot: {
-    margin: '2vh',
-  },
   logo: {
     width: '300px',
     height: '300px',
@@ -69,6 +66,7 @@ const defaultValues = {
 };
 
 const DtProduct = () => {
+  const theme = useTheme();
   const { control, handleSubmit, reset, errors } = useForm();
   const action = useDispatch();
   const classes = useStyles();
@@ -91,9 +89,11 @@ const DtProduct = () => {
     });
   };
   return (
-    <div>
-      <Card style={{ margin: '2vh' }}>
-        <Typography>เพิ่มประเภทสินค้า</Typography>
+    <div style={{ maxWidth: theme.layer.maxwidth, margin: 'auto' }}>
+      <Card style={{ margin: '2vh auto', width: '50%', padding: '2vh' }}>
+        <Typography align="center" variant="h4">
+          เพิ่มประเภทสินค้า
+        </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
             <Controller
@@ -109,7 +109,7 @@ const DtProduct = () => {
               error={errors.name && true}
               helperText={errors.name?.message}
               size="small"
-              classes={{ root: classes.TextFieldRoot }}
+              style={{ width: '100%', marginBottom: '1vh' }}
               disabled={loading}
             />
             <Controller
@@ -125,11 +125,11 @@ const DtProduct = () => {
               error={errors.th && true}
               helperText={errors.th?.message}
               size="small"
-              classes={{ root: classes.TextFieldRoot }}
+              style={{ width: '100%', marginBottom: '1vh' }}
               disabled={loading}
             />
           </CardContent>
-          <CardActions>
+          <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               type="submit"
               variant="contained"

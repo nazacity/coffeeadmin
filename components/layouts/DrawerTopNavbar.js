@@ -61,13 +61,13 @@ const DrawerTopNavbar = () => {
 
   const adminMenuOptions = [
     {
-      name: 'report',
+      name: 'รายงาน',
       link: '/report',
       selectedIndex: 1,
       icon: <Icon className="fas fa-file-medical-alt" />,
     },
     {
-      name: 'Client',
+      name: 'ลูกค้า',
       link: '/client',
       selectedIndex: 2,
       icon: (
@@ -79,7 +79,7 @@ const DrawerTopNavbar = () => {
       ),
     },
     {
-      name: 'Product',
+      name: 'สินค้า',
       link: '/product',
       selectedIndex: 3,
       icon: (
@@ -91,7 +91,7 @@ const DrawerTopNavbar = () => {
       ),
     },
     {
-      name: 'Promotion',
+      name: 'โปรโมชั่น',
       link: '/promotion',
       selectedIndex: 4,
       icon: <Icon className="fas fa-smile-wink" fontSize="small" />,
@@ -137,7 +137,7 @@ const DrawerTopNavbar = () => {
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
-          <ListItemText primary="Dashboard" />
+          <ListItemText primary="หน้าแรก" />
         </ListItem>
         {user.state == 'admin' &&
           adminMenuOptions.map((menu, index) => (
@@ -194,7 +194,7 @@ const DrawerTopNavbar = () => {
               <AccountCircleIcon />
             )}
           </ListItemIcon>
-          <ListItemText primary="User Information" />
+          <ListItemText primary="ข้อมูลผู้ใช้งาน" />
         </ListItem>
       </List>
       <Divider />

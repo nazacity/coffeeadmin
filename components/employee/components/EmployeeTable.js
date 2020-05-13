@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
-import { MUTAION_UPDATEUSER } from '../../apollo/mutation';
+import { MUTAION_UPDATEEMPLOYEE } from '../../../apollo/mutation';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { updateClient } from '../../redux/actions/clientActions';
+import { updateEmployees } from '../../../redux/actions/employeeActions';
 
 // Moment
 import moment from 'moment';
@@ -19,90 +19,107 @@ import Head from 'next/head';
 // MUI
 import MaterialTable from 'material-table';
 
-const MbClient = () => {
+const EmployeeTable = () => {
   const action = useDispatch();
   const columnTitle = [
     {
       title: 'รูปภาพ',
-      field: 'pictureUrl',
+      field: 'user.pictureUrl',
       render: (rowData) => (
         <img
-          src={rowData.pictureUrl}
+          src={rowData.user.pictureUrl}
           style={{ width: 40, borderRadius: '50%' }}
         />
       ),
       editable: 'never',
     },
-    { title: 'ชื่อ', field: 'firstName' },
-    { title: 'นามสกุล', field: 'lastName' },
-    {
-      title: 'อีเมล',
-      field: 'email',
-    },
+    { title: 'ชื่อ', field: 'user.firstName' },
+    { title: 'นามสกุล', field: 'user.lastName' },
     {
       title: 'เบอร์',
-      field: 'phone',
+      field: 'user.phone',
     },
-    { title: 'เป็นสมาชิกเมื่อ', field: 'createdAt', editable: 'never' },
     {
       title: 'สถานะ',
-      field: 'state',
+      field: 'user.state',
       lookup: {
         admin: 'ผู้ดูแล',
         employee: 'พนักงาน',
-        client0: 'ลูกค้ายังไม่ได้ลงทะเบียน',
-        client1: 'ลูกค้าไม่เคยซื้อสินค้า',
-        client2: 'ลูกค้า',
+      },
+    },
+    {
+      title: 'ตำแหน่ง',
+      field: 'position',
+      lookup: {
+        admin: 'ผู้ดูแล',
+        manager: 'ผู้จัดการ',
+        waiter: 'พนักงานเสิร์ฟ',
+        chef: 'พ่อครัว',
+      },
+    },
+    {
+      title: 'การทำงาน',
+      field: 'state',
+      lookup: {
+        work: 'ทำงาน',
+        leave: 'ลา',
+        out: 'สิ้นสถานะพนักงาน',
       },
     },
   ];
-  const clients = useSelector((state) => state.clients);
-  const newestClients = clients.sort((a, b) => {
-    return b.createdAt - a.createdAt;
-  });
+  const employees = useSelector((state) => state.employees);
 
   const [state, setState] = useState(() => {
-    let clientData = [];
-    newestClients.map((client) => {
+    let employeeData = [];
+    employees.map((employee) => {
       let formUserData = {
-        id: client.id,
-        lineId: client.lineId,
-        pictureUrl: client.pictureUrl,
-        firstName: client.firstName,
-        lastName: client.lastName,
-        phone: client.phone,
-        email: client.email,
-        createdAt: moment(client.createdAt).format('DD/MMM/YY'),
-        state: client.state,
+        id: employee.id,
+        user: {
+          lineId: employee.user.lineId,
+          pictureUrl: employee.user.pictureUrl,
+          firstName: employee.user.firstName,
+          lastName: employee.user.lastName,
+          phone: employee.user.phone,
+          state: employee.user.state,
+        },
+        state: employee.state,
+        IDcardPictureUrl: employee.IDcardPictureUrl,
+        position: employee.position,
       };
-      clientData.push(formUserData);
+      employeeData.push(formUserData);
     });
-    return clientData;
+    return employeeData;
   });
 
-  const [updateUser, { loading, data }] = useMutation(MUTAION_UPDATEUSER, {
-    onCompleted: async (data) => {
-      await action(updateClient(data.updateUser));
-      await setState(() => {
-        let clientData = [];
-        newestClients.map((client) => {
-          let formUserData = {
-            id: client.id,
-            lineId: client.lineId,
-            pictureUrl: client.pictureUrl,
-            firstName: client.firstName,
-            lastName: client.lastName,
-            phone: client.phone,
-            email: client.email,
-            createdAt: moment(client.createdAt).format('DD/MMM/YY'),
-            state: client.state,
-          };
-          clientData.push(formUserData);
+  const [updateEmployee, { loading, data }] = useMutation(
+    MUTAION_UPDATEEMPLOYEE,
+    {
+      onCompleted: async (data) => {
+        await action(updateEmployees(data.updateEmployee));
+        await setState(() => {
+          let employeeData = [];
+          employees.map((employee) => {
+            let formUserData = {
+              id: employee.id,
+              user: {
+                lineId: employee.user.lineId,
+                pictureUrl: employee.user.pictureUrl,
+                firstName: employee.user.firstName,
+                lastName: employee.user.lastName,
+                phone: employee.user.phone,
+                state: employee.user.state,
+              },
+              state: employee.state,
+              IDcardPictureUrl: employee.IDcardPictureUrl,
+              position: employee.position,
+            };
+            employeeData.push(formUserData);
+          });
+          return employeeData;
         });
-        return clientData;
-      });
-    },
-  });
+      },
+    }
+  );
 
   return (
     <React.Fragment>
@@ -134,19 +151,17 @@ const MbClient = () => {
               if (!oldData || newData === oldData) {
                 return;
               }
-              updateUser({
+              updateEmployee({
                 variables: {
                   id: newData.id,
-                  lineId: newData.lineId,
-                  firstName: newData.firstName
-                    ? newData.firstName
-                    : oldData.firstName,
-                  lastName: newData.lastName
-                    ? newData.lastName
-                    : oldData.lastName,
-                  phone: newData.phone ? newData.phone : oldData.phone,
-                  email: newData.email ? newData.email : oldData.email,
                   state: newData.state ? newData.state : oldData.state,
+                  position: newData.position
+                    ? newData.position
+                    : oldData.position,
+                  pin: newData.pin ? newData.pin : oldData.pin,
+                  IDcardPictureUrl: newData.IDcardPictureUrl
+                    ? newData.IDcardPictureUrl
+                    : oldData.IDcardPictureUrl,
                 },
               });
             }),
@@ -191,4 +206,4 @@ const MbClient = () => {
   );
 };
 
-export default MbClient;
+export default EmployeeTable;

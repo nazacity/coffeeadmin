@@ -270,7 +270,7 @@ const TopNavbar = () => {
           <MenuItem
             style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
           >
-            <Link href="/user" onClick={handleClose}>
+            <Link href="/employee" onClick={handleClose}>
               <ListItemIcon>
                 <Icon
                   className="fas fa-user"
@@ -280,19 +280,6 @@ const TopNavbar = () => {
               </ListItemIcon>
               <Typography variant="inherit">พนักงาน</Typography>
             </Link>
-          </MenuItem>
-          <Divider style={{ width: '60%', margin: '00px auto' }} />
-          <MenuItem>
-            <ListItemIcon>
-              <Icon
-                className="fas fa-smile-wink"
-                color="primary"
-                fontSize="small"
-              />
-            </ListItemIcon>
-            <Typography variant="inherit" color="primary">
-              PROMOTION
-            </Typography>
           </MenuItem>
           <Divider style={{ width: '60%', margin: '00px auto' }} />
           <MenuItem
@@ -309,7 +296,7 @@ const TopNavbar = () => {
               />
             </ListItemIcon>
             <Typography variant="inherit" color="primary">
-              SIGN OUT
+              ลงชื่อออก
             </Typography>
           </MenuItem>
         </Menu>

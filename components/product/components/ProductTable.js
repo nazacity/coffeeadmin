@@ -36,6 +36,7 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
   top: {
@@ -52,6 +53,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProductTable = () => {
+  const matches1024down = useMediaQuery('(max-width:1024px)');
+  const theme = useTheme();
   const classes = useStyles();
   const catalogs = useSelector((state) => state.products.catalogs);
   const [lookup, setLookup] = useState({});
@@ -371,7 +374,10 @@ const ProductTable = () => {
             hidden: !rowData.pictureUrl,
           }),
         ]}
-        style={{ border: 'none', boxShadow: 'none', marginBottom: '100px' }}
+        style={{
+          boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
+          marginBottom: '100px',
+        }}
       />
     </React.Fragment>
   );

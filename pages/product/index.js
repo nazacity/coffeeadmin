@@ -46,7 +46,7 @@ export const getStaticProps = async () => {
   const resultCatalogs = await getData(QUERY_CATALOGS);
   let products = resultProducts.data.products;
   let catalogs = resultCatalogs.data.catalogs;
-
+  console.log(resultProducts);
   // let result = [];
   // catalogs.map((catalog, i) => {
   //   result.push({

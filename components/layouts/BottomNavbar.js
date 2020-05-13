@@ -93,13 +93,13 @@ const BottomNavbar = () => {
 
   const adminMenuOptions = [
     {
-      name: 'report',
+      name: 'รายงาน',
       link: '/report',
       selectedIndex: 1,
       icon: <Icon className="fas fa-file-medical-alt" />,
     },
     {
-      name: 'Client',
+      name: 'ลูกค้า',
       link: '/client',
       selectedIndex: 2,
       icon: (
@@ -111,7 +111,7 @@ const BottomNavbar = () => {
       ),
     },
     {
-      name: 'Product',
+      name: 'สินค้า',
       link: '/product',
       selectedIndex: 3,
       icon: (
@@ -123,7 +123,7 @@ const BottomNavbar = () => {
       ),
     },
     {
-      name: 'Promotion',
+      name: 'โปรโมชั่น',
       link: '/promotion',
       selectedIndex: 4,
       icon: <Icon className="fas fa-smile-wink" fontSize="small" />,
@@ -181,7 +181,7 @@ const BottomNavbar = () => {
           <BottomNavigationAction
             component={Link}
             href="/"
-            label="Home"
+            label="หน้าแรก"
             value={0}
             icon={<HomeIcon />}
             classes={{
@@ -287,7 +287,7 @@ const BottomNavbar = () => {
           <MenuItem
             style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
           >
-            <Link href="/user" onClick={handleClose}>
+            <Link href="/employee" onClick={handleClose}>
               <ListItemIcon>
                 <Icon
                   className="fas fa-user"
@@ -295,21 +295,8 @@ const BottomNavbar = () => {
                   fontSize="small"
                 />
               </ListItemIcon>
-              <Typography variant="inherit">EMPLOYEE</Typography>
+              <Typography variant="inherit">พนักงาน</Typography>
             </Link>
-          </MenuItem>
-          <Divider style={{ width: '60%', margin: '00px auto' }} />
-          <MenuItem>
-            <ListItemIcon>
-              <Icon
-                className="fas fa-smile-wink"
-                color="primary"
-                fontSize="small"
-              />
-            </ListItemIcon>
-            <Typography variant="inherit" color="primary">
-              PROMOTION
-            </Typography>
           </MenuItem>
           <Divider style={{ width: '60%', margin: '0px auto' }} />
           <MenuItem
@@ -326,7 +313,7 @@ const BottomNavbar = () => {
               />
             </ListItemIcon>
             <Typography variant="inherit" color="primary">
-              SIGN OUT
+              ลงชื่อออก
             </Typography>
           </MenuItem>
         </Menu>
