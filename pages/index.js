@@ -20,6 +20,9 @@ import { useMutation } from '@apollo/react-hooks';
 // MUI
 import Container from '@material-ui/core/Container';
 import Hidden from '@material-ui/core/Hidden';
+import { makeStyles } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // components
 import MbSignIn from '../components/homepage/signin/MbSignIn';
@@ -36,11 +39,24 @@ import queryString from 'query-string';
 
 import { MUTATION_SIGNINWITHACCESSTOKEN } from '../apollo/mutation';
 
+const useStyles = makeStyles((theme) => ({
+  top: {
+    color: theme.palette.primary.dark,
+    position: 'absolute',
+  },
+  bottom: {
+    color: theme.palette.primary.light,
+    animationDuration: '550ms',
+  },
+}));
+
 const HomePage = () => {
   const user = useSelector((state) => state.user);
   const userLoading = useSelector((state) => state.layout.userLoading);
-  const theme = useTheme();
+  const classes = useStyles();
+  const matches600down = useMediaQuery('(max-width:600px)');
   const action = useDispatch();
+  const theme = useTheme();
 
   const [signinWithAccessToken, { loading, error }] = useMutation(
     MUTATION_SIGNINWITHACCESSTOKEN,
@@ -53,6 +69,7 @@ const HomePage = () => {
   );
 
   const router = useRouter();
+
   useEffect(() => {
     if (router.query.code) {
       const lineRequest = {
@@ -91,18 +108,41 @@ const HomePage = () => {
   return (
     <React.Fragment>
       <Container maxWidth={false} style={{ margin: 0, padding: 0 }}>
-        {userLoading
-          ? 'loading...'
-          : user?.state === 'guess' && (
-              <React.Fragment>
-                <Hidden smDown>
-                  <DtSignIn />
-                </Hidden>
-                <Hidden mdUp>
-                  <MbSignIn />
-                </Hidden>
-              </React.Fragment>
-            )}
+        {user?.state === 'guess' && !userLoading && (
+          <React.Fragment>
+            <Hidden smDown>
+              <DtSignIn />
+            </Hidden>
+            <Hidden mdUp>
+              <MbSignIn />
+            </Hidden>
+          </React.Fragment>
+        )}
+        {userLoading && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%,-50%)',
+            }}
+          >
+            <CircularProgress
+              variant="determinate"
+              value={100}
+              className={classes.top}
+              size={matches600down ? 60 : 120}
+              thickness={4}
+            />
+            <CircularProgress
+              variant="indeterminate"
+              disableShrink
+              className={classes.bottom}
+              size={matches600down ? 60 : 120}
+              thickness={4}
+            />
+          </div>
+        )}
         <Hidden smDown>
           <motion.div
             style={{

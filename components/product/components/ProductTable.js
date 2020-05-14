@@ -32,8 +32,6 @@ import Head from 'next/head';
 // MUI
 import { useTheme } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -102,7 +100,6 @@ const ProductTable = () => {
           })
           .then(() => {
             setRow({});
-            setPictureUploading(false);
           });
       }
     );
@@ -227,6 +224,7 @@ const ProductTable = () => {
 
   const [updateProduct] = useMutation(MUTAION_UPDATERODUCT, {
     onCompleted: async (data) => {
+      await setPictureUploading(false);
       await action(updateProducts(data.updateProduct));
       let DATA = [];
       catalogData(DATA);

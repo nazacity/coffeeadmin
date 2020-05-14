@@ -267,10 +267,10 @@ const TopNavbar = () => {
           transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           style={{ top: '30px', left: '10px' }}
         >
-          <MenuItem
-            style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
-          >
-            <Link href="/employee" onClick={handleClose}>
+          <Link href="/employee" onClick={handleClose}>
+            <MenuItem
+              style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
+            >
               <ListItemIcon>
                 <Icon
                   className="fas fa-user"
@@ -279,8 +279,8 @@ const TopNavbar = () => {
                 />
               </ListItemIcon>
               <Typography variant="inherit">พนักงาน</Typography>
-            </Link>
-          </MenuItem>
+            </MenuItem>
+          </Link>
           <Divider style={{ width: '60%', margin: '00px auto' }} />
           <MenuItem
             onClick={() => {
