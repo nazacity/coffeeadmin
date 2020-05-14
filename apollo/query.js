@@ -88,14 +88,33 @@ export const QUERY_PRODUCT = gql`
 `;
 
 export const QUERY_ORDERS = gql`
-  query QUERY_ORDERS($id: String!) {
-    product(id: $id) {
+  query QUERY_ORDERS {
+    orders {
       id
-      name
-      description
-      pictureUrl
-      price
-      catalog
+      amount
+      discount
+      net
+      by
+      status
+      discount
+      place {
+        branch
+        table
+      }
+      user {
+        id
+        firstName
+        pictureUrl
+      }
+      items {
+        id
+        product {
+          id
+          name
+          pictureUrl
+        }
+        quantity
+      }
     }
   }
 `;

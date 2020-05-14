@@ -1,4 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { getUserByAccessToken, getUsersByAccessToken } from '../../apollo/db';
+
+// Redux
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/actions/userActions';
+import { setClient } from '../../redux/actions/clientActions';
 
 // MUI
 import Hidden from '@material-ui/core/Hidden';
@@ -7,7 +13,15 @@ import Hidden from '@material-ui/core/Hidden';
 import { motion } from 'framer-motion';
 import MbClient from '../../components/client/MbClient';
 
-const Client = () => {
+import cookie from 'cookie';
+
+const Client = ({ user, client }) => {
+  const action = useDispatch();
+  useEffect(() => {
+    action(setUser(user ? user : null));
+    action(setClient(client ? client : null));
+  }, [user, client]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -24,6 +38,23 @@ const Client = () => {
       </Hidden>
     </motion.div>
   );
+};
+
+export const getServerSideProps = async ({ req, res }) => {
+  const { headers } = req;
+
+  const cookies = headers && cookie.parse(headers.cookie || '');
+  const accessToken = cookies && cookies.accessToken;
+
+  if (!accessToken) {
+    res.writeHead(302, { Location: '/' });
+    res.end();
+    return { props: {} };
+  } else {
+    const user = await getUserByAccessToken(accessToken);
+    const client = await getUsersByAccessToken(accessToken);
+    return { props: { user, client } };
+  }
 };
 
 export default Client;

@@ -87,7 +87,6 @@ const EmployeeTable = () => {
   };
   const handleImageChange = (e) => {
     setPictureUploading(true);
-    console.log(row.id);
     const Image = e.target.files[0];
     if (!e.target.value.length) {
       setRow({});

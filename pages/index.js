@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { getUserByAccessToken, getUsersByAccessToken } from '../apollo/db';
 
 // MUI
 import { useTheme } from '@material-ui/core/styles';
@@ -9,6 +10,7 @@ import { motion } from 'framer-motion';
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../redux/actions/userActions';
+import { setClient } from '../redux/actions/clientActions';
 import { setUserLoading } from '../redux/actions/layoutActions';
 
 // Next
@@ -37,6 +39,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import queryString from 'query-string';
 
+// Other
+import cookie from 'cookie';
+
 import { MUTATION_SIGNINWITHACCESSTOKEN } from '../apollo/mutation';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,13 +55,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HomePage = () => {
+const HomePage = ({ userFromAccessToken, client }) => {
   const user = useSelector((state) => state.user);
   const userLoading = useSelector((state) => state.layout.userLoading);
   const classes = useStyles();
   const matches600down = useMediaQuery('(max-width:600px)');
   const action = useDispatch();
   const theme = useTheme();
+
+  useEffect(() => {
+    action(setClient(client ? client : null));
+  }, [client]);
 
   const [signinWithAccessToken, { loading, error }] = useMutation(
     MUTATION_SIGNINWITHACCESSTOKEN,
@@ -69,7 +78,10 @@ const HomePage = () => {
   );
 
   const router = useRouter();
-
+  useEffect(() => {
+    action(setUser(userFromAccessToken));
+    action(setUserLoading(false));
+  }, [userFromAccessToken]);
   useEffect(() => {
     if (router.query.code) {
       const lineRequest = {
@@ -96,6 +108,8 @@ const HomePage = () => {
           signinWithAccessToken({
             variables: {
               accessToken: res.data.access_token,
+              branch: 'online',
+              table: '',
             },
           });
         })
@@ -202,6 +216,21 @@ const HomePage = () => {
       </Container>
     </React.Fragment>
   );
+};
+
+export const getServerSideProps = async ({ req, res }) => {
+  const { headers } = req;
+
+  const cookies = headers && cookie.parse(headers.cookie || '');
+  const accessToken = cookies && cookies.accessToken;
+
+  if (!accessToken) {
+    return { props: {} };
+  } else {
+    const user = await getUserByAccessToken(accessToken);
+    const client = await getUsersByAccessToken(accessToken);
+    return { props: { userFromAccessToken: user, client } };
+  }
 };
 
 export default HomePage;

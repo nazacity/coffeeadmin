@@ -7,19 +7,24 @@ import Hidden from '@material-ui/core/Hidden';
 // Redux
 import { useDispatch } from 'react-redux';
 import { setEmployees } from '../../redux/actions/employeeActions';
+import { setUser } from '../../redux/actions/userActions';
 
 // Apollo
-import { getData, QUERY_EMPLOYEES } from '../../apollo/db';
+import {
+  getUserByAccessToken,
+  getEmployeesByAccessToken,
+} from '../../apollo/db';
 
 // framer motion
 import { motion } from 'framer-motion';
 import MbEmployee from '../../components/employee/MbEmployee';
 
-const index = ({ employees }) => {
+const index = ({ employees, user }) => {
   const action = useDispatch();
   useEffect(() => {
     action(setEmployees(employees));
-  }, [employees]);
+    action(setUser(user ? user : null));
+  }, [employees, user]);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -48,23 +53,15 @@ export const getServerSideProps = async ({ req, res }) => {
     const accessToken = cookies && cookies.accessToken;
     const uri = process.env.APOLLO_URL;
 
-    if (accessToken) {
-      const response = await fetch(uri, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `${accessToken}` || '',
-        },
-        body: JSON.stringify(QUERY_EMPLOYEES),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        let employees = result.data.employees;
-        return { props: { employees } };
-      }
+    if (!accessToken) {
+      res.writeHead(302, { Location: '/' });
+      res.end();
+      return { props: {} };
+    } else {
+      const user = await getUserByAccessToken(accessToken);
+      const employees = await getEmployeesByAccessToken(accessToken);
+      return { props: { user, employees } };
     }
-    return { props: {} };
   }
 };
 

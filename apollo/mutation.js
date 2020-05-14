@@ -1,8 +1,16 @@
 import gql from 'graphql-tag';
 
 export const MUTATION_SIGNINWITHACCESSTOKEN = gql`
-  mutation MUTATION_SIGNINWITHACCESSTOKEN($accessToken: String) {
-    signinWithAccessToken(accessToken: $accessToken) {
+  mutation MUTATION_SIGNINWITHACCESSTOKEN(
+    $accessToken: String
+    $branch: String
+    $table: String
+  ) {
+    signinWithAccessToken(
+      accessToken: $accessToken
+      branch: $branch
+      table: $table
+    ) {
       id
       lineId
       firstName
@@ -11,6 +19,10 @@ export const MUTATION_SIGNINWITHACCESSTOKEN = gql`
       phone
       pictureUrl
       state
+      place {
+        branch
+        table
+      }
       carts {
         id
         product {

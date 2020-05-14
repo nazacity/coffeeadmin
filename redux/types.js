@@ -32,3 +32,7 @@ export const UPDATE_PROMOTION = 'UPDATE_PROMOTION';
 // Employee
 export const SET_EMPLOYEES = 'SET_EMPLOYEES';
 export const UPDATE_EMPLOYEE = 'UPDATE_EMPLOYEE';
+
+// Order
+export const SET_ORDER = 'SET_ORDER';
+export const UPDATE_ORDER = 'UPDATE_ORDER';

@@ -242,7 +242,7 @@ const BottomNavbar = () => {
                   onClick={
                     user.state === 'guess' && userLoading === false
                       ? () => {
-                          route.push('/signin');
+                          route.push('/');
                         }
                       : user.state === 'client0' && userLoading === false
                       ? () => {
@@ -262,7 +262,7 @@ const BottomNavbar = () => {
             onClick={
               user.state === 'guess' && userLoading === false
                 ? () => {
-                    route.push('/signin');
+                    route.push('/');
                   }
                 : user.state === 'client0' && userLoading === false
                 ? () => {
@@ -296,6 +296,21 @@ const BottomNavbar = () => {
                 />
               </ListItemIcon>
               <Typography variant="inherit">พนักงาน</Typography>
+            </MenuItem>
+          </Link>
+          <Divider style={{ width: '60%', margin: '0px auto' }} />
+          <Link href="/order" onClick={handleClose}>
+            <MenuItem
+              style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
+            >
+              <ListItemIcon>
+                <Icon
+                  className="fas fa-user"
+                  color="primary"
+                  fontSize="small"
+                />
+              </ListItemIcon>
+              <Typography variant="inherit">รายการสั่งอาหาร</Typography>
             </MenuItem>
           </Link>
           <Divider style={{ width: '60%', margin: '0px auto' }} />

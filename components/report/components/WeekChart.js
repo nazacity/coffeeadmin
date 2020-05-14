@@ -13,7 +13,7 @@ const am = new Date().setHours(0, 0, 0, 0);
 const pm = new Date().setHours(14, 0, 0, 0);
 
 const data = {
-  labels: ['FOOD', 'DRINK', 'SWEET'],
+  labels: ['อาหาร', 'เครื่องดื่ม', 'ขนม'],
   datasets: [
     {
       backgroundColor: [

@@ -282,6 +282,21 @@ const TopNavbar = () => {
             </MenuItem>
           </Link>
           <Divider style={{ width: '60%', margin: '00px auto' }} />
+          <Link href="/order" onClick={handleClose}>
+            <MenuItem
+              style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
+            >
+              <ListItemIcon>
+                <Icon
+                  className="fas fa-user"
+                  color="primary"
+                  fontSize="small"
+                />
+              </ListItemIcon>
+              <Typography variant="inherit">รายการสั่งอาหาร</Typography>
+            </MenuItem>
+          </Link>
+          <Divider style={{ width: '60%', margin: '0px auto' }} />
           <MenuItem
             onClick={() => {
               action(userSignOut());

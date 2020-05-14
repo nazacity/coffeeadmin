@@ -35,7 +35,7 @@ Router.events.on('routeChangeStart', (url) => {
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
-const MyApp = ({ Component, pageProps, apollo, user, client }) => {
+const MyApp = ({ Component, pageProps, apollo }) => {
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -45,20 +45,6 @@ const MyApp = ({ Component, pageProps, apollo, user, client }) => {
   }, []);
 
   const router = useRouter();
-
-  useEffect(() => {
-    store.dispatch({
-      type: SET_USER,
-      payload: user ? user : null,
-    });
-  }, [user]);
-
-  useEffect(() => {
-    store.dispatch({
-      type: SET_CLIENT,
-      payload: client ? client : null,
-    });
-  }, [client]);
 
   return (
     <React.Fragment>
@@ -105,88 +91,68 @@ const MyApp = ({ Component, pageProps, apollo, user, client }) => {
   );
 };
 
-const QUERY_USER = {
-  query: `
-  query{
-    user{
-      id
-      firstName
-      lastName
-      email
-      phone
-      pictureUrl
-      state
-      createdAt
-    }
-  }
-  `,
-};
+// MyApp.getInitialProps = async ({ ctx, router }) => {
+//   if (process.browser) {
+//     return __NEXT_DATA__.props.pageProps;
+//   }
+//   const { headers } = ctx.req;
 
-const QUERY_USERS = {
-  query: `
-  query{
-    users{
-      id
-      lineId
-      firstName
-      lastName
-      email
-      phone
-      pictureUrl
-      state
-      createdAt
-    }
-  }
-  `,
-};
+//   const cookies = headers && cookie.parse(headers.cookie || '');
 
-MyApp.getInitialProps = async ({ ctx, router }) => {
-  if (process.browser) {
-    return __NEXT_DATA__.props.pageProps;
-  }
-  const { headers } = ctx.req;
+//   if (!accessToken) {
+//     if (
+//       router.pathname === '/client' ||
+//       router.pathname === '/product' ||
+//       router.pathname === '/report' ||
+//       router.pathname === '/promotion' ||
+//       router.pathname === '/employee'
+//     ) {
+//       ctx.res.writeHead(302, { Location: '/' });
+//       ctx.res.end();
+//       return null;
+//     }
+//   }
 
-  const cookies = headers && cookie.parse(headers.cookie || '');
+//   const accessToken = cookies && cookies.accessToken;
 
-  const accessToken = cookies && cookies.accessToken;
+//   const uri = process.env.APOLLO_URL;
+//   if (accessToken) {
+//     const responseUser = await fetch(uri, {
+//       method: 'post',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         authorization: `${accessToken}` || '',
+//       },
+//       body: JSON.stringify(QUERY_USER),
+//     });
+//     const responeUsers = await fetch(uri, {
+//       method: 'post',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         authorization: `${accessToken}` || '',
+//       },
+//       body: JSON.stringify(QUERY_USERS),
+//     });
+//     if (responseUser.ok && responeUsers.ok) {
+//       const user = await responseUser.json();
+//       const users = await responeUsers.json();
 
-  const uri = process.env.APOLLO_URL;
-  if (accessToken) {
-    const responseUser = await fetch(uri, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `${accessToken}` || '',
-      },
-      body: JSON.stringify(QUERY_USER),
-    });
-    const responeUsers = await fetch(uri, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `${accessToken}` || '',
-      },
-      body: JSON.stringify(QUERY_USERS),
-    });
-    if (responseUser.ok && responeUsers.ok) {
-      const user = await responseUser.json();
-      const users = await responeUsers.json();
-
-      return { user: user.data.user, client: users.data.users };
-    } else {
-      if (
-        router.pathname === '/client' ||
-        router.pathname === '/product' ||
-        router.pathname === '/report' ||
-        router.pathname === '/promotion'
-      ) {
-        ctx.res.writeHead(302, { Location: '/' });
-        ctx.res.end();
-        return null;
-      }
-      return null;
-    }
-  }
-};
+//       return { user: user.data.user, client: users.data.users };
+//     } else {
+//       if (
+//         router.pathname === '/client' ||
+//         router.pathname === '/product' ||
+//         router.pathname === '/report' ||
+//         router.pathname === '/promotion' ||
+//         router.pathname === '/employee'
+//       ) {
+//         ctx.res.writeHead(302, { Location: '/' });
+//         ctx.res.end();
+//         return null;
+//       }
+//       return null;
+//     }
+//   }
+// };
 
 export default apolloClient(MyApp);

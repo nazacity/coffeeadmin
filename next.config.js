@@ -23,16 +23,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    async rewrites() {
-      return [
-        {
-          source: '/service-worker.js',
-          destination: '/_next/static/service-worker.js',
-        },
-      ];
-    },
-  },
   env: {
     APOLLO_URL: process.env.APOLLO_URL,
     LINE_CLIENT_KEY: process.env.LINE_CLIENT_KEY,

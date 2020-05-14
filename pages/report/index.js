@@ -1,4 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { getUserByAccessToken } from '../../apollo/db';
+
+// Redux
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/actions/userActions';
 
 // MUI
 import Hidden from '@material-ui/core/Hidden';
@@ -10,7 +15,13 @@ import { motion } from 'framer-motion';
 import DtReport from '../../components/report/DtReport';
 import MbReport from '../../components/report/MbReport';
 
-const OrderList = () => {
+import cookie from 'cookie';
+
+const OrderList = ({ user }) => {
+  const action = useDispatch();
+  useEffect(() => {
+    action(setUser(user ? user : null));
+  }, [user]);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -25,6 +36,22 @@ const OrderList = () => {
       </Hidden>
     </motion.div>
   );
+};
+
+export const getServerSideProps = async ({ req, res }) => {
+  const { headers } = req;
+
+  const cookies = headers && cookie.parse(headers.cookie || '');
+  const accessToken = cookies && cookies.accessToken;
+
+  if (!accessToken) {
+    res.writeHead(302, { Location: '/' });
+    res.end();
+    return { props: {} };
+  } else {
+    const user = await getUserByAccessToken(accessToken);
+    return { props: { user } };
+  }
 };
 
 export default OrderList;
