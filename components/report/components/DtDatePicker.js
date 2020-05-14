@@ -43,7 +43,7 @@ const DtDatePicker = () => {
           placeholder="2018/10/10"
           value={startDate}
           onChange={(date) => {
-            action(setStartDate(parseFloat(date.format('x'))));
+            action(setStartDate(parseFloat(date.add(1, 'day').format('x'))));
           }}
           format="DD/MMM/YYYY"
         />
