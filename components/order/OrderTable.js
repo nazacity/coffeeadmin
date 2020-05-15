@@ -246,6 +246,7 @@ const OrderTable = () => {
                       margin: '1vh',
                       padding: '1vh',
                     }}
+                    key={item.id}
                   >
                     <Avatar
                       src={item.product.pictureUrl}

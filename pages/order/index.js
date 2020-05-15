@@ -11,7 +11,7 @@ import { getData, QUERY_ORDERS, getUserByAccessToken } from '../../apollo/db';
 import Hidden from '@material-ui/core/Hidden';
 
 // Components
-import OrderTable from '../../components/order/orderTable';
+import OrderTable from '../../components/order/OrderTable';
 
 // framer motion
 import { motion } from 'framer-motion';

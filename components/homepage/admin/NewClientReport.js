@@ -50,56 +50,34 @@ const NewClientReport = () => {
       },
     },
   ];
-  const clients = useSelector((state) => state.clients);
-  const newestClients = clients.sort((a, b) => {
-    return b.createdAt - a.createdAt;
-  });
+
   const action = useDispatch();
   const { users, loading, data } = useQuery(QUERY_USERS, {
     onCompleted: (data) => {
       action(setClient(data.users));
       let clientData = [];
-      data.users
-        .slice(data.users.length - 5, data.users.length)
-        .map((client) => {
-          let formUserData = {
-            id: client.id,
-            lineId: client.lineId,
-            pictureUrl: client.pictureUrl,
-            firstName: client.firstName,
-            lastName: client.lastName,
-            phone: client.phone,
-            email: client.email,
-            createdAt: moment(client.createdAt).format('DD/MMM/YY'),
-            state: client.state,
-          };
-          clientData.push(formUserData);
-        });
+      let newestUsers = data.users.sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      });
+      newestUsers.slice(0, 5).map((client) => {
+        let formUserData = {
+          id: client.id,
+          lineId: client.lineId,
+          pictureUrl: client.pictureUrl,
+          firstName: client.firstName,
+          lastName: client.lastName,
+          phone: client.phone,
+          email: client.email,
+          createdAt: moment(client.createdAt).format('DD/MMM/YY'),
+          state: client.state,
+        };
+        clientData.push(formUserData);
+      });
       setState(clientData);
     },
   });
 
-  const [state, setState] = useState(() => {
-    if (clients === []) {
-      users();
-    }
-    let clientData = [];
-    newestClients.slice(0, 5).map((client) => {
-      let formUserData = {
-        id: client.id,
-        lineId: client.lineId,
-        pictureUrl: client.pictureUrl,
-        firstName: client.firstName,
-        lastName: client.lastName,
-        phone: client.phone,
-        email: client.email,
-        createdAt: moment(client.createdAt).format('DD/MMM/YY'),
-        state: client.state,
-      };
-      clientData.push(formUserData);
-    });
-    return clientData;
-  });
+  const [state, setState] = useState(() => users);
 
   return (
     <React.Fragment>

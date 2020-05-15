@@ -1,4 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import moment from 'moment';
+
+// Apollo
+import { useQuery } from '@apollo/react-hooks';
+import { QUERY_SALEDAILY } from '../../../apollo/query';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,7 +13,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
-import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Components
 import MotionSlider from '../../homepage/admin/motionslider';
@@ -36,108 +41,111 @@ const useStyles = makeStyles((theme) => ({
     left: '10%',
     transform: 'scale(1.3) translate(-50%, -50%)',
   },
+  top: {
+    color: theme.palette.primary.dark,
+    position: 'absolute',
+  },
+  bottom: {
+    color: theme.palette.primary.light,
+    animationDuration: '550ms',
+  },
 }));
-
-const ProductSaleData = [
-  {
-    id: '5eac57a18d396b1ba0dd0b71',
-    name: 'อเมริกาโน่ร้อน',
-    pictureUrl:
-      'https://drive.google.com/uc?id=1LKpBqxy9dFsGqOXycIVIUh3ozWIv2w-F',
-    quantity: 10,
-  },
-  {
-    id: '5eac58538d396b1ba0dd0b7a',
-    name: 'แซนวิท2',
-    pictureUrl:
-      'https://drive.google.com/uc?id=1yZ0YYgKaYF-vN9L6ISGt56KkeuoGHH-a',
-    quantity: 12,
-  },
-  {
-    id: '5eac58a28d396b1ba0dd0b7f',
-    name: 'เค้ก2',
-    pictureUrl:
-      'https://drive.google.com/uc?id=108RXwxklmEB9pJzfjX5wROuyR_gR-b4N',
-    quantity: 8,
-  },
-  {
-    id: '5eac57c78d396b1ba0dd0b72',
-    name: 'เอสเพสโซ่ร้อน',
-    pictureUrl:
-      'https://drive.google.com/uc?id=18rm7H254wL6ITMP5gLBVdGbpcQj85Bg1',
-    quantity: 9,
-  },
-  {
-    id: '5eac587e8d396b1ba0dd0b7d',
-    name: 'สเต็ก2',
-    pictureUrl:
-      'https://drive.google.com/uc?id=14NLlG4a_mgPul6Eyz5n04N4FjnMJ4j1g',
-    quantity: 6,
-  },
-  {
-    id: '5eac58618d396b1ba0dd0b7b',
-    name: 'พายแซนวิท',
-    pictureUrl:
-      'https://drive.google.com/uc?id=1t6lqXeh_m3853RbS0Pz2olCCqdBpnug6',
-    quantity: 3,
-  },
-];
 
 const ProductSale = () => {
   const classes = useStyles();
   const matches450down = useMediaQuery('(max-width:450px)');
+  const matches600down = useMediaQuery('(max-width:600px)');
+  const [productSaleData, setProductSaleData] = useState();
+
+  const { data, loading, error } = useQuery(QUERY_SALEDAILY, {
+    variables: {
+      year: moment(new Date()).get('year'),
+      month: moment(new Date()).get('month') + 1,
+      day: moment(new Date()).get('date'),
+    },
+    onCompleted: (data) => {
+      setProductSaleData(data.saleDaily);
+    },
+  });
+
   return (
     <Card>
       <CardContent>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Typography>ยอดขายสินค้า</Typography>
+          <Typography>ยอดขายสินค้าประจำวัน</Typography>
         </div>
       </CardContent>
       <div>
-        <MotionSlider
-          padding={30}
-          gap={30}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-          }}
-          allowSlideToLast
-        >
-          {ProductSaleData.map((product) => (
-            <div key={product.id}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
-                <Badge
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  color="primary"
-                  badgeContent={product.quantity}
-                  max={999}
-                  classes={{
-                    colorPrimary: classes.BadgeColor,
-                    anchorOriginTopLeftRectangle: classes.topLeft10,
-                  }}
-                >
-                  <Avatar
-                    src={product.pictureUrl}
+        {loading ? (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '2vh',
+            }}
+          >
+            <CircularProgress
+              variant="determinate"
+              value={100}
+              className={classes.top}
+              size={matches600down ? 60 : 120}
+              thickness={4}
+            />
+            <CircularProgress
+              variant="indeterminate"
+              disableShrink
+              className={classes.bottom}
+              size={matches600down ? 60 : 120}
+              thickness={4}
+            />
+          </div>
+        ) : (
+          productSaleData && (
+            <MotionSlider
+              padding={30}
+              gap={30}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+              }}
+              allowSlideToLast
+            >
+              {productSaleData?.map((product) => (
+                <div key={product.id}>
+                  <div
                     style={{
-                      height: matches450down ? '100px' : '150px',
-                      width: matches450down ? '100px' : '150px',
+                      display: 'flex',
+                      justifyContent: 'center',
                     }}
-                  />
-                </Badge>
-              </div>
-            </div>
-          ))}
-        </MotionSlider>
+                  >
+                    <Badge
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      color="primary"
+                      badgeContent={product.totalSales}
+                      classes={{
+                        colorPrimary: classes.BadgeColor,
+                        anchorOriginTopLeftRectangle: classes.topLeft10,
+                      }}
+                    >
+                      <Avatar
+                        src={product.pictureUrl}
+                        style={{
+                          height: matches450down ? '100px' : '150px',
+                          width: matches450down ? '100px' : '150px',
+                        }}
+                      />
+                    </Badge>
+                  </div>
+                </div>
+              ))}
+            </MotionSlider>
+          )
+        )}
       </div>
     </Card>
   );

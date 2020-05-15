@@ -118,3 +118,25 @@ export const QUERY_ORDERS = gql`
     }
   }
 `;
+
+export const QUERY_BESTSALEMONTHLY = gql`
+  query QUERY_BESTSALEMONTHLY($year: Float, $month: Float) {
+    bestSaleMonthly(year: $year, month: $month) {
+      id
+      name
+      pictureUrl
+      totalSales
+    }
+  }
+`;
+
+export const QUERY_SALEDAILY = gql`
+  query QUERY_SALEDAILY($year: Float, $month: Float, $day: Float) {
+    saleDaily(year: $year, month: $month, day: $day) {
+      id
+      name
+      pictureUrl
+      totalSales
+    }
+  }
+`;
