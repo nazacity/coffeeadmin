@@ -98,6 +98,15 @@ const DrawerTopNavbar = () => {
     },
   ];
 
+  const employeeMenuOptions = [
+    {
+      name: 'ห้องครัว',
+      link: '/kitchen',
+      selectedIndex: 4,
+      icon: <Icon className="fas fa-concierge-bell" fontSize="small" />,
+    },
+  ];
+
   const route = useRouter();
 
   useEffect(() => {
@@ -141,6 +150,23 @@ const DrawerTopNavbar = () => {
         </ListItem>
         {user.state == 'admin' &&
           adminMenuOptions.map((menu, index) => (
+            <ListItem
+              button
+              key={menu.name}
+              component={Link}
+              href={menu.link}
+              selected={menuIndex === menu.selectedIndex}
+              onClick={() => {
+                action(setDrawerTopNavbar());
+                action(setMenuIndex(index));
+              }}
+            >
+              <ListItemIcon>{menu.icon}</ListItemIcon>
+              <ListItemText primary={menu.name} />
+            </ListItem>
+          ))}
+        {user.state == 'employee' &&
+          employeeMenuOptions.map((menu, index) => (
             <ListItem
               button
               key={menu.name}

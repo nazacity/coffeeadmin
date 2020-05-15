@@ -28,6 +28,9 @@ import Icon from '@material-ui/core/Icon';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
+// Component
+import AdminMenu from './components/AdminMenu';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     position: 'fixed',
@@ -130,6 +133,21 @@ const BottomNavbar = () => {
     },
   ];
 
+  const employeeMenuOptions = [
+    {
+      name: 'ห้องครัว',
+      link: '/kitchen',
+      selectedIndex: 1,
+      icon: (
+        <Icon
+          className="fas fa-concierge-bell"
+          fontSize="small"
+          classes={{ root: classes.MuiIcon }}
+        />
+      ),
+    },
+  ];
+
   const handleChange = (event, activeIndex) => {
     action(setMenuIndex(activeIndex));
   };
@@ -191,6 +209,21 @@ const BottomNavbar = () => {
           />
           {user.state == 'admin' &&
             adminMenuOptions.map((menu) => (
+              <BottomNavigationAction
+                component={Link}
+                href={menu.link}
+                key={menu.name}
+                label={menu.name}
+                value={menu.selectedIndex}
+                icon={menu.icon}
+                classes={{
+                  root: classes.bottomnavroot,
+                  selected: classes.selected,
+                }}
+              />
+            ))}
+          {user.state == 'employee' &&
+            employeeMenuOptions.map((menu) => (
               <BottomNavigationAction
                 component={Link}
                 href={menu.link}
@@ -284,7 +317,8 @@ const BottomNavbar = () => {
           style={{ top: '10px' }}
           transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          <Link href="/employee" onClick={handleClose}>
+          {user.state === 'admin' && <AdminMenu handleClose={handleClose} />}
+          <Link href="/kitchen" onClick={handleClose}>
             <MenuItem
               style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
             >
@@ -295,22 +329,7 @@ const BottomNavbar = () => {
                   fontSize="small"
                 />
               </ListItemIcon>
-              <Typography variant="inherit">พนักงาน</Typography>
-            </MenuItem>
-          </Link>
-          <Divider style={{ width: '60%', margin: '0px auto' }} />
-          <Link href="/order" onClick={handleClose}>
-            <MenuItem
-              style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
-            >
-              <ListItemIcon>
-                <Icon
-                  className="fas fa-user"
-                  color="primary"
-                  fontSize="small"
-                />
-              </ListItemIcon>
-              <Typography variant="inherit">รายการสั่งอาหาร</Typography>
+              <Typography variant="inherit">รายการครัว</Typography>
             </MenuItem>
           </Link>
           <Divider style={{ width: '60%', margin: '0px auto' }} />

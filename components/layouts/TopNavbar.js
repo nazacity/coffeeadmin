@@ -32,9 +32,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Icon from '@material-ui/core/Icon';
 import Divider from '@material-ui/core/Divider';
-
+import Tooltip from '@material-ui/core/Tooltip';
 // components
 import DrawerTopNavbar from './DrawerTopNavbar';
+import AdminMenu from './components/AdminMenu';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,40 +90,69 @@ const TopNavbar = () => {
 
   const adminMenuOptions = [
     {
-      name: 'report',
+      name: 'รายงาน',
       link: '/report',
       selectedIndex: 1,
-      icon: <Icon className="fas fa-file-medical-alt" />,
+      icon: (
+        <Tooltip title="รายงาน">
+          <Icon className="fas fa-file-medical-alt" />
+        </Tooltip>
+      ),
     },
     {
-      name: 'Client',
+      name: 'ลูกค้า',
       link: '/client',
       selectedIndex: 2,
       icon: (
-        <Icon
-          className="fas fa-users"
-          fontSize="small"
-          classes={{ root: classes.MuiIcon }}
-        />
+        <Tooltip title="ลูกค้า">
+          <Icon
+            className="fas fa-users"
+            fontSize="small"
+            classes={{ root: classes.MuiIcon }}
+          />
+        </Tooltip>
       ),
     },
     {
-      name: 'Product',
+      name: 'สินค้า',
       link: '/product',
       selectedIndex: 3,
       icon: (
-        <Icon
-          className="fas fa-box-open"
-          fontSize="small"
-          classes={{ root: classes.MuiIcon }}
-        />
+        <Tooltip title="สินค้า">
+          <Icon
+            className="fas fa-box-open"
+            fontSize="small"
+            classes={{ root: classes.MuiIcon }}
+          />
+        </Tooltip>
       ),
     },
     {
-      name: 'Promotion',
+      name: 'โปรโมชั่น',
       link: '/promotion',
       selectedIndex: 4,
-      icon: <Icon className="fas fa-smile-wink" fontSize="small" />,
+      icon: (
+        <Tooltip title="โปรโมชั่น">
+          <Icon className="fas fa-smile-wink" fontSize="small" />
+        </Tooltip>
+      ),
+    },
+  ];
+
+  const employeeMenuOptions = [
+    {
+      name: 'ห้องครัว',
+      link: '/kitchen',
+      selectedIndex: 1,
+      icon: (
+        <Tooltip title="โปรโมชั่น">
+          <Icon
+            className="fas fa-concierge-bell"
+            fontSize="small"
+            classes={{ root: classes.MuiIcon }}
+          />
+        </Tooltip>
+      ),
     },
   ];
 
@@ -205,6 +235,26 @@ const TopNavbar = () => {
                     </IconButton>
                   </Link>
                 ))}
+              {user.state == 'employee' &&
+                employeeMenuOptions.map((menu) => (
+                  <Link
+                    href={menu.link}
+                    style={{ marginRight: '2em' }}
+                    key={menu.name}
+                    onClick={() => setMenuIndex(menu.selectedIndex)}
+                  >
+                    <IconButton
+                      style={{
+                        color:
+                          menuIndex === menu.selectedIndex
+                            ? theme.palette.primary.main
+                            : '#ffffff',
+                      }}
+                    >
+                      {menu.icon}
+                    </IconButton>
+                  </Link>
+                ))}
               <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -267,7 +317,8 @@ const TopNavbar = () => {
           transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           style={{ top: '30px', left: '10px' }}
         >
-          <Link href="/employee" onClick={handleClose}>
+          {user.state === 'admin' && <AdminMenu handleClose={handleClose} />}
+          <Link href="/kitchen" onClick={handleClose}>
             <MenuItem
               style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
             >
@@ -278,22 +329,7 @@ const TopNavbar = () => {
                   fontSize="small"
                 />
               </ListItemIcon>
-              <Typography variant="inherit">พนักงาน</Typography>
-            </MenuItem>
-          </Link>
-          <Divider style={{ width: '60%', margin: '00px auto' }} />
-          <Link href="/order" onClick={handleClose}>
-            <MenuItem
-              style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
-            >
-              <ListItemIcon>
-                <Icon
-                  className="fas fa-user"
-                  color="primary"
-                  fontSize="small"
-                />
-              </ListItemIcon>
-              <Typography variant="inherit">รายการสั่งอาหาร</Typography>
+              <Typography variant="inherit">รายการครัว</Typography>
             </MenuItem>
           </Link>
           <Divider style={{ width: '60%', margin: '0px auto' }} />

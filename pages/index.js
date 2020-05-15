@@ -43,6 +43,8 @@ import queryString from 'query-string';
 import cookie from 'cookie';
 
 import { MUTATION_SIGNINWITHACCESSTOKEN } from '../apollo/mutation';
+import DtEmployeeInfo from '../components/homepage/employee/DtEmployeeInfo';
+import MbEmployeeInfo from '../components/homepage/employee/MbEmployeeInfo';
 
 const useStyles = makeStyles((theme) => ({
   top: {
@@ -172,7 +174,7 @@ const HomePage = ({ userFromAccessToken, client }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                employee
+                <DtEmployeeInfo />
               </motion.div>
             )}
             {user?.state === 'admin' && (
@@ -196,7 +198,7 @@ const HomePage = ({ userFromAccessToken, client }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                employee
+                <MbEmployeeInfo />
               </motion.div>
             )}
             {user?.state === 'admin' && (
@@ -229,6 +231,7 @@ export const getServerSideProps = async ({ req, res }) => {
   } else {
     const user = await getUserByAccessToken(accessToken);
     const client = await getUsersByAccessToken(accessToken);
+
     return { props: { userFromAccessToken: user, client } };
   }
 };
