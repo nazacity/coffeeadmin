@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
+import 'moment/locale/th';
+import moment from 'moment';
+import cookie from 'cookie';
+
+moment.locale('th');
 
 // Redux
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/actions/userActions';
 
 // Apollo
-import { getData, QUERY_ORDERS, getUserByAccessToken } from '../../apollo/db';
+import { getUserByAccessToken } from '../../apollo/db';
 
 import { db } from '../../firebase';
 
 // MUI
-import Hidden from '@material-ui/core/Hidden';
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 // framer motion
 import { motion } from 'framer-motion';
 
-import cookie from 'cookie';
+// Components
+import DtOrderList from '../../components/kitchen/DtOrderList';
 
 const Kitchen = ({ orders, user }) => {
   const action = useDispatch();
+  const theme = useTheme();
+  const matches600down = useMediaQuery('(max-width:600px)');
   useEffect(() => {
     action(setUser(user ? user : null));
   }, [orders, user]);
@@ -31,34 +38,20 @@ const Kitchen = ({ orders, user }) => {
     db.ref('/order').on('value', (snapshot) => {
       let convertForm;
       convertForm = Object.values(snapshot.val());
+      let rearrange = convertForm.sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      });
       let a = snapshot.val();
       let b;
       if (a !== b) {
-        setState(convertForm);
+        setState(rearrange);
         b = a;
       }
     });
   }, 5000);
 
   let orderCard = state.map((order) => {
-    return (
-      <Card
-        key={order.id}
-        style={{
-          margin: '1vh',
-          display: 'flex',
-          alignItem: 'center',
-        }}
-      >
-        <Avatar src={order.user.pictureUrl} alt={order.user.name} />
-        <h1>{order.user.firstName}</h1>
-        {order.items.map((item) => (
-          <div key={item.id}>
-            <Avatar src={item.product.pictureUrl} alt={item.name} />
-          </div>
-        ))}
-      </Card>
-    );
+    return <DtOrderList key={order.id} order={order} />;
   });
 
   return (
@@ -66,7 +59,12 @@ const Kitchen = ({ orders, user }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ marginBottom: '100px' }}
+      style={{
+        marginBottom: '200px',
+        maxWidth: theme.layer.maxwidth,
+        width: matches600down ? '100%' : '80%',
+        margin: 'auto',
+      }}
     >
       {orderCard}
     </motion.div>

@@ -62,6 +62,10 @@ export const getServerSideProps = async ({ req, res }) => {
     return { props: {} };
   } else {
     const user = await getUserByAccessToken(accessToken);
+    if (user.state !== 'admin') {
+      res.writeHead(302, { Location: '/' });
+      res.end();
+    }
     return { props: { products, catalogs, user } };
   }
 };

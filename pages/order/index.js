@@ -48,7 +48,10 @@ export const getServerSideProps = async ({ req, res }) => {
   } else {
     const user = await getUserByAccessToken(accessToken);
     const resultOrders = await getData(QUERY_ORDERS);
-
+    if (user.state !== 'admin') {
+      res.writeHead(302, { Location: '/' });
+      res.end();
+    }
     let orders = resultOrders.data.orders;
     return { props: { orders, user } };
   }

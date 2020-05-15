@@ -324,7 +324,7 @@ const TopNavbar = () => {
             >
               <ListItemIcon>
                 <Icon
-                  className="fas fa-user"
+                  className="fas fa-concierge-bell"
                   color="primary"
                   fontSize="small"
                 />

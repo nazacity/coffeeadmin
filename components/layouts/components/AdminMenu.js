@@ -29,7 +29,7 @@ const AdminMenu = ({ handleClose }) => {
           style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
         >
           <ListItemIcon>
-            <Icon className="fas fa-user" color="primary" fontSize="small" />
+            <Icon className="fas fa-list-ul" color="primary" fontSize="small" />
           </ListItemIcon>
           <Typography variant="inherit">รายการสั่งอาหาร</Typography>
         </MenuItem>
