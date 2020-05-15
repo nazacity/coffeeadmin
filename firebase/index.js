@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import firebase from 'firebase';
 import 'firebase/storage';
 
 var fbConfig = {
@@ -15,4 +15,5 @@ if (!firebase.apps.length) {
   firebase.initializeApp(fbConfig);
 }
 
+export const db = firebase.database();
 export const storage = firebase.storage();
