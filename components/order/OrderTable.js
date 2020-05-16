@@ -121,7 +121,7 @@ const OrderTable = () => {
         data={state}
         options={{
           exportButton: true,
-          pageSize: 5,
+          pageSize: 10,
           draggable: false,
         }}
         editable={{

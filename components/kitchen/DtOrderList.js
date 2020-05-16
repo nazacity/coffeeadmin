@@ -2,18 +2,17 @@ import React from 'react';
 import _ from 'lodash';
 import 'moment/locale/th';
 import moment from 'moment';
+import { SwipeableList } from '@sandstreamdev/react-swipeable-list';
+import SwipeableItem from './components/SwipeableItem';
+import OrderAction from './components/OrderAction';
 
 moment.locale('th');
 
 // MUI
+import { useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import { useTheme } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
-
-// framer motion
-import { motion } from 'framer-motion';
+import Typography from '@material-ui/core/Typography';
 
 const DtOrderList = ({ order }) => {
   const theme = useTheme();
@@ -47,31 +46,16 @@ const DtOrderList = ({ order }) => {
           {moment(+order.createdAt).format('DD/MMM/YYYY HH:mm')}
         </Typography>
       </Card>
-      <Card style={{ padding: '1vh', flexGrow: 1 }}>
-        {order.items.map((item) => (
-          <CardActionArea
-            key={item.id}
-            style={{
-              display: 'flex',
-              margin: '1vh 0',
-              justifyContent: 'space-between',
-              padding: '0.5vh',
-            }}
-          >
-            <Avatar
-              src={item.product.pictureUrl}
-              alt={item.name}
-              style={{
-                boxShadow: theme.common.shadow.black,
-                width: 40,
-                height: 40,
-              }}
-            />
-            <Typography>{item.product.name}</Typography>
-            <Typography>{item.quantity}</Typography>
-          </CardActionArea>
-        ))}
-      </Card>
+      <div style={{ flexGrow: 1 }}>
+        <Card>
+          <SwipeableList threshold={0.5}>
+            {order.items.map((item) => (
+              <SwipeableItem item={item} key={item.id} />
+            ))}
+          </SwipeableList>
+        </Card>
+        <OrderAction order={order} />
+      </div>
     </Card>
   );
 };

@@ -34,10 +34,20 @@ const Kitchen = ({ orders, user }) => {
   }, [orders, user]);
   const [state, setState] = useState([]);
 
+  const convert = async (values) => {
+    let orders = Object.entries(values);
+    let returnForm = [];
+    await orders.map((order) => {
+      returnForm.push({ key: order[0], ...order[1] });
+    });
+
+    return returnForm;
+  };
+
   setTimeout(() => {
-    db.ref('/order').on('value', (snapshot) => {
+    db.ref('/order').on('value', async (snapshot) => {
       let convertForm;
-      convertForm = Object.values(snapshot.val());
+      convertForm = await convert(snapshot.val());
       let rearrange = convertForm.sort((a, b) => {
         return b.createdAt - a.createdAt;
       });

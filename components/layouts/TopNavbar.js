@@ -33,9 +33,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Icon from '@material-ui/core/Icon';
 import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
+
 // components
 import DrawerTopNavbar from './DrawerTopNavbar';
-import AdminMenu from './components/AdminMenu';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -317,7 +317,40 @@ const TopNavbar = () => {
           transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           style={{ top: '30px', left: '10px' }}
         >
-          {user.state === 'admin' && <AdminMenu handleClose={handleClose} />}
+          {user.state === 'admin' && (
+            <Link href="/employee" onClick={handleClose}>
+              <MenuItem
+                style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
+              >
+                <ListItemIcon>
+                  <Icon
+                    className="fas fa-user"
+                    color="primary"
+                    fontSize="small"
+                  />
+                </ListItemIcon>
+                <Typography variant="inherit">พนักงาน</Typography>
+              </MenuItem>
+              <Divider style={{ width: '60%', margin: '0px auto' }} />
+            </Link>
+          )}
+          {user.state === 'admin' && (
+            <Link href="/order" onClick={handleClose}>
+              <MenuItem
+                style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
+              >
+                <ListItemIcon>
+                  <Icon
+                    className="fas fa-list-ul"
+                    color="primary"
+                    fontSize="small"
+                  />
+                </ListItemIcon>
+                <Typography variant="inherit">รายการสั่งอาหาร</Typography>
+              </MenuItem>
+              <Divider style={{ width: '60%', margin: '0px auto' }} />
+            </Link>
+          )}
           <Link href="/kitchen" onClick={handleClose}>
             <MenuItem
               style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}

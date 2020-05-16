@@ -56,6 +56,11 @@ const MyApp = ({ Component, pageProps, apollo }) => {
         />
         <link rel="icon" href="./images/logo/logo.jpg" />
         <link rel="stylesheet" type="text/css" href="/styles/nprogress.css" />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="/styles/SwipeableList.css"
+        />
         <meta
           name="description"
           content="ระบบ full system e-commerce รองรับการยืนยันตัวตนด้วย Line
