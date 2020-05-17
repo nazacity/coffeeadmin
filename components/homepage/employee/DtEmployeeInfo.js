@@ -1,9 +1,10 @@
 import React from 'react';
+import EmployeeCard from './components/EmployeeCard';
 
 const DtEmployeeInfo = () => {
   return (
     <div>
-      <h1>DtEmployee</h1>
+      <EmployeeCard />
     </div>
   );
 };

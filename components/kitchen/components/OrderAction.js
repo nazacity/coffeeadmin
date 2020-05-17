@@ -17,13 +17,11 @@ const OrderAction = ({ order }) => {
     db.ref(`/order/${order.key}`).remove();
   };
   return (
-    <CardActions
-      style={{ display: 'flex', justifyContent: 'center' }}
-      onClick={handleClearOrder}
-    >
+    <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
       <Button
         size="small"
         variant="contained"
+        onClick={handleClearOrder}
         style={{ backgroundColor: '#66bb6a', color: 'white' }}
       >
         เรียบร้อย

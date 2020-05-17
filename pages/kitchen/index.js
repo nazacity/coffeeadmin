@@ -46,8 +46,11 @@ const Kitchen = ({ orders, user }) => {
 
   setTimeout(() => {
     db.ref('/order').on('value', async (snapshot) => {
-      let convertForm;
-      convertForm = await convert(snapshot.val());
+      let convertForm = [];
+      if (snapshot.val()) {
+        convertForm = await convert(snapshot.val());
+      }
+
       let rearrange = convertForm.sort((a, b) => {
         return b.createdAt - a.createdAt;
       });

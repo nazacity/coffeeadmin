@@ -4,6 +4,13 @@ import {
   ActionAnimations,
 } from '@sandstreamdev/react-swipeable-list';
 
+// Apollo
+import { useMutation } from '@apollo/react-hooks';
+import {
+  MUTATION_CANCEL_ORDERITEM_BY_ID,
+  MUTATION_DONE_ORDERITEM_BY_ID,
+} from '../../../apollo/mutation';
+
 // MUI
 import Avatar from '@material-ui/core/Avatar';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -12,15 +19,28 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 // Firebase
 import { db } from '../../../firebase';
 
-const SwipeableItem = ({ item }) => {
+const SwipeableItem = ({ order, item }) => {
   const theme = useTheme();
   const matchesLGDown = useMediaQuery('(max-width:1300px)');
   const matchesMDDown = useMediaQuery('(max-width:1200px)');
   const matchesSMDown = useMediaQuery('(max-width:600px)');
+
+  const [cancelOrderItemByID] = useMutation(MUTATION_CANCEL_ORDERITEM_BY_ID, {
+    onCompleted: (data) => {
+      if (data.cancelOrderItemByID.items.length >= 1) {
+        db.ref('/order').push(data.cancelOrderItemByID);
+      }
+    },
+  });
+
+  const [doneOrderItemByID] = useMutation(MUTATION_DONE_ORDERITEM_BY_ID, {
+    onCompleted: (data) => {},
+  });
   return (
     <SwipeableListItem
       swipeLeft={{
@@ -31,9 +51,13 @@ const SwipeableItem = ({ item }) => {
               width: '100%',
               height: '100%',
               display: 'flex',
+              alignItems: 'center',
               justifyContent: 'flex-end',
             }}
           >
+            <Typography style={{ color: '#fff' }}>
+              รายการอาหาร สำเร็จ
+            </Typography>
             <ListItemIcon
               style={{
                 display: 'flex',
@@ -52,7 +76,84 @@ const SwipeableItem = ({ item }) => {
             </ListItemIcon>
           </div>
         ),
-        action: () => console.log('test'),
+        action: () => {
+          setTimeout(() => {
+            doneOrderItemByID({
+              variables: {
+                orderItemId: item.id,
+              },
+            });
+            db.ref(`/order/${order.key}`).remove();
+            if (order.items.length > 1) {
+              let newOrder;
+              newOrder = {
+                user: order.user,
+                createdAt: order.createdAt,
+                id: order.id,
+                items: order.items.filter((key) => item.id !== key.id),
+              };
+              db.ref('/order').push(newOrder);
+            }
+          }, 600);
+        },
+        actionAnimation: ActionAnimations.REMOVE,
+      }}
+      swipeRight={{
+        content: (
+          <div
+            style={{
+              backgroundColor: '#c62828',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+            }}
+          >
+            <ListItemIcon
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                paddingLeft: matchesSMDown
+                  ? '2%'
+                  : matchesMDDown
+                  ? '4%'
+                  : matchesLGDown
+                  ? '4.5%'
+                  : '5%',
+              }}
+            >
+              <CancelIcon style={{ color: '#fff' }} />
+            </ListItemIcon>
+            <Typography style={{ color: '#fff' }}>
+              ยกเลิก รายการอาหาร
+            </Typography>
+          </div>
+        ),
+        action: () => {
+          setTimeout(() => {
+            db.ref(`/order/${order.key}`).remove();
+            // if (order.items.length > 1) {
+            //   let newOrder;
+            //   newOrder = {
+            //     user: order.user,
+            //     createdAt: order.createdAt,
+            //     id: order.id,
+            //     items: order.items.filter((key) => item.id !== key.id),
+            //   };
+            //   db.ref('/order').push(newOrder);
+            // }
+            if (order.items.length > 1) {
+              cancelOrderItemByID({
+                variables: {
+                  orderId: order.id,
+                  orderItemId: item.id,
+                },
+              });
+            }
+          }, 600);
+        },
         actionAnimation: ActionAnimations.REMOVE,
       }}
     >

@@ -118,7 +118,7 @@ const ProductTable = () => {
       title: 'รูปภาพ',
       field: 'pictureUrl',
       render: (rowData) => {
-        if (rowData.pictureUrl) {
+        if (rowData?.pictureUrl) {
           return (
             <div
               style={{
@@ -160,6 +160,23 @@ const ProductTable = () => {
                   />
                 </div>
               )}
+            </div>
+          );
+        } else {
+          return (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <img
+                src="./images/product/no-product-picture.png"
+                style={{
+                  width: 40,
+                  borderRadius: '50%',
+                }}
+              />
             </div>
           );
         }

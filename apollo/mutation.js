@@ -19,10 +19,6 @@ export const MUTATION_SIGNINWITHACCESSTOKEN = gql`
       phone
       pictureUrl
       state
-      place {
-        branch
-        table
-      }
       carts {
         id
         product {
@@ -203,6 +199,43 @@ export const MUTAION_UPDATEEMPLOYEE = gql`
       pin
       IDcardPictureUrl
       createdAt
+    }
+  }
+`;
+
+export const MUTATION_CANCEL_ORDERITEM_BY_ID = gql`
+  mutation MUTATION_CANCEL_ORDERITEM_BY_ID(
+    $orderId: String!
+    $orderItemId: String!
+  ) {
+    cancelOrderItemByID(orderId: $orderId, orderItemId: $orderItemId) {
+      id
+      amount
+      user {
+        id
+        lineId
+        pictureUrl
+        firstName
+        phone
+      }
+      items {
+        id
+        product {
+          name
+          pictureUrl
+        }
+        quantity
+        state
+      }
+      createdAt
+    }
+  }
+`;
+
+export const MUTATION_DONE_ORDERITEM_BY_ID = gql`
+  mutation MUTATION_DONE_ORDERITEM_BY_ID($orderItemId: String!) {
+    doneOrderItemByID(orderItemId: $orderItemId) {
+      id
     }
   }
 `;

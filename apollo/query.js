@@ -140,3 +140,34 @@ export const QUERY_SALEDAILY = gql`
     }
   }
 `;
+
+export const QUERY_EMPLOYEE = gql`
+  query QUERY_EMPLOYEE {
+    employee {
+      id
+      IDcardPictureUrl
+      state
+      position
+      user {
+        id
+        lineId
+        firstName
+        lastName
+        email
+        phone
+        pictureUrl
+        state
+        carts {
+          id
+          product {
+            id
+            name
+            pictureUrl
+            price
+          }
+          quantity
+        }
+      }
+    }
+  }
+`;

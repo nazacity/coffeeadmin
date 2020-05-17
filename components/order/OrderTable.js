@@ -216,18 +216,10 @@ const OrderTable = () => {
                   <Typography variant="h6">{rowData.user.phone}</Typography>
                 </div>
                 <div>
-                  {rowData.place.branch === 'online' ? (
-                    <Typography variant="h6">{rowData.place.branch}</Typography>
-                  ) : (
-                    <div>
-                      <Typography variant="h6">
-                        สาขา {rowData.place.branch}
-                      </Typography>
-                      <Typography variant="h6">
-                        โต๊ะ {rowData.place.table}
-                      </Typography>
-                    </div>
-                  )}
+                  <div>
+                    <Typography variant="h6">สาขา</Typography>
+                    <Typography variant="h6">โต๊ะ</Typography>
+                  </div>
                 </div>
               </Card>
               <div

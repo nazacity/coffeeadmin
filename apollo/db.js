@@ -158,10 +158,6 @@ export const QUERY_ORDERS = {
     discount
     step
     createdAt
-    place{
-      branch
-      table
-    }
     user{
       id
       firstName

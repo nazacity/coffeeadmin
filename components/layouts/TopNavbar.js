@@ -145,7 +145,7 @@ const TopNavbar = () => {
       link: '/kitchen',
       selectedIndex: 1,
       icon: (
-        <Tooltip title="โปรโมชั่น">
+        <Tooltip title="ครัว">
           <Icon
             className="fas fa-concierge-bell"
             fontSize="small"

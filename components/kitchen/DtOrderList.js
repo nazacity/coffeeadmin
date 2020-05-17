@@ -40,8 +40,6 @@ const DtOrderList = ({ order }) => {
           {order.user.firstName}
         </Typography>
         <Typography align="center">{order.user.phone}</Typography>
-        <Typography align="center">{order.place.branch}</Typography>
-        <Typography align="center">{order.place.table}</Typography>
         <Typography align="center">
           {moment(+order.createdAt).format('DD/MMM/YYYY HH:mm')}
         </Typography>
@@ -49,8 +47,8 @@ const DtOrderList = ({ order }) => {
       <div style={{ flexGrow: 1 }}>
         <Card>
           <SwipeableList threshold={0.5}>
-            {order.items.map((item) => (
-              <SwipeableItem item={item} key={item.id} />
+            {order?.items?.map((item) => (
+              <SwipeableItem item={item} key={item.id} order={order} />
             ))}
           </SwipeableList>
         </Card>
