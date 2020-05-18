@@ -210,24 +210,6 @@ export const MUTATION_CANCEL_ORDERITEM_BY_ID = gql`
   ) {
     cancelOrderItemByID(orderId: $orderId, orderItemId: $orderItemId) {
       id
-      amount
-      user {
-        id
-        lineId
-        pictureUrl
-        firstName
-        phone
-      }
-      items {
-        id
-        product {
-          name
-          pictureUrl
-        }
-        quantity
-        state
-      }
-      createdAt
     }
   }
 `;
@@ -236,6 +218,15 @@ export const MUTATION_DONE_ORDERITEM_BY_ID = gql`
   mutation MUTATION_DONE_ORDERITEM_BY_ID($orderItemId: String!) {
     doneOrderItemByID(orderItemId: $orderItemId) {
       id
+    }
+  }
+`;
+
+export const MUTATION_CREATE_BRANCH = gql`
+  mutation MUTATION_CREATE_BRANCH($branch: String!) {
+    createBranch(branch: $branch) {
+      id
+      branch
     }
   }
 `;

@@ -10,8 +10,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { MUTAION_CREATECATALOG } from '../../apollo/mutation';
 
 // MUI
-import { useTheme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -67,6 +66,8 @@ const defaultValues = {
 
 const MbProduct = () => {
   const { control, handleSubmit, reset, errors } = useForm();
+  const theme = useTheme();
+
   const action = useDispatch();
   const classes = useStyles();
   const [createCatalog, { loading, error }] = useMutation(
@@ -88,8 +89,8 @@ const MbProduct = () => {
     });
   };
   return (
-    <div>
-      <Card style={{ margin: '2vh' }}>
+    <React.Fragment>
+      <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
         <Typography align="center">เพิ่มประเภทสินค้า</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
@@ -172,7 +173,7 @@ const MbProduct = () => {
         </form>
       </Card>
       <ProductTable />
-    </div>
+    </React.Fragment>
   );
 };
 

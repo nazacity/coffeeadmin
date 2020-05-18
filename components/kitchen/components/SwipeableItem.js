@@ -32,9 +32,9 @@ const SwipeableItem = ({ order, item }) => {
 
   const [cancelOrderItemByID] = useMutation(MUTATION_CANCEL_ORDERITEM_BY_ID, {
     onCompleted: (data) => {
-      if (data.cancelOrderItemByID.items.length >= 1) {
-        db.ref('/order').push(data.cancelOrderItemByID);
-      }
+      // if (data.cancelOrderItemByID.items.length >= 1) {
+      //   db.ref('/order').push(data.cancelOrderItemByID);
+      // }
     },
   });
 
@@ -133,24 +133,22 @@ const SwipeableItem = ({ order, item }) => {
         ),
         action: () => {
           setTimeout(() => {
+            cancelOrderItemByID({
+              variables: {
+                orderId: order.id,
+                orderItemId: item.id,
+              },
+            });
             db.ref(`/order/${order.key}`).remove();
-            // if (order.items.length > 1) {
-            //   let newOrder;
-            //   newOrder = {
-            //     user: order.user,
-            //     createdAt: order.createdAt,
-            //     id: order.id,
-            //     items: order.items.filter((key) => item.id !== key.id),
-            //   };
-            //   db.ref('/order').push(newOrder);
-            // }
             if (order.items.length > 1) {
-              cancelOrderItemByID({
-                variables: {
-                  orderId: order.id,
-                  orderItemId: item.id,
-                },
-              });
+              let newOrder;
+              newOrder = {
+                user: order.user,
+                createdAt: order.createdAt,
+                id: order.id,
+                items: order.items.filter((key) => item.id !== key.id),
+              };
+              db.ref('/order').push(newOrder);
             }
           }, 600);
         },
@@ -162,6 +160,7 @@ const SwipeableItem = ({ order, item }) => {
           display: 'flex',
           justifyContent: 'space-between',
           padding: '0.5vh',
+          boxShadow: theme.common.shadow.black,
         }}
       >
         <Avatar
@@ -169,12 +168,17 @@ const SwipeableItem = ({ order, item }) => {
           alt={item.name}
           style={{
             boxShadow: theme.common.shadow.black,
+            backgroundColor: '#fff',
             width: 40,
             height: 40,
           }}
         />
-        <Typography>{item.product.name}</Typography>
-        <Typography>{item.quantity}</Typography>
+        <Typography variant="body1" color="primary">
+          {item.product.name}
+        </Typography>
+        <Typography variant="body1" color="primary">
+          {item.quantity}
+        </Typography>
       </CardActionArea>
     </SwipeableListItem>
   );

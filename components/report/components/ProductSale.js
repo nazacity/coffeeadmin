@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useTheme } from '@material-ui/core/styles';
 
 // Components
 import MotionSlider from '../../homepage/admin/motionslider';
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductSale = () => {
   const classes = useStyles();
+  const theme = useTheme();
   const matches450down = useMediaQuery('(max-width:450px)');
   const matches600down = useMediaQuery('(max-width:600px)');
   const [productSaleData, setProductSaleData] = useState();
@@ -69,7 +71,7 @@ const ProductSale = () => {
   });
 
   return (
-    <Card>
+    <Card style={{ boxShadow: theme.common.shadow.main1, margin: '2vh 0' }}>
       <CardContent>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Typography>ยอดขายสินค้าประจำวัน</Typography>

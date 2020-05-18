@@ -390,7 +390,7 @@ const ProductTable = () => {
           }),
         ]}
         style={{
-          boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
+          boxShadow: matches1024down ? 'none' : theme.common.shadow.main1,
           marginBottom: '100px',
         }}
       />

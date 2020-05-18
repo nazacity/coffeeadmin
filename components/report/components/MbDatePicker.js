@@ -34,11 +34,12 @@ const MbDatePicker = () => {
       <Card
         style={{
           padding: '1vh 1vw',
-          margin: '1vw',
+          margin: '1vh 0',
           display: 'flex',
           flexDirection: matches450down ? 'column' : 'row',
           justifyContent: 'center',
           alignItems: 'center',
+          boxShadow: theme.common.shadow.main1,
         }}
       >
         <div

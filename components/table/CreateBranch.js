@@ -7,11 +7,10 @@ import { createCatalogs } from '../../redux/actions/productAction';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
-import { MUTAION_CREATECATALOG } from '../../apollo/mutation';
+import { MUTATION_CREATE_BRANCH } from '../../apollo/mutation';
 
 // MUI
-import { useTheme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -19,9 +18,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-// Components
-import ProductTable from './components/ProductTable';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -61,91 +58,70 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const defaultValues = {
-  name: '',
-  th: '',
+  branch: '',
 };
 
-const DtProduct = () => {
-  const theme = useTheme();
+const CreateBranch = () => {
   const { control, handleSubmit, reset, errors } = useForm();
+  const theme = useTheme();
+  const matches1024down = useMediaQuery('(max-width:1024)');
   const action = useDispatch();
   const classes = useStyles();
-  const [createCatalog, { loading, error }] = useMutation(
-    MUTAION_CREATECATALOG,
+  const [createBranch, { loading, error }] = useMutation(
+    MUTATION_CREATE_BRANCH,
     {
       onCompleted: (data) => {
-        action(createCatalogs(data.createCatalog));
-        reset(defaultValues);
+        console.log(data);
       },
     }
   );
 
   const onSubmit = (data) => {
-    createCatalog({
+    createBranch({
       variables: {
-        name: data.name.toLowerCase(),
-        th: data.th,
+        branch: data.branch,
       },
     });
   };
   return (
-    <div style={{ maxWidth: theme.layer.maxwidth, margin: 'auto' }}>
-      <Card
-        style={{
-          margin: '2vh auto',
-          width: '50%',
-          padding: '2vh',
-          boxShadow: theme.common.shadow.main1,
-        }}
-      >
-        <Typography align="center" variant="h4">
-          เพิ่มประเภทสินค้า
-        </Typography>
+    <div
+      style={{
+        maxWidth: matches1024down ? undefined : theme.layer.maxwidth,
+        margin: 'auto',
+      }}
+    >
+      <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
+        <Typography align="center">เพิ่มสาขา</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
             <Controller
               as={TextField}
-              name="name"
+              name="branch"
               control={control}
               defaultValue=""
-              label="ภาษาอังกฤษ"
+              label="ชื่อสาขา"
               variant="outlined"
               rules={{
-                required: 'กรุณาใส่ประเภทภาษาอังกฤษ',
+                required: 'กรุณาใส่สาขา',
               }}
-              error={errors.name && true}
-              helperText={errors.name?.message}
+              error={errors.branch && true}
+              helperText={errors.branch?.message}
               size="small"
-              style={{ width: '100%', marginBottom: '1vh' }}
+              classes={{ root: classes.TextFieldRoot }}
               disabled={loading}
-            />
-            <Controller
-              as={TextField}
-              name="th"
-              control={control}
-              defaultValue=""
-              label="ภาษาไทย"
-              variant="outlined"
-              rules={{
-                required: 'กรุณาใส่ประเภทภาษาไทย',
-              }}
-              error={errors.th && true}
-              helperText={errors.th?.message}
-              size="small"
-              style={{ width: '100%', marginBottom: '1vh' }}
-              disabled={loading}
+              style={{ width: '100%', margin: '1vh auto' }}
             />
           </CardContent>
-          <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
+          <CardActions>
             <Button
               type="submit"
               variant="contained"
               color="primary"
-              style={{ marginRight: '2em' }}
+              style={{ marginRight: '2em', margin: 'auto' }}
               disabled={loading}
               classes={{ root: classes.buttonRoot, disabled: classes.disabled }}
             >
-              Confirm
+              เพิ่มสาขา
               {loading && (
                 <div style={{ position: 'absolute', display: 'flex' }}>
                   <CircularProgress
@@ -172,15 +148,15 @@ const DtProduct = () => {
               }}
               variant="outlined"
               color="primary"
+              style={{ margin: 'auto' }}
             >
-              Cancel
+              ยกเลิก
             </Button>
           </CardActions>
         </form>
       </Card>
-      <ProductTable />
     </div>
   );
 };
 
-export default DtProduct;
+export default CreateBranch;

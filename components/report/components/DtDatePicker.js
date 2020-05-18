@@ -36,6 +36,7 @@ const DtDatePicker = () => {
         margin: '2vh auto',
         maxWidth: theme.layer.maxWidth,
         padding: '1vh',
+        boxShadow: theme.common.shadow.main1,
       }}
     >
       <MuiPickersUtilsProvider utils={MomentUtils} locale="th">

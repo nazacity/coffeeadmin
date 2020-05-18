@@ -17,9 +17,13 @@ moment.locale('th');
 import Head from 'next/head';
 
 // MUI
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import MaterialTable from 'material-table';
 
 const MbClient = () => {
+  const matches1024down = useMediaQuery('(max-width:1024px)');
+  const theme = useTheme();
   const action = useDispatch();
   const columnTitle = [
     {
@@ -117,76 +121,87 @@ const MbClient = () => {
           href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
         />
       </Head>
-      <MaterialTable
-        title="สมาชิกทั้งหมด"
-        columns={columnTitle}
-        data={state}
-        options={{
-          exportButton: true,
-          selection: true,
-          pageSize: 10,
+      <div
+        style={{
+          maxWidth: theme.layer.maxwidth,
+          margin: '1vh auto',
+          marginBottom: '100px',
         }}
-        isLoading={!state ? true : false}
-        editable={{
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve) => {
-              resolve();
-              if (!oldData || newData === oldData) {
-                return;
-              }
-              updateUser({
-                variables: {
-                  id: newData.id,
-                  lineId: newData.lineId,
-                  firstName: newData.firstName
-                    ? newData.firstName
-                    : oldData.firstName,
-                  lastName: newData.lastName
-                    ? newData.lastName
-                    : oldData.lastName,
-                  phone: newData.phone ? newData.phone : oldData.phone,
-                  email: newData.email ? newData.email : oldData.email,
-                  state: newData.state ? newData.state : oldData.state,
-                },
-              });
-            }),
-        }}
-        actions={[
-          {
-            tooltip: 'ส่งข้อความ LINE',
-            icon: 'send',
-            onClick: (evt, data) => {
-              // TODO: send line msg
-              console.log('send evt', evt);
-              console.log('send data', data);
+      >
+        <MaterialTable
+          title="สมาชิกทั้งหมด"
+          columns={columnTitle}
+          data={state}
+          options={{
+            exportButton: true,
+            selection: true,
+            pageSize: 5,
+          }}
+          isLoading={!state ? true : false}
+          editable={{
+            onRowUpdate: (newData, oldData) =>
+              new Promise((resolve) => {
+                resolve();
+                if (!oldData || newData === oldData) {
+                  return;
+                }
+                updateUser({
+                  variables: {
+                    id: newData.id,
+                    lineId: newData.lineId,
+                    firstName: newData.firstName
+                      ? newData.firstName
+                      : oldData.firstName,
+                    lastName: newData.lastName
+                      ? newData.lastName
+                      : oldData.lastName,
+                    phone: newData.phone ? newData.phone : oldData.phone,
+                    email: newData.email ? newData.email : oldData.email,
+                    state: newData.state ? newData.state : oldData.state,
+                  },
+                });
+              }),
+          }}
+          actions={[
+            {
+              tooltip: 'ส่งข้อความ LINE',
+              icon: 'send',
+              onClick: (evt, data) => {
+                // TODO: send line msg
+                console.log('send evt', evt);
+                console.log('send data', data);
+              },
             },
-          },
-        ]}
-        localization={{
-          body: {
-            emptyDataSourceMessage: 'ยังไม่มีสมาชิก',
-            editTooltip: 'แก้ไข',
-          },
-          toolbar: {
-            searchTooltip: 'ค้นหาสมาชิก',
-            searchPlaceholder: 'ค้นหาสมาชิก',
-            exportName: 'ดาวโหลด รายงาน',
-            nRowsSelected: 'เลือกสมาชิก {0} คน',
-          },
-          pagination: {
-            labelRowsSelect: 'แถว',
-            labelDisplayedRows: ' {from}-{to} จาก {count}',
-            firstTooltip: 'หน้าแรก',
-            previousTooltip: 'หน้าก่อน',
-            nextTooltip: 'หน้าต่อไป',
-            lastTooltip: 'หน้าสุดท้าย',
-          },
-          header: {
-            actions: '',
-          },
-        }}
-        style={{ border: 'none', boxShadow: 'none', marginBottom: '100px' }}
-      />
+          ]}
+          localization={{
+            body: {
+              emptyDataSourceMessage: 'ยังไม่มีสมาชิก',
+              editTooltip: 'แก้ไข',
+            },
+            toolbar: {
+              searchTooltip: 'ค้นหาสมาชิก',
+              searchPlaceholder: 'ค้นหาสมาชิก',
+              exportName: 'ดาวโหลด รายงาน',
+              nRowsSelected: 'เลือกสมาชิก {0} คน',
+            },
+            pagination: {
+              labelRowsSelect: 'แถว',
+              labelDisplayedRows: ' {from}-{to} จาก {count}',
+              firstTooltip: 'หน้าแรก',
+              previousTooltip: 'หน้าก่อน',
+              nextTooltip: 'หน้าต่อไป',
+              lastTooltip: 'หน้าสุดท้าย',
+            },
+            header: {
+              actions: '',
+            },
+          }}
+          style={{
+            boxShadow: matches1024down ? 'none' : theme.common.shadow.main1,
+            margin: '2vh auto',
+          }}
+        />
+      </div>
     </React.Fragment>
   );
 };

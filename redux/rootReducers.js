@@ -7,6 +7,7 @@ import productReducer from './reducers/productReducer';
 import promotionReducer from './reducers/promotionReducer';
 import employeeReducer from './reducers/employeeReducer';
 import orderReducer from './reducers/orderReducer';
+import storeReducer from './reducers/storeReducer';
 
 const rootReducer = combineReducers({
   layout: layoutReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   promotions: promotionReducer,
   employees: employeeReducer,
   orders: orderReducer,
+  store: storeReducer,
 });
 
 export default rootReducer;

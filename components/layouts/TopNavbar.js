@@ -335,6 +335,23 @@ const TopNavbar = () => {
             </Link>
           )}
           {user.state === 'admin' && (
+            <Link href="/table" onClick={handleClose}>
+              <MenuItem
+                style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
+              >
+                <ListItemIcon>
+                  <Icon
+                    className="fab fa-buffer"
+                    color="primary"
+                    fontSize="small"
+                  />
+                </ListItemIcon>
+                <Typography variant="inherit">สาขา และ โต๊ะ</Typography>
+              </MenuItem>
+              <Divider style={{ width: '60%', margin: '0px auto' }} />
+            </Link>
+          )}
+          {user.state === 'admin' && (
             <Link href="/order" onClick={handleClose}>
               <MenuItem
                 style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}

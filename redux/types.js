@@ -36,3 +36,12 @@ export const UPDATE_EMPLOYEE = 'UPDATE_EMPLOYEE';
 // Order
 export const SET_ORDER = 'SET_ORDER';
 export const UPDATE_ORDER = 'UPDATE_ORDER';
+
+// Store
+export const SET_BRANCH = 'SET_BRANCH';
+export const CREATE_BRANCH = 'CREATE_BRANCH';
+export const DELETE_BRANCH = 'DELETE_BRANCH';
+export const SET_TABLES = 'SET_TABLES';
+export const CREATE_TABLE = 'CREATE_TABLE';
+export const DELETE_TABLE = 'DELETE_TABLE';
+export const UPDATE_TABLE = 'UPDATE_TABLE';

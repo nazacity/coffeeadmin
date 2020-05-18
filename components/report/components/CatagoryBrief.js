@@ -1,14 +1,16 @@
 import React from 'react';
 
 // MUI
+import { useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import Divider from '@material-ui/core/Divider';
 import WeekChart from './WeekChart';
 
 const DailyBrief = () => {
+  const theme = useTheme();
   return (
-    <Card>
+    <Card style={{ boxShadow: theme.common.shadow.main1 }}>
       <div
         style={{
           display: 'grid',

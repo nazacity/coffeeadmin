@@ -11,6 +11,7 @@ const theme = createMuiTheme({
     shadow: {
       black: '0px 0px 5px 1px rgba(0,0,0,0.2)',
       main: '0px 0px 5px 3px rgba(169,120,67,0.5)',
+      main1: '0px 0px 5px 1px rgba(169,120,67,0.5)',
     },
   },
   layer: {

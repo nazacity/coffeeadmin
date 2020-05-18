@@ -4,7 +4,7 @@ import 'moment/locale/th';
 import moment from 'moment';
 import { SwipeableList } from '@sandstreamdev/react-swipeable-list';
 import SwipeableItem from './components/SwipeableItem';
-import OrderAction from './components/OrderAction';
+//import OrderAction from './components/OrderAction';
 
 moment.locale('th');
 
@@ -23,9 +23,16 @@ const DtOrderList = ({ order }) => {
         margin: '1vh',
         display: 'flex',
         padding: '1vh',
+        boxShadow: theme.common.shadow.main1,
       }}
     >
-      <Card style={{ marginRight: '1vh', padding: '1vh' }}>
+      <Card
+        style={{
+          marginRight: '1vh',
+          padding: '1vh',
+          boxShadow: theme.common.shadow.main1,
+        }}
+      >
         <Avatar
           src={order.user.pictureUrl}
           alt={order.user.name}
@@ -36,23 +43,42 @@ const DtOrderList = ({ order }) => {
             height: 80,
           }}
         />
-        <Typography variant="h6" align="center">
-          {order.user.firstName}
-        </Typography>
-        <Typography align="center">{order.user.phone}</Typography>
-        <Typography align="center">
-          {moment(+order.createdAt).format('DD/MMM/YYYY HH:mm')}
-        </Typography>
+        <div style={{ margin: '1vh 0' }}>
+          <Typography variant="h6" color="primary">
+            {order.user.firstName}
+          </Typography>
+          <Typography variant="body1" color="primary">
+            {order.user.phone}
+          </Typography>
+          <Typography variant="body2" color="primary">
+            วันที่ {moment(+order.createdAt).format('DD MMM YY')}
+          </Typography>
+          <Typography variant="body2" color="primary">
+            เวลา {moment(+order.createdAt).format('HH:mm')}
+          </Typography>
+        </div>
       </Card>
       <div style={{ flexGrow: 1 }}>
-        <Card>
+        <Card
+          style={{
+            marginRight: '1vh',
+            boxShadow: theme.common.shadow.main1,
+          }}
+        >
           <SwipeableList threshold={0.5}>
             {order?.items?.map((item) => (
               <SwipeableItem item={item} key={item.id} order={order} />
             ))}
           </SwipeableList>
         </Card>
-        <OrderAction order={order} />
+        <div style={{ margin: '1vh auto' }}>
+          <Typography align="center" variant="body2" style={{ color: 'green' }}>
+            *เลื่อนไปด้านขวาเมื่อเมนูเรียบร้อย
+          </Typography>
+          <Typography align="center" variant="body2" style={{ color: 'red' }}>
+            *เลื่อนไปด้านซ้ายเพื่อยกเลิกเมนู
+          </Typography>
+        </div>
       </div>
     </Card>
   );
