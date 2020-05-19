@@ -42,6 +42,7 @@
     "react-load-script": "0.0.6",
     "react-redux": "^7.2.0",
     "react-swipeable-views": "^0.13.9",
+    "react-toast-notifications": "^2.4.0",
     "react-use-dimensions": "^1.2.1",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",

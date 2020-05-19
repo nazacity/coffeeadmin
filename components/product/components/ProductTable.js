@@ -36,6 +36,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+// Toast
+import { useToasts } from 'react-toast-notifications';
+
 const useStyles = makeStyles((theme) => ({
   top: {
     color: theme.palette.primary.dark,
@@ -58,6 +61,7 @@ const ProductTable = () => {
   const [lookup, setLookup] = useState({});
   const [row, setRow] = useState({});
   const [pictureUploading, setPictureUploading] = useState(false);
+  const { addToast } = useToasts();
 
   const imageInput = useRef();
   const handleEditPicture = () => {
@@ -99,6 +103,10 @@ const ProductTable = () => {
             });
           })
           .then(() => {
+            addToast('อัพโหลดรูปสินค้าเรียบร้อย', {
+              appearance: 'success',
+              autoDismiss: true,
+            });
             setRow({});
           });
       }
@@ -224,18 +232,30 @@ const ProductTable = () => {
   const [deleteCatalog] = useMutation(MUTAION_DELETECATALOG, {
     onCompleted: (data) => {
       action(deleteCatalogs(data.deleteCatalog.id));
+      addToast('ลบประเภทสินค้าเรียบร้อย', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
     },
   });
 
   const [createProduct] = useMutation(MUTAION_CREATEPRODUCT, {
     onCompleted: (data) => {
       action(createProducts(data.createProduct));
+      addToast('เพิ่มสินค้าเรียบร้อย', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
     },
   });
 
   const [deleteProduct] = useMutation(MUTAION_DELETEPRODUCT, {
     onCompleted: (data) => {
       action(deleteProducts(data.deleteProduct.id));
+      addToast('ลบสินค้าเรียบร้อย', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
     },
   });
 
@@ -247,6 +267,10 @@ const ProductTable = () => {
       catalogData(DATA);
       productData(DATA);
       setState(DATA);
+      addToast('แก้ไขสินค้าเรียบร้อย', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
     },
   });
 

@@ -20,6 +20,9 @@ import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+// Toast
+import { useToasts } from 'react-toast-notifications';
+
 const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: '1.5em',
@@ -63,6 +66,8 @@ const defaultValues = {
 
 const CreateBranch = () => {
   const { control, handleSubmit, reset, errors } = useForm();
+  const { addToast } = useToasts();
+
   const theme = useTheme();
   const matches1024down = useMediaQuery('(max-width:1024)');
   const action = useDispatch();
@@ -73,7 +78,10 @@ const CreateBranch = () => {
       onCompleted: (data) => {
         action(createBranchs(data.createBranch));
         reset(defaultValues);
-        console.log(errors);
+        addToast(`เพิ่มสาขาเรียบร้อย`, {
+          appearance: 'success',
+          autoDismiss: true,
+        });
       },
     }
   );
@@ -86,7 +94,15 @@ const CreateBranch = () => {
         },
       });
     } catch (error) {
-      console.log(error);
+      addToast(
+        error.message === 'GraphQL error: Branch already exist' &&
+          'ไม่สามารถเพิ่มสาขาซ้ำได้',
+        {
+          appearance: 'error',
+          placement: 'top-center',
+          autoDismiss: true,
+        }
+      );
     }
   };
   return (

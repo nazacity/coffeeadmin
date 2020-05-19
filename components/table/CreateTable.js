@@ -24,6 +24,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 
+// Toast
+import { useToasts } from 'react-toast-notifications';
+
 const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: '1.5em',
@@ -68,6 +71,7 @@ const defaultValues = {
 
 const CreateTable = () => {
   const matches600down = useMediaQuery('(max-width:600px)');
+  const { addToast } = useToasts();
   const { control, handleSubmit, reset, errors } = useForm();
   const theme = useTheme();
   const matches1024down = useMediaQuery('(max-width:1024)');
@@ -78,6 +82,10 @@ const CreateTable = () => {
     onCompleted: (data) => {
       action(createTables(data.createPlace));
       reset(defaultValues);
+      addToast(`เพิ่มโต๊ะในสาขาเรียบร้อย`, {
+        appearance: 'success',
+        autoDismiss: true,
+      });
     },
   });
 
@@ -90,7 +98,15 @@ const CreateTable = () => {
         },
       });
     } catch (error) {
-      console.log(error.message);
+      addToast(
+        error.message === 'GraphQL error: Table already exsit' &&
+          'ไม่สามารถเพิ่มรหัสโต๊ะซ้ำได้',
+        {
+          appearance: 'error',
+          autoDismiss: true,
+          placement: 'top-center',
+        }
+      );
     }
   };
   return (

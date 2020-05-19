@@ -24,22 +24,35 @@ import CancelIcon from '@material-ui/icons/Cancel';
 // Firebase
 import { db } from '../../../firebase';
 
+// Toast
+import { useToasts } from 'react-toast-notifications';
+
 const SwipeableItem = ({ order, item }) => {
   const theme = useTheme();
   const matchesLGDown = useMediaQuery('(max-width:1300px)');
   const matchesMDDown = useMediaQuery('(max-width:1200px)');
   const matchesSMDown = useMediaQuery('(max-width:600px)');
+  const { addToast } = useToasts();
 
   const [cancelOrderItemByID] = useMutation(MUTATION_CANCEL_ORDERITEM_BY_ID, {
     onCompleted: (data) => {
       // if (data.cancelOrderItemByID.items.length >= 1) {
       //   db.ref('/order').push(data.cancelOrderItemByID);
       // }
+      addToast('ยกเลิกรายการอาหารเรียบร้อย', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
     },
   });
 
   const [doneOrderItemByID] = useMutation(MUTATION_DONE_ORDERITEM_BY_ID, {
-    onCompleted: (data) => {},
+    onCompleted: (data) => {
+      addToast('รายการอาหารเสร็จเรียบร้อย', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
+    },
   });
   return (
     <SwipeableListItem
