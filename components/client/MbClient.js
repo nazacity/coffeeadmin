@@ -140,26 +140,30 @@ const MbClient = () => {
           isLoading={!state ? true : false}
           editable={{
             onRowUpdate: (newData, oldData) =>
-              new Promise((resolve) => {
+              new Promise(async (resolve) => {
                 resolve();
                 if (!oldData || newData === oldData) {
                   return;
                 }
-                updateUser({
-                  variables: {
-                    id: newData.id,
-                    lineId: newData.lineId,
-                    firstName: newData.firstName
-                      ? newData.firstName
-                      : oldData.firstName,
-                    lastName: newData.lastName
-                      ? newData.lastName
-                      : oldData.lastName,
-                    phone: newData.phone ? newData.phone : oldData.phone,
-                    email: newData.email ? newData.email : oldData.email,
-                    state: newData.state ? newData.state : oldData.state,
-                  },
-                });
+                try {
+                  await updateUser({
+                    variables: {
+                      id: newData.id,
+                      lineId: newData.lineId,
+                      firstName: newData.firstName
+                        ? newData.firstName
+                        : oldData.firstName,
+                      lastName: newData.lastName
+                        ? newData.lastName
+                        : oldData.lastName,
+                      phone: newData.phone ? newData.phone : oldData.phone,
+                      email: newData.email ? newData.email : oldData.email,
+                      state: newData.state ? newData.state : oldData.state,
+                    },
+                  });
+                } catch (error) {
+                  console.log(error.message);
+                }
               }),
           }}
           actions={[

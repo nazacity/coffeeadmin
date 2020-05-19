@@ -178,6 +178,23 @@ export const QUERY_ORDERS = {
   `,
 };
 
+export const QUERY_BRANCH = {
+  query: `
+  query{
+    branch{
+    id
+    branch
+    place{
+      id
+      table
+      customer
+      state
+      }
+    }
+  }
+  `,
+};
+
 export const getUserByAccessToken = async (accessToken) => {
   const uri = process.env.APOLLO_URL;
   let user;
@@ -252,4 +269,23 @@ export const getOrders = async (accessToken) => {
     }
   }
   return orders.data.orders;
+};
+
+export const getBranch = async (accessToken) => {
+  const uri = process.env.APOLLO_URL;
+  let branch;
+  if (accessToken) {
+    const responseOrders = await fetch(uri, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `${accessToken}` || '',
+      },
+      body: JSON.stringify(QUERY_BRANCH),
+    });
+    if (responseOrders.ok) {
+      branch = await responseOrders.json();
+    }
+  }
+  return branch.data.branch;
 };

@@ -15,6 +15,8 @@ let INITIAL_STATE = {
 
 const clientReducer = (state = INITIAL_STATE, action) => {
   let newProducts;
+  let newBranch;
+  let index;
   switch (action.type) {
     case SET_BRANCH:
       if (action.payload === undefined) {
@@ -27,17 +29,20 @@ const clientReducer = (state = INITIAL_STATE, action) => {
       }
       return { ...state, tabless: [...action.payload] };
     case CREATE_BRANCH:
-      return { ...state, branch: [...state.catalogs, action.payload] };
+      return { ...state, branch: [...state.branch, action.payload] };
     case DELETE_BRANCH:
-      let newBranch = state.branch.filter(
-        (branch) => branch.id !== action.payload
-      );
+      newBranch = state.branch.filter((branch) => branch.id !== action.payload);
       return { ...state, catalogs: newBranch };
     case CREATE_TABLE:
-      return { ...state, tables: [...state.tables, action.payload] };
+      index = state.branch.findIndex(
+        (branch) => branch.id === action.payload.id
+      );
+      newBranch = state.branch;
+      newBranch[index] == action.payload;
+      return { ...state, branch: newBranch };
     case UPDATE_TABLE:
-      newProducts = state.tables;
-      let index = state.products.findIndex(
+      newTables = state.tables;
+      index = state.products.findIndex(
         (product) => product.id === action.payload.id
       );
       newProducts[index] = action.payload;

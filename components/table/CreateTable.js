@@ -2,12 +2,12 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 // Redux
-import { useDispatch } from 'react-redux';
-import { createCatalogs } from '../../redux/actions/productAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { createTables } from '../../redux/actions/storeActions';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
-import { MUTATION_CREATE_BRANCH } from '../../apollo/mutation';
+import { MUTATION_CREATE_TABLE } from '../../apollo/mutation';
 
 // MUI
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -19,6 +19,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -58,30 +62,36 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const defaultValues = {
-  branch: '',
+  branchId: '',
+  table: '',
 };
 
 const CreateTable = () => {
+  const matches600down = useMediaQuery('(max-width:600px)');
   const { control, handleSubmit, reset, errors } = useForm();
   const theme = useTheme();
   const matches1024down = useMediaQuery('(max-width:1024)');
+  const branchs = useSelector((state) => state.store.branch);
   const action = useDispatch();
   const classes = useStyles();
-  const [createBranch, { loading, error }] = useMutation(
-    MUTATION_CREATE_BRANCH,
-    {
-      onCompleted: (data) => {
-        console.log(data);
-      },
-    }
-  );
+  const [createTable, { loading, error }] = useMutation(MUTATION_CREATE_TABLE, {
+    onCompleted: (data) => {
+      action(createTables(data.createPlace));
+      reset(defaultValues);
+    },
+  });
 
-  const onSubmit = (data) => {
-    createBranch({
-      variables: {
-        branch: data.branch,
-      },
-    });
+  const onSubmit = async (data) => {
+    try {
+      await createTable({
+        variables: {
+          branchId: data.branchId,
+          table: data.table,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
     <div
@@ -91,21 +101,57 @@ const CreateTable = () => {
       }}
     >
       <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
-        <Typography align="center">เพิ่มสาขา</Typography>
+        <Typography align="center">เพิ่มโต๊ะ</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
+            <FormControl
+              variant="outlined"
+              style={{
+                width: '100%',
+                marginRight: matches600down ? 0 : '2vh',
+                marginBottom: '2vh',
+              }}
+            >
+              <InputLabel id="demo-simple-select-outlined-label">
+                สาขา
+              </InputLabel>
+              <Controller
+                as={
+                  <Select label="สาขา">
+                    {branchs.map((branch) => (
+                      <MenuItem key={branch.id} value={branch.id}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItem: 'center',
+                          }}
+                        >
+                          <Typography style={{ margin: 'auto 2vh' }}>
+                            {branch.branch}
+                          </Typography>
+                        </div>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                }
+                control={control}
+                name="branchId"
+                defaultValue=""
+                style={{ width: '100%' }}
+              />
+            </FormControl>
             <Controller
               as={TextField}
-              name="branch"
+              name="table"
               control={control}
               defaultValue=""
-              label="ชื่อสาขา"
+              label="รหัสโต๊ะ"
               variant="outlined"
               rules={{
-                required: 'กรุณาใส่สาขา',
+                required: 'กรุณาใส่รหัสโต๊ะ',
               }}
-              error={errors.branch && true}
-              helperText={errors.branch?.message}
+              error={errors.table && true}
+              helperText={errors.table?.message}
               size="small"
               classes={{ root: classes.TextFieldRoot }}
               disabled={loading}
@@ -121,7 +167,7 @@ const CreateTable = () => {
               disabled={loading}
               classes={{ root: classes.buttonRoot, disabled: classes.disabled }}
             >
-              เพิ่มสาขา
+              เพิ่มโต๊ะ
               {loading && (
                 <div style={{ position: 'absolute', display: 'flex' }}>
                   <CircularProgress

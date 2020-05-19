@@ -8,7 +8,7 @@ import {
   UPDATE_TABLE,
 } from '../types';
 
-export const setBranch = (Branch) => (dispatch) => {
+export const setBranch = (branch) => (dispatch) => {
   dispatch({
     type: SET_BRANCH,
     payload: branch,

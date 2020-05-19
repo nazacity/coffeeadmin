@@ -90,19 +90,22 @@ const MbPromotion = () => {
     }
   );
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     let productId = [];
     data.product1 && productId.push(data.product1);
     data.product2 && productId.push(data.product2);
-
-    createPromotion({
-      variables: {
-        title: data.title,
-        detail: data.detail,
-        products: productId,
-        price: +data.price,
-      },
-    });
+    try {
+      await createPromotion({
+        variables: {
+          title: data.title,
+          detail: data.detail,
+          products: productId,
+          price: +data.price,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
     <React.Fragment>
@@ -160,11 +163,11 @@ const MbPromotion = () => {
                 }}
               >
                 <InputLabel id="demo-simple-select-outlined-label">
-                  สินค้า 1
+                  สินค้าที่ 1
                 </InputLabel>
                 <Controller
                   as={
-                    <Select>
+                    <Select label="สินค้าที่ 1">
                       {products.map((product) => (
                         <MenuItem key={product.id} value={product.id}>
                           <div style={{ display: 'flex', alignItem: 'center' }}>
@@ -190,11 +193,11 @@ const MbPromotion = () => {
                 }}
               >
                 <InputLabel id="demo-simple-select-outlined-label">
-                  สินค้า 2
+                  สินค้าที่ 2
                 </InputLabel>
                 <Controller
                   as={
-                    <Select>
+                    <Select label="สินค้าที่ 2">
                       {products.map((product) => (
                         <MenuItem key={product.id} value={product.id}>
                           <div style={{ display: 'flex', alignItem: 'center' }}>

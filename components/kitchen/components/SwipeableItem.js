@@ -132,13 +132,18 @@ const SwipeableItem = ({ order, item }) => {
           </div>
         ),
         action: () => {
-          setTimeout(() => {
-            cancelOrderItemByID({
-              variables: {
-                orderId: order.id,
-                orderItemId: item.id,
-              },
-            });
+          setTimeout(async () => {
+            try {
+              await cancelOrderItemByID({
+                variables: {
+                  orderId: order.id,
+                  orderItemId: item.id,
+                },
+              });
+            } catch (error) {
+              console.log(error.message);
+            }
+
             db.ref(`/order/${order.key}`).remove();
             if (order.items.length > 1) {
               let newOrder;

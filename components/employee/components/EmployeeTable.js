@@ -224,24 +224,28 @@ const EmployeeTable = () => {
         isLoading={!state ? true : false}
         editable={{
           onRowUpdate: (newData, oldData) =>
-            new Promise((resolve) => {
+            new Promise(async (resolve) => {
               resolve();
               if (!oldData || newData === oldData) {
                 return;
               }
-              updateEmployee({
-                variables: {
-                  id: newData.id,
-                  state: newData.state ? newData.state : oldData.state,
-                  position: newData.position
-                    ? newData.position
-                    : oldData.position,
-                  pin: newData.pin ? newData.pin : oldData.pin,
-                  IDcardPictureUrl: newData.IDcardPictureUrl
-                    ? newData.IDcardPictureUrl
-                    : oldData.IDcardPictureUrl,
-                },
-              });
+              try {
+                updateEmployee({
+                  variables: {
+                    id: newData.id,
+                    state: newData.state ? newData.state : oldData.state,
+                    position: newData.position
+                      ? newData.position
+                      : oldData.position,
+                    pin: newData.pin ? newData.pin : oldData.pin,
+                    IDcardPictureUrl: newData.IDcardPictureUrl
+                      ? newData.IDcardPictureUrl
+                      : oldData.IDcardPictureUrl,
+                  },
+                });
+              } catch (error) {
+                console.log(error.message);
+              }
             }),
         }}
         actions={[

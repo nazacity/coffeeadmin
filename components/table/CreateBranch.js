@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 
 // Redux
 import { useDispatch } from 'react-redux';
-import { createCatalogs } from '../../redux/actions/productAction';
+import { createBranchs } from '../../redux/actions/storeActions';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
@@ -71,17 +71,23 @@ const CreateBranch = () => {
     MUTATION_CREATE_BRANCH,
     {
       onCompleted: (data) => {
-        console.log(data);
+        action(createBranchs(data.createBranch));
+        reset(defaultValues);
+        console.log(errors);
       },
     }
   );
 
-  const onSubmit = (data) => {
-    createBranch({
-      variables: {
-        branch: data.branch,
-      },
-    });
+  const onSubmit = async (data) => {
+    try {
+      await createBranch({
+        variables: {
+          branch: data.branch,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div

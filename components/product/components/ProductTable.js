@@ -328,22 +328,30 @@ const ProductTable = () => {
               }
             }),
           onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
+            new Promise(async (resolve, reject) => {
               if (!oldData) return;
               // Delete Catalog
               if (!oldData.pictureUrl) {
-                deleteCatalog({
-                  variables: {
-                    id: oldData.id,
-                  },
-                });
+                try {
+                  await deleteCatalog({
+                    variables: {
+                      id: oldData.id,
+                    },
+                  });
+                } catch (error) {
+                  console.log(error.message);
+                }
               }
               if (oldData.pictureUrl) {
-                deleteProduct({
-                  variables: {
-                    id: oldData.id,
-                  },
-                });
+                try {
+                  deleteProduct({
+                    variables: {
+                      id: oldData.id,
+                    },
+                  });
+                } catch (error) {
+                  console.log(error.message);
+                }
               }
               resolve();
             }),

@@ -80,13 +80,17 @@ const DtProduct = () => {
     }
   );
 
-  const onSubmit = (data) => {
-    createCatalog({
-      variables: {
-        name: data.name.toLowerCase(),
-        th: data.th,
-      },
-    });
+  const onSubmit = async (data) => {
+    try {
+      await createCatalog({
+        variables: {
+          name: data.name.toLowerCase(),
+          th: data.th,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
     <div style={{ maxWidth: theme.layer.maxwidth, margin: 'auto' }}>

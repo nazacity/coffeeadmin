@@ -230,3 +230,18 @@ export const MUTATION_CREATE_BRANCH = gql`
     }
   }
 `;
+
+export const MUTATION_CREATE_TABLE = gql`
+  mutation MUTATION_CREATE_TABLE($branchId: ID!, $table: String!) {
+    createPlace(branchId: $branchId, table: $table) {
+      id
+      branch
+      place {
+        id
+        table
+        state
+        customer
+      }
+    }
+  }
+`;
