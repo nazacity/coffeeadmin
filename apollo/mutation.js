@@ -240,7 +240,42 @@ export const MUTATION_CREATE_TABLE = gql`
         id
         table
         state
-        customer
+        adult
+        children
+        package
+        bill {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export const MUTATION_UPDATEPLACE_CREATETABLE = gql`
+  mutation MUTATION_UPDATEPLACE_CREATETABLE(
+    $placeId: ID!
+    $adult: Float!
+    $children: Float!
+    $package: Float
+  ) {
+    updatePlaceAndCreateTable(
+      placeId: $placeId
+      adult: $adult
+      children: $children
+      package: $package
+    ) {
+      id
+      branch
+      place {
+        id
+        table
+        state
+        adult
+        children
+        package
+        bill {
+          id
+        }
       }
     }
   }

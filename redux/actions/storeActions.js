@@ -2,6 +2,7 @@ import {
   SET_BRANCH,
   CREATE_BRANCH,
   DELETE_BRANCH,
+  UPDATE_BRANCH,
   SET_TABLES,
   CREATE_TABLE,
   DELETE_TABLE,
@@ -18,6 +19,13 @@ export const setBranch = (branch) => (dispatch) => {
 export const createBranchs = (branch) => (dispatch) => {
   dispatch({
     type: CREATE_BRANCH,
+    payload: branch,
+  });
+};
+
+export const updateBranch = (branch) => (dispatch) => {
+  dispatch({
+    type: UPDATE_BRANCH,
     payload: branch,
   });
 };

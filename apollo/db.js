@@ -187,8 +187,13 @@ export const QUERY_BRANCH = {
     place{
       id
       table
-      customer
+      adult
+      children
+      package
       state
+      bill{
+        id
+      }
       }
     }
   }

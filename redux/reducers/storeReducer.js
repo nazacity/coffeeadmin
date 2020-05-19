@@ -2,6 +2,7 @@ import {
   SET_BRANCH,
   CREATE_BRANCH,
   DELETE_BRANCH,
+  UPDATE_BRANCH,
   SET_TABLES,
   CREATE_TABLE,
   DELETE_TABLE,
@@ -29,7 +30,15 @@ const clientReducer = (state = INITIAL_STATE, action) => {
       }
       return { ...state, tabless: [...action.payload] };
     case CREATE_BRANCH:
-      return { ...state, branch: [...state.branch, action.payload] };
+      newBranch = { ...action.payload, place: [] };
+      return { ...state, branch: [...state.branch, newBranch] };
+    case UPDATE_BRANCH:
+      index = state.branch.findIndex(
+        (branch) => branch.id === action.payload.id
+      );
+      newBranch = state.branch;
+      newBranch[index] = action.payload;
+      return { ...state, branch: newBranch };
     case DELETE_BRANCH:
       newBranch = state.branch.filter((branch) => branch.id !== action.payload);
       return { ...state, catalogs: newBranch };
@@ -38,7 +47,7 @@ const clientReducer = (state = INITIAL_STATE, action) => {
         (branch) => branch.id === action.payload.id
       );
       newBranch = state.branch;
-      newBranch[index] == action.payload;
+      newBranch[index] = action.payload;
       return { ...state, branch: newBranch };
     case UPDATE_TABLE:
       newTables = state.tables;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import CreateBranch from '../../components/table/CreateBranch';
 import cookie from 'cookie';
 
 // Redux
@@ -9,9 +8,14 @@ import { setUser } from '../../redux/actions/userActions';
 import { setBranch } from '../../redux/actions/storeActions';
 
 import { getUserByAccessToken, getBranch } from '../../apollo/db';
+
+// Components
+import CreateBranch from '../../components/table/CreateBranch';
 import CreateTable from '../../components/table/CreateTable';
+import TableItem from '../../components/table/TableItem';
 
 // MUI
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
@@ -19,11 +23,16 @@ import SwipeableViews from 'react-swipeable-views';
 const Table = ({ user, branch }) => {
   const action = useDispatch();
   const branchs = useSelector((state) => state.store.branch);
+  const matches600down = useMediaQuery('(max-width:600px)');
+  const matches1200down = useMediaQuery('(max-width:1200px)');
+
   const [state, setState] = useState(0);
   useEffect(() => {
     action(setUser(user ? user : null));
     action(setBranch(branch ? branch : null));
   }, [user, branch]);
+
+  const [reRender, setRerender] = useState(false);
 
   const handleChange = (event, value) => {
     setState(value);
@@ -51,11 +60,31 @@ const Table = ({ user, branch }) => {
         enableMouseEvents
       >
         {branchs.map((branch) => (
-          <div key={branch.id}>{branch.branch}</div>
+          <div
+            key={branch.id}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: matches600down
+                ? '1fr 1fr'
+                : matches1200down
+                ? '1fr 1fr 1fr'
+                : '1fr 1fr 1fr 1fr',
+              gridGap: '1vh',
+              padding: '1vh',
+            }}
+          >
+            {branch.place.map((table) => (
+              <TableItem
+                key={table.id}
+                table={table}
+                setRerender={setRerender}
+              />
+            ))}
+          </div>
         ))}
         <div>
           <CreateBranch />
-          <CreateTable />
+          <CreateTable setRerender={setRerender} />
         </div>
       </SwipeableViews>
     </motion.div>

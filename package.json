@@ -8,6 +8,7 @@
     "@material-ui/core": "latest",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/pickers": "^3.2.10",
+    "@mui-treasury/styles": "^1.4.0",
     "@sandstreamdev/react-swipeable-list": "^0.5.0",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",

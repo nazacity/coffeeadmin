@@ -69,7 +69,7 @@ const defaultValues = {
   table: '',
 };
 
-const CreateTable = () => {
+const CreateTable = ({ setRerender }) => {
   const matches600down = useMediaQuery('(max-width:600px)');
   const { addToast } = useToasts();
   const { control, handleSubmit, reset, errors } = useForm();
@@ -80,12 +80,15 @@ const CreateTable = () => {
   const classes = useStyles();
   const [createTable, { loading, error }] = useMutation(MUTATION_CREATE_TABLE, {
     onCompleted: (data) => {
+      console.log(data);
       action(createTables(data.createPlace));
       reset(defaultValues);
-      addToast(`เพิ่มโต๊ะในสาขาเรียบร้อย`, {
+      addToast('เพิ่มโต๊ะในสาขาเรียบร้อย', {
         appearance: 'success',
         autoDismiss: true,
       });
+      setRerender(true);
+      setRerender(false);
     },
   });
 
@@ -98,6 +101,7 @@ const CreateTable = () => {
         },
       });
     } catch (error) {
+      console.log(error);
       addToast(
         error.message === 'GraphQL error: Table already exsit' &&
           'ไม่สามารถเพิ่มรหัสโต๊ะซ้ำได้',
