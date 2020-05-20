@@ -12,7 +12,8 @@ import { updateBranch } from '../../redux/actions/storeActions';
 // Mui
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import TextField from '@material-ui/core/TextField';
@@ -209,6 +210,7 @@ const EditTableState = ({ table, handleClose, setRerender }) => {
               type="button"
               onClick={() => {
                 reset(defaultValues);
+                handleClose();
               }}
               variant="outlined"
               color="primary"
@@ -223,7 +225,57 @@ const EditTableState = ({ table, handleClose, setRerender }) => {
   }
   return (
     <div>
-      <h1>{table.state}</h1>
+      <CardActionArea>
+        <CardHeader
+          avatar={
+            <Avatar
+              aria-label="recipe"
+              style={{
+                width: 60,
+                height: 60,
+                margin: 'auto',
+                backgroundColor: '#fff',
+                color: 'black',
+              }}
+            >
+              {table.table}
+            </Avatar>
+          }
+          style={{
+            backgroundColor:
+              table.state === 'Open'
+                ? 'green'
+                : table.state === 'Close'
+                ? 'red'
+                : table.state === 'Wait' && 'orange',
+            color: 'white',
+          }}
+          title={table.status}
+        />
+      </CardActionArea>
+      <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          style={{ margin: 'auto', marginBottom: '2vh', width: '50%' }}
+          disabled={loading}
+          classes={{ root: classes.buttonRoot, disabled: classes.disabled }}
+        >
+          เช็คบิล
+        </Button>
+        <Button
+          type="button"
+          onClick={() => {
+            reset(defaultValues);
+          }}
+          variant="outlined"
+          color="primary"
+          style={{ margin: 'auto', marginBottom: '2vh', width: '50%' }}
+        >
+          ย้ายโต๊ะ
+        </Button>
+      </CardActions>
     </div>
   );
 };

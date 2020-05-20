@@ -182,21 +182,24 @@ export const QUERY_BRANCH = {
   query: `
   query{
     branch{
-    id
-    branch
-    place{
-      id
-      table
-      adult
-      children
-      package
-      state
-      bill{
-        id
-      }
-      }
+          id
+          branch
+          place{
+            id
+            table
+            adult
+            children
+            package
+            state
+            bill{
+                  id
+                  adult
+                  children
+                  createdAt
+                }
+          }
+        }
     }
-  }
   `,
 };
 

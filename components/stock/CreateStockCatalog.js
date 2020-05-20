@@ -3,11 +3,11 @@ import { useForm, Controller } from 'react-hook-form';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { createTables } from '../../redux/actions/storeActions';
+import { createStockCatalogs } from '../../redux/actions/stockActions';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
-import { MUTATION_CREATE_TABLE } from '../../apollo/mutation';
+import { MUTAION_CREATE_STOCKCATALOG } from '../../apollo/mutation';
 
 // MUI
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -19,10 +19,6 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
 
 // Toast
 import { useToasts } from 'react-toast-notifications';
@@ -47,53 +43,56 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const defaultValues = {
-  branchId: '',
-  table: '',
+  name: '',
+  th: '',
 };
 
-const CreateTable = ({ setRerender }) => {
+const CreateStockCatalog = ({ setRerender }) => {
   const matches600down = useMediaQuery('(max-width:600px)');
   const { addToast } = useToasts();
   const { control, handleSubmit, reset, errors } = useForm();
   const theme = useTheme();
   const matches1024down = useMediaQuery('(max-width:1024)');
-  const branchs = useSelector((state) => state.store.branch);
   const action = useDispatch();
   const classes = useStyles();
-  const [createTable, { loading, error }] = useMutation(MUTATION_CREATE_TABLE, {
-    onCompleted: (data) => {
-      console.log(data);
-      action(createTables(data.createPlace));
-      reset(defaultValues);
-      addToast('เพิ่มโต๊ะในสาขาเรียบร้อย', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
-      setRerender(true);
-      setRerender(false);
-    },
-  });
+  const [createStockCatalog, { loading, error }] = useMutation(
+    MUTAION_CREATE_STOCKCATALOG,
+    {
+      onCompleted: (data) => {
+        console.log(data);
+        action(createStockCatalogs(data.createStockCatalog));
+        reset(defaultValues);
+        addToast('เพิ่มประเภทวัตถุดิบเรียบร้อย', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+        setRerender(true);
+        setRerender(false);
+      },
+    }
+  );
 
   const onSubmit = async (data) => {
-    try {
-      await createTable({
-        variables: {
-          branchId: data.branchId,
-          table: data.table,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-      addToast(
-        error.message === 'GraphQL error: Table already exsit' &&
-          'ไม่สามารถเพิ่มรหัสโต๊ะซ้ำได้',
-        {
-          appearance: 'error',
-          autoDismiss: true,
-          placement: 'top-center',
-        }
-      );
-    }
+    console.log(data);
+    // try {
+    await createStockCatalog({
+      variables: {
+        name: data.name,
+        th: data.th,
+      },
+    });
+    // } catch (error) {
+    //   console.log(error);
+    //   addToast(
+    //     error.message === 'GraphQL error: StcokCatalog already exsit' &&
+    //       'ไม่สามารถเพิ่มประเภทวัตถุดิบซ้ำได้',
+    //     {
+    //       appearance: 'error',
+    //       autoDismiss: true,
+    //       placement: 'top-center',
+    //     }
+    //   );
+    // }
   };
   return (
     <div
@@ -103,57 +102,38 @@ const CreateTable = ({ setRerender }) => {
       }}
     >
       <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
-        <Typography align="center">เพิ่มโต๊ะ</Typography>
+        <Typography align="center">เพิ่มประเภทวัตถุดิบ</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
-            <FormControl
-              variant="outlined"
-              style={{
-                width: '100%',
-                marginRight: matches600down ? 0 : '2vh',
-                marginBottom: '2vh',
-              }}
-            >
-              <InputLabel id="demo-simple-select-outlined-label">
-                สาขา
-              </InputLabel>
-              <Controller
-                as={
-                  <Select label="สาขา">
-                    {branchs.map((branch) => (
-                      <MenuItem key={branch.id} value={branch.id}>
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItem: 'center',
-                          }}
-                        >
-                          <Typography style={{ margin: 'auto 2vh' }}>
-                            {branch.branch}
-                          </Typography>
-                        </div>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                }
-                control={control}
-                name="branchId"
-                defaultValue=""
-                fullWidth={true}
-              />
-            </FormControl>
             <Controller
               as={TextField}
-              name="table"
+              name="name"
               control={control}
               defaultValue=""
-              label="รหัสโต๊ะ"
+              label="ภาษาอังกฤษ"
               variant="outlined"
               rules={{
-                required: 'กรุณาใส่รหัสโต๊ะ',
+                required: 'กรุณาใส่ประเภทภาษาอังกฤษ',
               }}
-              error={errors.table && true}
-              helperText={errors.table?.message}
+              error={errors.name && true}
+              helperText={errors.name?.message}
+              size="small"
+              classes={{ root: classes.TextFieldRoot }}
+              disabled={loading}
+              style={{ width: '100%', margin: '1vh auto' }}
+            />
+            <Controller
+              as={TextField}
+              name="th"
+              control={control}
+              defaultValue=""
+              label="ภาษาไทย"
+              variant="outlined"
+              rules={{
+                required: 'กรุณาใส่ประเภทภาษาไทย',
+              }}
+              error={errors.th && true}
+              helperText={errors.th?.message}
               size="small"
               classes={{ root: classes.TextFieldRoot }}
               disabled={loading}
@@ -169,7 +149,7 @@ const CreateTable = ({ setRerender }) => {
               disabled={loading}
               classes={{ root: classes.buttonRoot, disabled: classes.disabled }}
             >
-              เพิ่มโต๊ะ
+              เพิ่มประเภทวัตถุดิบ
               {loading && (
                 <div style={{ position: 'absolute', display: 'flex' }}>
                   <CircularProgress
@@ -207,4 +187,4 @@ const CreateTable = ({ setRerender }) => {
   );
 };
 
-export default CreateTable;
+export default CreateStockCatalog;

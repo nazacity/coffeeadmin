@@ -11,36 +11,13 @@ import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
-import moment from 'moment';
-//import EditStatus from './EditStatus';
 import Dialog from '@material-ui/core/Dialog';
 import EditTableState from './EditTableState';
 
+// Moment
+import moment from 'moment';
+
 const useStyles = makeStyles(({ palette }) => ({
-  card: {
-    borderRadius: 12,
-    minWidth: 250,
-    textAlign: 'center',
-  },
-  avatar: {
-    width: 60,
-    height: 60,
-    margin: 'auto',
-    backgroundColor: '#fff',
-    color: 'black',
-  },
-  heading: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    letterSpacing: '0.5px',
-    marginTop: 8,
-    marginBottom: 0,
-  },
-  subheader: {
-    fontSize: 14,
-    color: palette.grey[500],
-    marginBottom: '0.875em',
-  },
   statLabel: {
     fontSize: 20,
     fontWeight: 500,
@@ -55,16 +32,6 @@ const useStyles = makeStyles(({ palette }) => ({
     marginBottom: 4,
     letterSpacing: '1px',
     textAlign: 'center',
-  },
-  cardfooter: {
-    width: '100%',
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr 1fr',
-  },
-  cardtabledetail: {
-    width: '100%',
-    display: 'grid',
-    gridTemplateColumns: '1fr 2fr',
   },
   cardclientdetail: {
     width: '100%',
@@ -99,7 +66,16 @@ const TableItem = ({ table, setRerender }) => {
       <CardActionArea onClick={handleClickOpen}>
         <CardHeader
           avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
+            <Avatar
+              aria-label="recipe"
+              style={{
+                width: 60,
+                height: 60,
+                margin: 'auto',
+                backgroundColor: '#fff',
+                color: 'black',
+              }}
+            >
               {table.table}
             </Avatar>
           }
@@ -127,7 +103,16 @@ const TableItem = ({ table, setRerender }) => {
               </Box>
               <Box p={2} flex={'auto'}>
                 <p className={classes.statLabel}>เริ่ม</p>
-                <p className={classes.statValue}>{table.startTime}</p>
+                <p className={classes.statValue}>
+                  {table.bill
+                    ? moment(table.bill?.createdAt).format('DD/MM/YY')
+                    : ''}
+                </p>
+                <p className={classes.statValue}>
+                  {table.bill
+                    ? moment(table.bill?.createdAt).format('HH:mm')
+                    : ''}
+                </p>
               </Box>
             </Box>
           </Typography>

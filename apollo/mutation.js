@@ -243,9 +243,6 @@ export const MUTATION_CREATE_TABLE = gql`
         adult
         children
         package
-        bill {
-          id
-        }
       }
     }
   }
@@ -275,8 +272,21 @@ export const MUTATION_UPDATEPLACE_CREATETABLE = gql`
         package
         bill {
           id
+          adult
+          children
+          createdAt
         }
       }
+    }
+  }
+`;
+
+export const MUTAION_CREATE_STOCKCATALOG = gql`
+  mutation MUTAION_CREATE_STOCKCATALOG($name: String!, $th: String!) {
+    createStockCatalog(name: $name, th: $th) {
+      id
+      name
+      th
     }
   }
 `;
