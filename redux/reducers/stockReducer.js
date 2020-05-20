@@ -16,7 +16,7 @@ const clientReducer = (state = INITIAL_STATE, action) => {
       if (action.payload === undefined) {
         return state;
       }
-      return { ...state, stockCatalog: [...action.payload] };
+      return { ...state, stockCatalog: action.payload };
     case CREATE_STOCKCATALOG:
       if (action.payload === undefined) {
         return state;

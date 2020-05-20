@@ -349,6 +349,23 @@ const BottomNavbar = () => {
             </Link>
           )}
           {user.state === 'admin' && (
+            <Link href="/stock" onClick={handleClose}>
+              <MenuItem
+                style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
+              >
+                <ListItemIcon>
+                  <Icon
+                    className="fab fa-cloudversify"
+                    color="primary"
+                    fontSize="small"
+                  />
+                </ListItemIcon>
+                <Typography variant="inherit">คลังสินค้า</Typography>
+              </MenuItem>
+              <Divider style={{ width: '60%', margin: '0px auto' }} />
+            </Link>
+          )}
+          {user.state === 'admin' && (
             <Link href="/order" onClick={handleClose}>
               <MenuItem
                 style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}

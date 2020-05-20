@@ -198,6 +198,28 @@ export const QUERY_BRANCH = {
                   createdAt
                 }
           }
+          stock{
+            id
+            pictureUrl
+            name
+            catalog{
+              id
+              name
+              th
+            }
+            remain
+            amount
+            stockAdd{
+              id
+              buy
+              amount
+            }
+            stockOut{
+              id
+              out
+              cost
+            }
+          }
         }
     }
   `,
@@ -296,4 +318,35 @@ export const getBranch = async (accessToken) => {
     }
   }
   return branch.data.branch;
+};
+
+export const QUERY_STOCK_CATALOGS = {
+  query: `
+  query{
+    stockCatalog {
+      id
+      name
+      th
+    }
+  }
+  `,
+};
+
+export const getStockCatalog = async (accessToken) => {
+  const uri = process.env.APOLLO_URL;
+  let stockCatalog;
+  if (accessToken) {
+    const responseOrders = await fetch(uri, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `${accessToken}` || '',
+      },
+      body: JSON.stringify(QUERY_STOCK_CATALOGS),
+    });
+    if (responseOrders.ok) {
+      stockCatalog = await responseOrders.json();
+    }
+  }
+  return stockCatalog.data.stockCatalog;
 };

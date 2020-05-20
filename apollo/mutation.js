@@ -290,3 +290,154 @@ export const MUTAION_CREATE_STOCKCATALOG = gql`
     }
   }
 `;
+
+export const MUTAION_DELETE_STOCKCATALOG = gql`
+  mutation MUTAION_DELETE_STOCKCATALOG($id: ID!) {
+    deleteStockCatalog(id: $id) {
+      id
+    }
+  }
+`;
+
+export const MUTATION_CREATE_STOCK = gql`
+  mutation MUTAION_CREATE_STOCKCATALOG(
+    $name: String!
+    $catalogId: ID!
+    $branchId: ID!
+    $pictureUrl: String!
+  ) {
+    createStock(
+      name: $name
+      catalogId: $catalogId
+      branchId: $branchId
+      pictureUrl: $pictureUrl
+    ) {
+      id
+      branch
+      place {
+        id
+        table
+        adult
+        children
+        package
+        state
+        bill {
+          id
+          adult
+          children
+          createdAt
+        }
+      }
+      stock {
+        id
+        pictureUrl
+        name
+        catalog {
+          id
+        }
+        remain
+        amount
+        stockAdd {
+          id
+          buy
+          amount
+        }
+        stockOut {
+          id
+          out
+          cost
+        }
+      }
+    }
+  }
+`;
+
+export const MUTATION_UPDATE_STOCK = gql`
+  mutation MUTATION_UPDATE_STOCK(
+    $id: ID!
+    $name: String!
+    $pictureUrl: String!
+  ) {
+    updateStock(id: $id, name: $name, pictureUrl: $pictureUrl) {
+      id
+      branch
+      place {
+        id
+        table
+        adult
+        children
+        package
+        state
+        bill {
+          id
+          adult
+          children
+          createdAt
+        }
+      }
+      stock {
+        id
+        pictureUrl
+        name
+        catalog {
+          id
+        }
+        remain
+        amount
+        stockAdd {
+          id
+          buy
+          amount
+        }
+        stockOut {
+          id
+          out
+          cost
+        }
+      }
+    }
+  }
+`;
+
+export const MUTATION_DELETE_STOCK = gql`
+  mutation MUTATION_DELETE_STOCK($id: ID!) {
+    deleteStock(id: $id) {
+      id
+      branch
+      place {
+        id
+        table
+        adult
+        children
+        package
+        state
+        bill {
+          id
+          adult
+          children
+          createdAt
+        }
+      }
+      stock {
+        id
+        pictureUrl
+        name
+        catalog {
+          id
+        }
+        remain
+        amount
+        stockAdd {
+          id
+          buy
+          amount
+        }
+        stockOut {
+          id
+          out
+          cost
+        }
+      }
+    }
+  }
+`;

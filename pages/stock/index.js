@@ -6,11 +6,17 @@ import cookie from 'cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../redux/actions/userActions';
 import { setBranch } from '../../redux/actions/storeActions';
+import { setStockCatalogs } from '../../redux/actions/stockActions';
 
-import { getUserByAccessToken, getBranch } from '../../apollo/db';
+import {
+  getUserByAccessToken,
+  getBranch,
+  getStockCatalog,
+} from '../../apollo/db';
 
 // Components
 import CreateStockCatalog from '../../components/stock/CreateStockCatalog';
+import StockTable from '../../components/stock/StockTable';
 
 // MUI
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -18,7 +24,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
 
-const Stock = ({ user, branch }) => {
+const Stock = ({ user, branch, stockCatalog }) => {
   const action = useDispatch();
   const branchs = useSelector((state) => state.store.branch);
   const matches600down = useMediaQuery('(max-width:600px)');
@@ -28,6 +34,7 @@ const Stock = ({ user, branch }) => {
   useEffect(() => {
     action(setUser(user ? user : null));
     action(setBranch(branch ? branch : null));
+    action(setStockCatalogs(stockCatalog ? stockCatalog : null));
   }, [user, branch]);
 
   const [reRender, setRerender] = useState(false);
@@ -58,20 +65,12 @@ const Stock = ({ user, branch }) => {
         enableMouseEvents
       >
         {branchs.map((branch) => (
-          <div
-            key={branch.id}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: matches600down
-                ? '1fr 1fr'
-                : matches1200down
-                ? '1fr 1fr 1fr'
-                : '1fr 1fr 1fr 1fr',
-              gridGap: '1vh',
-              padding: '1vh',
-            }}
-          >
-            {branch.branch}
+          <div key={branch.id}>
+            <StockTable
+              stock={branch.stock ? branch.stock : []}
+              branchId={branch.id}
+              setRerender={setRerender}
+            />
           </div>
         ))}
         <div>
@@ -95,11 +94,12 @@ export const getServerSideProps = async ({ req, res }) => {
   } else {
     const user = await getUserByAccessToken(accessToken);
     const branch = await getBranch(accessToken);
+    const stockCatalog = await getStockCatalog(accessToken);
     if (user.state !== 'admin') {
       res.writeHead(302, { Location: '/' });
       res.end();
     }
-    return { props: { user, branch } };
+    return { props: { user, branch, stockCatalog } };
   }
 };
 
