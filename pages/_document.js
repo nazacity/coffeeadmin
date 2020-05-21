@@ -54,8 +54,6 @@ export default class MyDocument extends Document {
             href="/icons/icon_96x96.png"
           />
           <link rel="manifest" href="/manifest.json" />
-          <link rel="mask-icon" href="/images/logo/logo.png" color="#5bbad5" />
-          <link rel="shortcut icon" href="/images/logo/logo.png" />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"

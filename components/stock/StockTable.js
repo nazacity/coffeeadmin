@@ -32,9 +32,20 @@ import MaterialTable from 'material-table';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Dialog from '@material-ui/core/Dialog';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import LensIcon from '@material-ui/icons/Lens';
+import NatureIcon from '@material-ui/icons/Nature';
 
 // Toast
 import { useToasts } from 'react-toast-notifications';
+import CreateStockAdd from './CreateStockAdd';
+import StockAddItem from './StockAdditem';
 
 const useStyles = makeStyles((theme) => ({
   top: {
@@ -84,7 +95,6 @@ const StockTable = ({ stock, branchId, setRerender }) => {
       },
       (err) => {
         // error function ....
-        console.log(err);
         addToast('ไม่สามารถอัพโหลดรูปวัตถุดิบได้', {
           appearance: 'success',
           autoDismiss: true,
@@ -114,6 +124,14 @@ const StockTable = ({ stock, branchId, setRerender }) => {
           });
       }
     );
+  };
+
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = (e) => {
+    setOpen(true);
+  };
+  const handleClose = (e) => {
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -197,16 +215,17 @@ const StockTable = ({ stock, branchId, setRerender }) => {
       editable: 'never',
     },
     { title: 'รายการ/หน่วย', field: 'name' },
+    { title: 'ประเภท', field: 'catalog', lookup, defaultGroupOrder: 0 },
     { title: 'ประเภท', field: 'catalog', lookup },
     { title: 'คงเหลือ', field: 'remain', editable: 'never' },
     { title: 'ต้นทุน', field: 'amount', editable: 'never' },
   ];
 
-  const catalogData = async (DATA) => {
-    await stockCatalog.map((catalog) => {
-      DATA.push({ id: catalog.id, th: catalog.th });
-    });
-  };
+  // const catalogData = async (DATA) => {
+  //   await stockCatalog.map((catalog) => {
+  //     DATA.push({ id: catalog.id, th: catalog.th });
+  //   });
+  // };
 
   const stockData = async (DATA) => {
     await stock.map((product) => {
@@ -228,7 +247,7 @@ const StockTable = ({ stock, branchId, setRerender }) => {
   const [state, setState] = useState([]);
   useEffect(() => {
     let DATA = [];
-    catalogData(DATA);
+    // catalogData(DATA);
     stockData(DATA);
     setState(DATA);
   }, [stock, stockCatalog]);
@@ -280,8 +299,6 @@ const StockTable = ({ stock, branchId, setRerender }) => {
     },
   });
 
-  const handleStockAdd = () => {};
-
   return (
     <React.Fragment>
       <Head>
@@ -309,7 +326,46 @@ const StockTable = ({ stock, branchId, setRerender }) => {
           exportButton: true,
           pageSize: 10,
         }}
-        parentChildData={(row, rows) => rows.find((a) => a.id === row.catalog)}
+        detailPanel={[
+          {
+            icon: () => <LensIcon />,
+            isFreeAction: true,
+            openIcon: () => <NatureIcon />,
+            tooltip: 'รายการเพิ่ม-ลดวัตถุดิบ',
+            render: (rowData) => {
+              if (rowData.th) return '';
+              return (
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                  }}
+                >
+                  {rowData.stockAdd.map((item) => (
+                    <Card
+                      key={item.id}
+                      style={{ margin: '1vh', padding: '1vh' }}
+                    >
+                      <StockAddItem item={item} />
+                    </Card>
+                  ))}
+                  {/* {rowData.stockOut?.map((item) => (
+                    <Card
+                      key={item.id}
+                      style={{ margin: '1vh', padding: '1vh' }}
+                    >
+                      <StockAddItem item={item} />
+                    </Card>
+                  ))} */}
+                </div>
+              );
+            },
+          },
+        ]}
+        options={{
+          grouping: true,
+        }}
+        // parentChildData={(row, rows) => rows.find((a) => a.id === row.catalog)}
         editable={{
           isEditable: (rowData) => rowData.pictureUrl,
           onRowAdd: (newData) =>
@@ -335,6 +391,7 @@ const StockTable = ({ stock, branchId, setRerender }) => {
 
                   resolve();
                 } catch (error) {
+                  console.log(error);
                   addToast('ไม่สามารถเพิ่มวัตถุดิบได้', {
                     appearance: 'error',
                     autoDismiss: true,
@@ -354,7 +411,6 @@ const StockTable = ({ stock, branchId, setRerender }) => {
                 return resolve();
               }
               if (newData.name !== oldData.name) {
-                console.log(newData);
                 try {
                   updateStock({
                     variables: {
@@ -389,7 +445,11 @@ const StockTable = ({ stock, branchId, setRerender }) => {
                     },
                   });
                 } catch (error) {
-                  console.log(error.message);
+                  addToast('ไม่สามารถลบประเภทวัตถุดิบได้', {
+                    appearance: 'error',
+                    autoDismiss: true,
+                  });
+                  resolve();
                 }
               }
               if (oldData.pictureUrl) {
@@ -400,7 +460,7 @@ const StockTable = ({ stock, branchId, setRerender }) => {
                     },
                   });
                 } catch (error) {
-                  addToast('ไม่สามารถแก้ไขข้อมูลวัตถุดิบได้', {
+                  addToast('ไม่สามารถลบข้อมูลวัตถุดิบได้', {
                     appearance: 'error',
                     autoDismiss: true,
                   });
@@ -455,7 +515,7 @@ const StockTable = ({ stock, branchId, setRerender }) => {
             tooltip: 'เพิ่มวัตถุดิบ',
             onClick: (event, rowData) => {
               setRow(rowData);
-              handleStockAdd();
+              handleClickOpen();
             },
             hidden: !rowData.pictureUrl,
           }),
@@ -465,6 +525,23 @@ const StockTable = ({ stock, branchId, setRerender }) => {
           marginBottom: '100px',
         }}
       />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth="xs"
+        fullWidth={true}
+      >
+        <Typography variant="h6" align="center">
+          เพิ่มปริมาณวัตถุดิบ
+        </Typography>
+        <CreateStockAdd
+          row={row}
+          setRerender={setRerender}
+          handleClose={handleClose}
+        />
+      </Dialog>
     </React.Fragment>
   );
 };

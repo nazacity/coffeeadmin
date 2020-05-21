@@ -341,6 +341,7 @@ export const MUTATION_CREATE_STOCK = gql`
           id
           buy
           amount
+          createdAt
         }
         stockOut {
           id
@@ -388,6 +389,7 @@ export const MUTATION_UPDATE_STOCK = gql`
           id
           buy
           amount
+          createdAt
         }
         stockOut {
           id
@@ -402,6 +404,53 @@ export const MUTATION_UPDATE_STOCK = gql`
 export const MUTATION_DELETE_STOCK = gql`
   mutation MUTATION_DELETE_STOCK($id: ID!) {
     deleteStock(id: $id) {
+      id
+      branch
+      place {
+        id
+        table
+        adult
+        children
+        package
+        state
+        bill {
+          id
+          adult
+          children
+          createdAt
+        }
+      }
+      stock {
+        id
+        pictureUrl
+        name
+        catalog {
+          id
+        }
+        remain
+        amount
+        stockAdd {
+          id
+          buy
+          amount
+        }
+        stockOut {
+          id
+          out
+          cost
+        }
+      }
+    }
+  }
+`;
+
+export const MUTATION_CREATE_STOCKADD = gql`
+  mutation MUTATION_CREATE_STOCKAD(
+    $stockId: ID!
+    $buy: Float!
+    $amount: Float!
+  ) {
+    createStockAdd(stockId: $stockId, buy: $buy, amount: $amount) {
       id
       branch
       place {

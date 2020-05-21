@@ -213,6 +213,7 @@ export const QUERY_BRANCH = {
               id
               buy
               amount
+              createdAt
             }
             stockOut{
               id

@@ -124,7 +124,7 @@ const NewClientReport = () => {
             actions: '',
           },
         }}
-        style={{ border: 'none', boxShadow: 'none' }}
+        style={{ border: 'none', boxShadow: 'none', zIndex: -1 }}
       />
     </React.Fragment>
   );
