@@ -24,8 +24,8 @@ import { motion } from 'framer-motion';
 import cookie from 'cookie';
 
 // Components
-import CreateStoreProductCatalog from '../../components/product/components/CreateStoreProductCatalog';
-import StoreProductTable from '../../components/product/components/StoreProductTable';
+import CreateStoreProductCatalog from '../../components/product/store/CreateStoreProductCatalog';
+import StoreProductTable from '../../components/product/store/StoreProductTable';
 
 const StoreProduct = ({ storeProductCatalogs, storeProduct, user }) => {
   const action = useDispatch();

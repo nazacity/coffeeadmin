@@ -26,10 +26,10 @@ const clientReducer = (state = INITIAL_STATE, action) => {
         stockCatalog: [...state.stockCatalog, action.payload],
       };
     case DELETE_STOCKCATALOG:
-      let newStockCatalogs = state.stockCatalog.filter(
+      let newStockCatalog = state.stockCatalog.filter(
         (catalog) => catalog.id !== action.payload
       );
-      return { ...state, stockCatalogs: newStockCatalogs };
+      return { ...state, stockCatalog: newStockCatalog };
     default:
       return state;
   }

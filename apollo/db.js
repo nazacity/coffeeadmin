@@ -386,3 +386,38 @@ export const QUERY_STOREPRODUCT = {
   }
   `,
 };
+
+export const QUERY_ONLINEPRODUCTCATALOG = {
+  query: `
+  query{
+    onlineProductCatalog {
+      id
+      name
+      th
+    }
+  }
+  `,
+};
+
+export const QUERY_ONLINEPRODUCT = {
+  query: `
+  query{
+    onlineProduct {
+      id
+      name
+      price
+      stockOutDetail{
+        name
+        out
+      }
+      pictureUrl
+      package
+      catalog{
+        id
+        name
+        th
+      }
+    }
+  }
+  `,
+};

@@ -23,6 +23,9 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 // Toast
 import { useToasts } from 'react-toast-notifications';
 
+// Component
+import DeleteStockCatalog from './DeleteStockCatalog';
+
 const useStyles = makeStyles((theme) => ({
   top: {
     color: theme.palette.primary.dark,
@@ -51,7 +54,8 @@ const CreateStockCatalog = ({ setRerender }) => {
   const { addToast } = useToasts();
   const { control, handleSubmit, reset, errors } = useForm();
   const theme = useTheme();
-  const matches1024down = useMediaQuery('(max-width:1024)');
+  const matches1024down = useMediaQuery('(max-width:1024px)');
+  const matches600down = useMediaQuery('(max-width:600px)');
   const action = useDispatch();
   const classes = useStyles();
   const [createStockCatalog, { loading, error }] = useMutation(
@@ -72,7 +76,6 @@ const CreateStockCatalog = ({ setRerender }) => {
   );
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       await createStockCatalog({
         variables: {
@@ -98,6 +101,8 @@ const CreateStockCatalog = ({ setRerender }) => {
       style={{
         maxWidth: matches1024down ? undefined : theme.layer.maxwidth,
         margin: 'auto',
+        display: matches600down ? undefined : 'grid',
+        gridTemplateColumns: '1.4fr 0.6fr',
       }}
     >
       <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
@@ -182,6 +187,13 @@ const CreateStockCatalog = ({ setRerender }) => {
           </CardActions>
         </form>
       </Card>
+      <div
+        style={{
+          marginTop: '1vh',
+        }}
+      >
+        <DeleteStockCatalog setRerender={setRerender} />
+      </div>
     </div>
   );
 };

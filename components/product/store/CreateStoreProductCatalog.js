@@ -3,15 +3,17 @@ import { useForm, Controller } from 'react-hook-form';
 
 // Redux
 import { useDispatch } from 'react-redux';
-import { createCatalogs } from '../../redux/actions/productAction';
+import {
+  createStoreProductCatalogs,
+  deleteStoreProductCatalogs,
+} from '../../../redux/actions/productAction';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
-import { MUTAION_CREATECATALOG } from '../../apollo/mutation';
+import { MUTAION_CREATE_STOREPRODUCTCATALOG } from '../../../apollo/mutation';
 
 // MUI
-import { useTheme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -19,23 +21,15 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-// Components
-import ProductTable from './components/ProductTable';
+// Toast
+import { useToasts } from 'react-toast-notifications';
+
+// Component
+import DeleteStoreCatalog from './DeleteStoreCatalog';
 
 const useStyles = makeStyles((theme) => ({
-  title: {
-    fontSize: '1.5em',
-    color: theme.common.color.white,
-    fontWeight: 'bold',
-    marginBottom: '10px',
-  },
-  logo: {
-    width: '300px',
-    height: '300px',
-    margin: 'auto',
-    border: '10px solid #764d24',
-  },
   top: {
     color: theme.palette.primary.dark,
   },
@@ -52,12 +46,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   disabled: {},
-  userlogo: {
-    width: '80px',
-    height: '80px',
-    margin: 'auto',
-    border: '5px solid #764d24',
-  },
 }));
 
 const defaultValues = {
@@ -65,46 +53,64 @@ const defaultValues = {
   th: '',
 };
 
-const DtProduct = () => {
-  const theme = useTheme();
+const CreateStoreProductCatalog = ({ setRerender }) => {
+  const { addToast } = useToasts();
   const { control, handleSubmit, reset, errors } = useForm();
+  const theme = useTheme();
+  const matches1024down = useMediaQuery('(max-width:1024px)');
+  const matches600down = useMediaQuery('(max-width:600px)');
   const action = useDispatch();
   const classes = useStyles();
-  const [createCatalog, { loading, error }] = useMutation(
-    MUTAION_CREATECATALOG,
+  const [createStoreProductCatalog, { loading, error }] = useMutation(
+    MUTAION_CREATE_STOREPRODUCTCATALOG,
     {
       onCompleted: (data) => {
-        action(createCatalogs(data.createCatalog));
+        console.log(data);
+        action(createStoreProductCatalogs(data.createStoreProductCatalog));
         reset(defaultValues);
+        addToast('เพิ่มประเภทสินค้าในร้านเรียบร้อย', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+        setRerender(true);
+        setRerender(false);
       },
     }
   );
 
   const onSubmit = async (data) => {
+    console.log(data);
     try {
-      await createCatalog({
+      await createStoreProductCatalog({
         variables: {
-          name: data.name.toLowerCase(),
+          name: data.name,
           th: data.th,
         },
       });
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
+      addToast(
+        error.message === 'GraphQL error: StcokCatalog already exsit' &&
+          'ไม่สามารถเพิ่มประเภทสินค้าในร้านซ้ำได้',
+        {
+          appearance: 'error',
+          autoDismiss: true,
+          placement: 'top-center',
+        }
+      );
     }
   };
   return (
-    <div style={{ maxWidth: theme.layer.maxwidth, margin: 'auto' }}>
-      <Card
-        style={{
-          margin: '2vh auto',
-          width: '50%',
-          padding: '2vh',
-          boxShadow: theme.common.shadow.main1,
-        }}
-      >
-        <Typography align="center" variant="h4">
-          เพิ่มประเภทสินค้า
-        </Typography>
+    <div
+      style={{
+        maxWidth: matches1024down ? undefined : theme.layer.maxwidth,
+        margin: 'auto',
+        display: matches600down ? undefined : 'grid',
+        gridTemplateColumns: '1.4fr 0.6fr',
+      }}
+    >
+      <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
+        <Typography align="center">เพิ่มประเภทสินค้าในร้าน</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
             <Controller
@@ -120,8 +126,8 @@ const DtProduct = () => {
               error={errors.name && true}
               helperText={errors.name?.message}
               size="small"
-              style={{ width: '100%', marginBottom: '1vh' }}
               disabled={loading}
+              style={{ width: '100%', margin: '1vh auto' }}
             />
             <Controller
               as={TextField}
@@ -136,20 +142,20 @@ const DtProduct = () => {
               error={errors.th && true}
               helperText={errors.th?.message}
               size="small"
-              style={{ width: '100%', marginBottom: '1vh' }}
               disabled={loading}
+              style={{ width: '100%', margin: '1vh auto' }}
             />
           </CardContent>
-          <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
+          <CardActions>
             <Button
               type="submit"
               variant="contained"
               color="primary"
-              style={{ marginRight: '2em' }}
+              style={{ marginRight: '2em', margin: 'auto' }}
               disabled={loading}
               classes={{ root: classes.buttonRoot, disabled: classes.disabled }}
             >
-              Confirm
+              เพิ่มประเภทสินค้าในร้าน
               {loading && (
                 <div style={{ position: 'absolute', display: 'flex' }}>
                   <CircularProgress
@@ -176,15 +182,16 @@ const DtProduct = () => {
               }}
               variant="outlined"
               color="primary"
+              style={{ margin: 'auto' }}
             >
-              Cancel
+              ยกเลิก
             </Button>
           </CardActions>
         </form>
       </Card>
-      <ProductTable />
+      <DeleteStoreCatalog setRerender={setRerender} />
     </div>
   );
 };
 
-export default DtProduct;
+export default CreateStoreProductCatalog;

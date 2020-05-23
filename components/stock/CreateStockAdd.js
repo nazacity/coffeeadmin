@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { MUTATION_CREATE_STOCKADD } from '../../apollo/mutation';
 
 // Redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { updateBranch } from '../../redux/actions/storeActions';
 
 // MUI

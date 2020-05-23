@@ -493,11 +493,19 @@ export const MUTAION_CREATE_STOREPRODUCTCATALOG = gql`
   }
 `;
 
+export const MUTAION_DELETE_STOREPRODUCTCATALOG = gql`
+  mutation MUTAION_DELETE_STOREPRODUCTCATALOG($id: ID!) {
+    deleteStoreProductCatalog(id: $id) {
+      id
+    }
+  }
+`;
+
 export const MUTAION_CREATE_STOREPRODUCT = gql`
   mutation MUTAION_CREATE_STOREPRODUCT(
     $name: String!
     $price: Float!
-    $stockOutDetail: [StockOutDetailInput]!
+    $stockOutDetail: [StockOutDetailInput]
     $pictureUrl: String!
     $catalogId: ID!
   ) {
@@ -562,6 +570,101 @@ export const MUTAION_UPDATE_STOREPRODUCT = gql`
 export const MUTAION_DELETE_STOREPRODUCT = gql`
   mutation MUTAION_DELETE_STOREPRODUCT($id: ID!) {
     deleteStoreProduct(id: $id) {
+      id
+      name
+      pictureUrl
+    }
+  }
+`;
+
+// Online Product
+export const MUTAION_CREATE_ONLINEPRODUCTCATALOG = gql`
+  mutation MUTAION_CREATE_ONLINEPRODUCTCATALOG($name: String!, $th: String!) {
+    createOnlineProductCatalog(name: $name, th: $th) {
+      id
+      name
+      th
+    }
+  }
+`;
+
+export const MUTAION_DELETE_ONLINEPRODUCTCATALOG = gql`
+  mutation MUTAION_DELETE_ONLINEPRODUCTCATALOG($id: ID!) {
+    deleteOnlineProductCatalog(id: $id) {
+      id
+    }
+  }
+`;
+
+export const MUTAION_CREATE_ONLINEPRODUCT = gql`
+  mutation MUTAION_CREATE_ONLINEPRODUCT(
+    $name: String!
+    $price: Float!
+    $stockOutDetail: [StockOutDetailInput]
+    $pictureUrl: String!
+    $catalogId: ID!
+  ) {
+    createOnlineProduct(
+      name: $name
+      price: $price
+      stockOutDetail: $stockOutDetail
+      pictureUrl: $pictureUrl
+      catalogId: $catalogId
+    ) {
+      id
+      name
+      price
+      stockOutDetail {
+        name
+        out
+      }
+      pictureUrl
+      package
+      catalog {
+        id
+        name
+        th
+      }
+    }
+  }
+`;
+
+export const MUTAION_UPDATE_ONLINEPRODUCT = gql`
+  mutation MUTAION_UPDATE_ONLINEPRODUCT(
+    $id: ID!
+    $name: String
+    $price: Float
+    $pictureUrl: String
+    $catalogId: ID
+  ) {
+    updateOnlineProduct(
+      id: $id
+      name: $name
+      price: $price
+      pictureUrl: $pictureUrl
+      catalogId: $catalogId
+    ) {
+      id
+      name
+      price
+      stockOutDetail {
+        name
+        out
+      }
+      pictureUrl
+      package
+      catalog {
+        id
+        name
+        th
+      }
+    }
+  }
+`;
+
+export const MUTAION_DELETE_ONLINEPRODUCT = gql`
+  mutation MUTAION_DELETE_ONLINEPRODUCT($id: ID!) {
+    deleteOnlineProduct(id: $id) {
       id
       name
       pictureUrl

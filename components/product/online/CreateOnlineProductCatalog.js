@@ -3,11 +3,14 @@ import { useForm, Controller } from 'react-hook-form';
 
 // Redux
 import { useDispatch } from 'react-redux';
-import { createCatalogs } from '../../redux/actions/productAction';
+import {
+  createOnlineProductCatalogs,
+  deleteOnlineProductCatalogs,
+} from '../../../redux/actions/productAction';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
-import { MUTAION_CREATECATALOG } from '../../apollo/mutation';
+import { MUTAION_CREATE_ONLINEPRODUCTCATALOG } from '../../../apollo/mutation';
 
 // MUI
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -18,23 +21,15 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-// Components
-import ProductTable from './components/ProductTable';
+// Toast
+import { useToasts } from 'react-toast-notifications';
+
+// Component
+import DeleteOnlineCatalog from './DeleteOnlineCatalog';
 
 const useStyles = makeStyles((theme) => ({
-  title: {
-    fontSize: '1.5em',
-    color: theme.common.color.white,
-    fontWeight: 'bold',
-    marginBottom: '10px',
-  },
-  logo: {
-    width: '300px',
-    height: '300px',
-    margin: 'auto',
-    border: '10px solid #764d24',
-  },
   top: {
     color: theme.palette.primary.dark,
   },
@@ -51,12 +46,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   disabled: {},
-  userlogo: {
-    width: '80px',
-    height: '80px',
-    margin: 'auto',
-    border: '5px solid #764d24',
-  },
 }));
 
 const defaultValues = {
@@ -64,38 +53,64 @@ const defaultValues = {
   th: '',
 };
 
-const MbProduct = () => {
+const CreateOnlineProductCatalog = ({ setRerender }) => {
+  const { addToast } = useToasts();
   const { control, handleSubmit, reset, errors } = useForm();
   const theme = useTheme();
-
+  const matches1024down = useMediaQuery('(max-width:1024px)');
+  const matches600down = useMediaQuery('(max-width:600px)');
   const action = useDispatch();
   const classes = useStyles();
-  const [createCatalog, { loading, error }] = useMutation(
-    MUTAION_CREATECATALOG,
+  const [createOnlineProductCatalog, { loading, error }] = useMutation(
+    MUTAION_CREATE_ONLINEPRODUCTCATALOG,
     {
       onCompleted: (data) => {
-        action(createCatalogs(data.createCatalog));
+        console.log(data);
+        action(createOnlineProductCatalogs(data.createOnlineProductCatalog));
         reset(defaultValues);
+        addToast('เพิ่มประเภทสินค้าออนไลน์เรียบร้อย', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+        setRerender(true);
+        setRerender(false);
       },
     }
   );
 
   const onSubmit = async (data) => {
+    console.log(data);
     try {
-      await createCatalog({
+      await createOnlineProductCatalog({
         variables: {
-          name: data.name.toLowerCase(),
+          name: data.name,
           th: data.th,
         },
       });
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
+      addToast(
+        error.message === 'GraphQL error: StcokCatalog already exsit' &&
+          'ไม่สามารถเพิ่มประเภทสินค้าออนไลน์ซ้ำได้',
+        {
+          appearance: 'error',
+          autoDismiss: true,
+          placement: 'top-center',
+        }
+      );
     }
   };
   return (
-    <React.Fragment>
+    <div
+      style={{
+        maxWidth: matches1024down ? undefined : theme.layer.maxwidth,
+        margin: 'auto',
+        display: matches600down ? undefined : 'grid',
+        gridTemplateColumns: '1.4fr 0.6fr',
+      }}
+    >
       <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
-        <Typography align="center">เพิ่มประเภทสินค้า</Typography>
+        <Typography align="center">เพิ่มประเภทสินค้าออนไลน์</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
             <Controller
@@ -111,7 +126,6 @@ const MbProduct = () => {
               error={errors.name && true}
               helperText={errors.name?.message}
               size="small"
-              classes={{ root: classes.TextFieldRoot }}
               disabled={loading}
               style={{ width: '100%', margin: '1vh auto' }}
             />
@@ -128,7 +142,6 @@ const MbProduct = () => {
               error={errors.th && true}
               helperText={errors.th?.message}
               size="small"
-              classes={{ root: classes.TextFieldRoot }}
               disabled={loading}
               style={{ width: '100%', margin: '1vh auto' }}
             />
@@ -142,7 +155,7 @@ const MbProduct = () => {
               disabled={loading}
               classes={{ root: classes.buttonRoot, disabled: classes.disabled }}
             >
-              เพิ่มประเภท
+              เพิ่มประเภทสินค้าออนไลน์
               {loading && (
                 <div style={{ position: 'absolute', display: 'flex' }}>
                   <CircularProgress
@@ -176,9 +189,9 @@ const MbProduct = () => {
           </CardActions>
         </form>
       </Card>
-      <ProductTable />
-    </React.Fragment>
+      <DeleteOnlineCatalog setRerender={setRerender} />
+    </div>
   );
 };
 
-export default MbProduct;
+export default CreateOnlineProductCatalog;

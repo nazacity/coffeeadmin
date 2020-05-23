@@ -6,7 +6,16 @@ import {
   CREATE_STOREPRODUCT,
   DELETE_STOREPRODUCT,
   UPDATE_STOREPRODUCT,
+  SET_ONLINEPRODUCTCATALOG,
+  CREATE_ONLINEPRODUCTCATALOG,
+  DELETE_ONLINEPRODUCTCATALOG,
+  SET_ONLINEPRODUCT,
+  CREATE_ONLINEPRODUCT,
+  DELETE_ONLINEPRODUCT,
+  UPDATE_ONLINEPRODUCT,
 } from '../types';
+
+// Store Product
 
 export const setStoreProductCatalogs = (catalogs) => (dispatch) => {
   dispatch({
@@ -53,6 +62,57 @@ export const updateStoreProducts = (product) => (dispatch) => {
 export const deleteStoreProducts = (id) => (dispatch) => {
   dispatch({
     type: DELETE_STOREPRODUCT,
+    payload: id,
+  });
+};
+
+// Online Product
+
+export const setOnlineProductCatalogs = (catalogs) => (dispatch) => {
+  dispatch({
+    type: SET_ONLINEPRODUCTCATALOG,
+    payload: catalogs,
+  });
+};
+
+export const createOnlineProductCatalogs = (catalog) => (dispatch) => {
+  dispatch({
+    type: CREATE_ONLINEPRODUCTCATALOG,
+    payload: catalog,
+  });
+};
+
+export const deleteOnlineProductCatalogs = (id) => (dispatch) => {
+  dispatch({
+    type: DELETE_ONLINEPRODUCTCATALOG,
+    payload: id,
+  });
+};
+
+export const setOnlineProducts = (products) => (dispatch) => {
+  dispatch({
+    type: SET_ONLINEPRODUCT,
+    payload: products,
+  });
+};
+
+export const createOnlineProducts = (product) => (dispatch) => {
+  dispatch({
+    type: CREATE_ONLINEPRODUCT,
+    payload: product,
+  });
+};
+
+export const updateOnlineProducts = (product) => (dispatch) => {
+  dispatch({
+    type: UPDATE_ONLINEPRODUCT,
+    payload: product,
+  });
+};
+
+export const deleteOnlineProducts = (id) => (dispatch) => {
+  dispatch({
+    type: DELETE_ONLINEPRODUCT,
     payload: id,
   });
 };

@@ -6,15 +6,15 @@ import { storage } from '../../../firebase';
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
 import {
-  MUTAION_UPDATE_STOREPRODUCT,
-  MUTAION_DELETE_STOREPRODUCT,
+  MUTAION_UPDATE_ONLINEPRODUCT,
+  MUTAION_DELETE_ONLINEPRODUCT,
 } from '../../../apollo/mutation';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  updateStoreProducts,
-  deleteStoreProducts,
+  updateOnlineProducts,
+  deleteOnlineProducts,
 } from '../../../redux/actions/productAction';
 
 // Moment
@@ -37,7 +37,7 @@ import Typography from '@material-ui/core/Typography';
 
 // Toast
 import { useToasts } from 'react-toast-notifications';
-import CreateStoreProduct from './CreateStoreProduct';
+import CreateOnlineProduct from './CreateOnlineProduct';
 
 const useStyles = makeStyles((theme) => ({
   top: {
@@ -53,19 +53,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StoreProductTable = ({ setRerender }) => {
+const OnlineProductTable = ({ setRerender }) => {
   const matches1024down = useMediaQuery('(max-width:1024px)');
   const theme = useTheme();
   const classes = useStyles();
-  const catalogs = useSelector((state) => state.products.storeProductCatalogs);
+  const catalogs = useSelector((state) => state.products.onlineProductCatalogs);
   const [lookup, setLookup] = useState({});
   const [row, setRow] = useState({});
   const [pictureUploading, setPictureUploading] = useState(false);
-  const [addStoreProductDialog, setAddStoreProductDialog] = useState(false);
+  const [addProductDialog, setAddProductDialog] = useState(false);
   const { addToast } = useToasts();
 
-  const handleAddStoreProductDialogClose = () => {
-    setAddStoreProductDialog(false);
+  const handleAddProductDialogClose = () => {
+    setAddProductDialog(false);
   };
 
   const imageInput = useRef();
@@ -100,19 +100,12 @@ const StoreProductTable = ({ setRerender }) => {
           .child(Image.name)
           .getDownloadURL()
           .then((url) => {
-            updateStoreProduct({
+            updateOnlineProduct({
               variables: {
                 id: row.id,
                 pictureUrl: url,
               },
             });
-          })
-          .then(() => {
-            addToast('อัพโหลดรูปสินค้าเรียบร้อย', {
-              appearance: 'success',
-              autoDismiss: true,
-            });
-            setRow({});
           });
       }
     );
@@ -209,7 +202,7 @@ const StoreProductTable = ({ setRerender }) => {
     { title: 'ประเภท', field: 'catalog', lookup },
     { title: 'ประเภท', field: 'catalog', lookup, defaultGroupOrder: 0 },
   ];
-  const products = useSelector((state) => state.products.storeProducts);
+  const products = useSelector((state) => state.products.onlineProducts);
 
   const productData = async (DATA) => {
     await products.map((product) => {
@@ -235,39 +228,19 @@ const StoreProductTable = ({ setRerender }) => {
   }, [products]);
 
   const action = useDispatch();
-  // const [deleteCatalog] = useMutation(MUTAION_DELETECATALOG, {
-  //   onCompleted: (data) => {
-  //     action(deleteCatalogs(data.deleteCatalog.id));
-  //     addToast('ลบประเภทสินค้าเรียบร้อย', {
-  //       appearance: 'success',
-  //       autoDismiss: true,
-  //     });
-  //   },
-  // });
 
-  // const [createProduct] = useMutation(MUTAION_CREATEPRODUCT, {
-  //   onCompleted: (data) => {
-  //     action(createProducts(data.createProduct));
-  //     addToast('เพิ่มสินค้าเรียบร้อย', {
-  //       appearance: 'success',
-  //       autoDismiss: true,
-  //     });
-  //   },
-  // });
-
-  const [deleteStoreProduct] = useMutation(MUTAION_DELETE_STOREPRODUCT, {
+  const [deleteOnlineProduct] = useMutation(MUTAION_DELETE_ONLINEPRODUCT, {
     onCompleted: (data) => {
-      action(deleteStoreProducts(data.deleteStoreProduct.id));
+      action(deleteOnlineProducts(data.deleteOnlineProduct.id));
 
-      let DATA = [];
-      productData(DATA);
-      setState(DATA);
+      setRerender(true);
+      setRerender(false);
 
       const content = (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
-            src={data.deleteStoreProduct.pictureUrl}
-            alt={data.deleteStoreProduct.name}
+            src={data.deleteOnlineProduct.pictureUrl}
+            alt={data.deleteOnlineProduct.name}
             style={{
               marginRight: '1vh',
               backgroundColor: '#fff',
@@ -275,7 +248,7 @@ const StoreProductTable = ({ setRerender }) => {
             }}
           />
           <Typography>
-            ลบสินค้า {data.deleteStoreProduct.name} ในร้านเรียบร้อย
+            ลบสินค้า {data.deleteOnlineProduct.name} ออนไลน์เรียบร้อย
           </Typography>
         </div>
       );
@@ -286,10 +259,10 @@ const StoreProductTable = ({ setRerender }) => {
     },
   });
 
-  const [updateStoreProduct] = useMutation(MUTAION_UPDATE_STOREPRODUCT, {
+  const [updateOnlineProduct] = useMutation(MUTAION_UPDATE_ONLINEPRODUCT, {
     onCompleted: (data) => {
       setPictureUploading(false);
-      action(updateStoreProducts(data.updateStoreProduct));
+      action(updateOnlineProducts(data.updateOnlineProduct));
 
       let DATA = [];
       productData(DATA);
@@ -298,8 +271,8 @@ const StoreProductTable = ({ setRerender }) => {
       const content = (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
-            src={data.updateStoreProduct.pictureUrl}
-            alt={data.updateStoreProduct.name}
+            src={data.updateOnlineProduct.pictureUrl}
+            alt={data.updateOnlineProduct.name}
             style={{
               marginRight: '1vh',
               backgroundColor: '#fff',
@@ -307,7 +280,7 @@ const StoreProductTable = ({ setRerender }) => {
             }}
           />
           <Typography>
-            แก้ไขสินค้า {data.updateStoreProduct.name} ในร้านเรียบร้อย
+            แก้ไขสินค้า {data.updateOnlineProduct.name} ออนไลน์เรียบร้อย
           </Typography>
         </div>
       );
@@ -365,7 +338,7 @@ const StoreProductTable = ({ setRerender }) => {
                 newData.catalog !== oldData.catalog
               ) {
                 try {
-                  updateStoreProduct({
+                  updateOnlineProduct({
                     variables: {
                       id: newData.id,
                       name: newData.name,
@@ -393,7 +366,7 @@ const StoreProductTable = ({ setRerender }) => {
           onRowDelete: (oldData) =>
             new Promise(async (resolve, reject) => {
               try {
-                deleteStoreProduct({
+                deleteOnlineProduct({
                   variables: {
                     id: oldData.id,
                   },
@@ -410,7 +383,7 @@ const StoreProductTable = ({ setRerender }) => {
         }}
         localization={{
           body: {
-            emptyDataSourceMessage: 'ยังสินค้า',
+            emptyDataSourceMessage: 'ยังไม่มีสินค้า',
             editTooltip: 'แก้ไข',
             deleteTooltip: 'ลบ',
             addTooltip: 'เพิ่มสินค้า',
@@ -453,7 +426,7 @@ const StoreProductTable = ({ setRerender }) => {
             tooltip: 'เพิ่มสินค้า',
             isFreeAction: true,
             onClick: (event, rowData) => {
-              setAddStoreProductDialog(true);
+              setAddProductDialog(true);
             },
           },
         ]}
@@ -463,17 +436,17 @@ const StoreProductTable = ({ setRerender }) => {
         }}
       />
       <Dialog
-        onClose={handleAddStoreProductDialogClose}
-        open={addStoreProductDialog}
+        onClose={handleAddProductDialogClose}
+        open={addProductDialog}
         fullWidth
         maxWidth="md"
       >
-        <CreateStoreProduct
-          handleAddStoreProductDialogClose={handleAddStoreProductDialogClose}
+        <CreateOnlineProduct
+          handleAddProductDialogClose={handleAddProductDialogClose}
         />
       </Dialog>
     </React.Fragment>
   );
 };
 
-export default StoreProductTable;
+export default OnlineProductTable;

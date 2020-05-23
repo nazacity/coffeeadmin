@@ -3,12 +3,12 @@ import { useForm, Controller } from 'react-hook-form';
 
 // Apollo
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { MUTAION_CREATE_STOREPRODUCT } from '../../../apollo/mutation';
+import { MUTAION_CREATE_ONLINEPRODUCT } from '../../../apollo/mutation';
 import { QUERY_STOCKNAME } from '../../../apollo/query';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { createStoreProducts } from '../../../redux/actions/productAction';
+import { createOnlineProducts } from '../../../redux/actions/productAction';
 
 // MUI
 import Card from '@material-ui/core/Card';
@@ -32,7 +32,7 @@ const defaultValues = {
   title: 'hey',
 };
 
-const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
+const CreateOnlineProduct = ({ handleAddProductDialogClose }) => {
   const [indexes, setIndexes] = React.useState([0]);
   const [counter, setCounter] = React.useState(1);
   const { addToast } = useToasts();
@@ -40,20 +40,18 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
   const matches600down = useMediaQuery('(max-width:600px)');
   const { data } = useQuery(QUERY_STOCKNAME);
 
-  const storeProductCatalogs = useSelector(
-    (state) => state.products.storeProductCatalogs
-  );
-  const [createStoreProduct, { loading, error }] = useMutation(
-    MUTAION_CREATE_STOREPRODUCT,
+  const catalogs = useSelector((state) => state.products.onlineProductCatalogs);
+  const [createOnlineProduct, { loading, error }] = useMutation(
+    MUTAION_CREATE_ONLINEPRODUCT,
     {
       onCompleted: (data) => {
-        console.log(data.createStoreProduct);
-        action(createStoreProducts(data.createStoreProduct));
+        console.log(data.createOnlineProduct);
+        action(createOnlineProducts(data.createOnlineProduct));
         const content = (
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Avatar
-              src={data.createStoreProduct.pictureUrl}
-              alt={data.createStoreProduct.name}
+              src={data.createOnlineProduct.pictureUrl}
+              alt={data.createOnlineProduct.name}
               style={{
                 marginRight: '1vh',
                 backgroundColor: '#fff',
@@ -61,7 +59,7 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
               }}
             />
             <Typography>
-              เพิ่มสินค้า {data.createStoreProduct.name} ในร้านเรียบร้อย
+              เพิ่มสินค้า {data.createOnlineProduct.name} ในร้านเรียบร้อย
             </Typography>
           </div>
         );
@@ -69,7 +67,7 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
           appearance: 'success',
           autoDismiss: true,
         });
-        handleAddStoreProductDialogClose();
+        handleAddProductDialogClose();
       },
     }
   );
@@ -86,10 +84,10 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
   const onSubmit = async (data) => {
     console.log(data);
     let convertStockOutDetail = [];
-    data.stockOutDetail.map((detail) => {
+    data.stockOutDetail?.map((detail) => {
       convertStockOutDetail.push({ name: detail.name, out: +detail.out });
     });
-    await createStoreProduct({
+    await createOnlineProduct({
       variables: {
         name: data.name,
         stockOutDetail: convertStockOutDetail,
@@ -170,7 +168,7 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
           <Controller
             as={
               <Select label="ประเภทสินค้า" style={{ height: '50px' }}>
-                {storeProductCatalogs.map((catalog) => (
+                {catalogs.map((catalog) => (
                   <MenuItem key={catalog.id} value={catalog.id}>
                     <div style={{ display: 'flex', alignItem: 'center' }}>
                       <Typography style={{ margin: '1auto 2vh' }}>
@@ -259,11 +257,6 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
                     defaultValue=""
                     label="ปริมาณ"
                     variant="outlined"
-                    rules={{
-                      required: 'กรุณาใส่ปริมาณ',
-                    }}
-                    error={errors.fieldName?.out && true}
-                    helperText={errors.fieldName?.out?.message}
                     size="small"
                     // disabled={loading}
                     style={{
@@ -308,4 +301,4 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
   );
 };
 
-export default CreateStoreProduct;
+export default CreateOnlineProduct;
