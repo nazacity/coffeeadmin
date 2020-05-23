@@ -9,15 +9,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateBranch } from '../../redux/actions/storeActions';
 
 // MUI
-import { useTheme } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { useForm, Controller } from 'react-hook-form';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
 
 // Toast
 import { useToasts } from 'react-toast-notifications';
@@ -77,7 +77,23 @@ const CreateStockAdd = ({ row, setRerender, handleClose }) => {
         await action(updateBranch(data.createStockAdd));
         setRerender(true);
         setRerender(false);
-        addToast('เพิ่มปริมาณวัตถุดิบเรียบร้อย', {
+        const content = (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar
+              src={data.createStockAdd.pictureUrl}
+              alt={data.createStockAdd.name}
+              style={{
+                marginRight: '1vh',
+                backgroundColor: '#fff',
+                boxShadow: theme.common.shadow.black,
+              }}
+            />
+            <Typography>
+              เพิ่มวัตถุดิบ {data.createStockAdd.name} เรียบร้อย
+            </Typography>
+          </div>
+        );
+        addToast(content, {
           appearance: 'success',
           autoDismiss: true,
         });

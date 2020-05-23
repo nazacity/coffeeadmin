@@ -3,11 +3,11 @@ import { useForm, Controller } from 'react-hook-form';
 
 // Redux
 import { useDispatch } from 'react-redux';
-import { createStockCatalogs } from '../../redux/actions/stockActions';
+import { createStoreProductCatalogs } from '../../../redux/actions/productAction';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
-import { MUTAION_CREATE_STOCKCATALOG } from '../../apollo/mutation';
+import { MUTAION_CREATE_STOREPRODUCTCATALOG } from '../../../apollo/mutation';
 
 // MUI
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -47,21 +47,21 @@ const defaultValues = {
   th: '',
 };
 
-const CreateStockCatalog = ({ setRerender }) => {
+const CreateStoreProductCatalog = ({ setRerender }) => {
   const { addToast } = useToasts();
   const { control, handleSubmit, reset, errors } = useForm();
   const theme = useTheme();
   const matches1024down = useMediaQuery('(max-width:1024)');
   const action = useDispatch();
   const classes = useStyles();
-  const [createStockCatalog, { loading, error }] = useMutation(
-    MUTAION_CREATE_STOCKCATALOG,
+  const [createStoreProductCatalog, { loading, error }] = useMutation(
+    MUTAION_CREATE_STOREPRODUCTCATALOG,
     {
       onCompleted: (data) => {
         console.log(data);
-        action(createStockCatalogs(data.createStockCatalog));
+        action(createStoreProductCatalogs(data.createStoreProductCatalog));
         reset(defaultValues);
-        addToast('เพิ่มประเภทวัตถุดิบเรียบร้อย', {
+        addToast('เพิ่มประเภทสินค้าในร้านเรียบร้อย', {
           appearance: 'success',
           autoDismiss: true,
         });
@@ -74,7 +74,7 @@ const CreateStockCatalog = ({ setRerender }) => {
   const onSubmit = async (data) => {
     console.log(data);
     try {
-      await createStockCatalog({
+      await createStoreProductCatalog({
         variables: {
           name: data.name,
           th: data.th,
@@ -84,7 +84,7 @@ const CreateStockCatalog = ({ setRerender }) => {
       console.log(error);
       addToast(
         error.message === 'GraphQL error: StcokCatalog already exsit' &&
-          'ไม่สามารถเพิ่มประเภทวัตถุดิบซ้ำได้',
+          'ไม่สามารถเพิ่มประเภทสินค้าในร้านซ้ำได้',
         {
           appearance: 'error',
           autoDismiss: true,
@@ -101,7 +101,7 @@ const CreateStockCatalog = ({ setRerender }) => {
       }}
     >
       <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
-        <Typography align="center">เพิ่มประเภทวัตถุดิบ</Typography>
+        <Typography align="center">เพิ่มประเภทสินค้าในร้าน</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
             <Controller
@@ -117,7 +117,6 @@ const CreateStockCatalog = ({ setRerender }) => {
               error={errors.name && true}
               helperText={errors.name?.message}
               size="small"
-              classes={{ root: classes.TextFieldRoot }}
               disabled={loading}
               style={{ width: '100%', margin: '1vh auto' }}
             />
@@ -134,7 +133,6 @@ const CreateStockCatalog = ({ setRerender }) => {
               error={errors.th && true}
               helperText={errors.th?.message}
               size="small"
-              classes={{ root: classes.TextFieldRoot }}
               disabled={loading}
               style={{ width: '100%', margin: '1vh auto' }}
             />
@@ -148,7 +146,7 @@ const CreateStockCatalog = ({ setRerender }) => {
               disabled={loading}
               classes={{ root: classes.buttonRoot, disabled: classes.disabled }}
             >
-              เพิ่มประเภทวัตถุดิบ
+              เพิ่มประเภทสินค้าในร้าน
               {loading && (
                 <div style={{ position: 'absolute', display: 'flex' }}>
                   <CircularProgress
@@ -186,4 +184,4 @@ const CreateStockCatalog = ({ setRerender }) => {
   );
 };
 
-export default CreateStockCatalog;
+export default CreateStoreProductCatalog;

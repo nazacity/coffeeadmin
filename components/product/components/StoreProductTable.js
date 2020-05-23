@@ -6,19 +6,15 @@ import { storage } from '../../../firebase';
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
 import {
-  MUTAION_DELETECATALOG,
-  MUTAION_CREATEPRODUCT,
-  MUTAION_DELETEPRODUCT,
-  MUTAION_UPDATERODUCT,
+  MUTAION_UPDATE_STOREPRODUCT,
+  MUTAION_DELETE_STOREPRODUCT,
 } from '../../../apollo/mutation';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  deleteCatalogs,
-  createProducts,
-  deleteProducts,
-  updateProducts,
+  updateStoreProducts,
+  deleteStoreProducts,
 } from '../../../redux/actions/productAction';
 
 // Moment
@@ -35,9 +31,13 @@ import MaterialTable from 'material-table';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Dialog from '@material-ui/core/Dialog';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
 
 // Toast
 import { useToasts } from 'react-toast-notifications';
+import CreateStoreProduct from './CreateStoreProduct';
 
 const useStyles = makeStyles((theme) => ({
   top: {
@@ -53,15 +53,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProductTable = () => {
+const StoreProductTable = ({ setRerender }) => {
   const matches1024down = useMediaQuery('(max-width:1024px)');
   const theme = useTheme();
   const classes = useStyles();
-  const catalogs = useSelector((state) => state.products.catalogs);
+  const catalogs = useSelector((state) => state.products.storeProductCatalogs);
   const [lookup, setLookup] = useState({});
   const [row, setRow] = useState({});
   const [pictureUploading, setPictureUploading] = useState(false);
+  const [addStoreProductDialog, setAddStoreProductDialog] = useState(false);
   const { addToast } = useToasts();
+
+  const handleAddStoreProductDialogClose = () => {
+    setAddStoreProductDialog(false);
+  };
 
   const imageInput = useRef();
   const handleEditPicture = () => {
@@ -74,7 +79,7 @@ const ProductTable = () => {
       setRow({});
     }
     const uploadTask = storage
-      .ref(`products/${row.catalog}/${Image.name}`)
+      .ref(`products/${row.catalogName}/${Image.name}`)
       .put(Image);
     uploadTask.on(
       'state_changed',
@@ -91,11 +96,11 @@ const ProductTable = () => {
       () => {
         // complete function ...
         storage
-          .ref(`products/${row.catalog}`)
+          .ref(`products/${row.catalogName}`)
           .child(Image.name)
           .getDownloadURL()
           .then((url) => {
-            updateProduct({
+            updateStoreProduct({
               variables: {
                 id: row.id,
                 pictureUrl: url,
@@ -116,12 +121,12 @@ const ProductTable = () => {
   useEffect(() => {
     let lookupmap = {};
     catalogs.map((catalog) => {
-      lookupmap = { ...lookupmap, [catalog.name]: catalog.th };
+      lookupmap = { ...lookupmap, [catalog.id]: catalog.th };
     });
     setLookup(lookupmap);
   }, [catalogs]);
+
   const columnTitle = [
-    { title: 'ประเภท', field: 'th', editable: 'never' },
     {
       title: 'รูปภาพ',
       field: 'pictureUrl',
@@ -179,7 +184,7 @@ const ProductTable = () => {
               }}
             >
               <img
-                src="./images/product/no-product-picture.png"
+                src="https://firebasestorage.googleapis.com/v0/b/coffeecafesho.appspot.com/o/products%2Fno-product-picture.png?alt=media"
                 style={{
                   width: 40,
                   borderRadius: '50%',
@@ -193,81 +198,120 @@ const ProductTable = () => {
       editable: 'never',
     },
     { title: 'รายการ', field: 'name' },
-    { title: 'รายละเอียด', field: 'description' },
     {
       title: 'ราคา',
       field: 'price',
     },
+    {
+      title: 'คอร์ส',
+      field: 'package',
+    },
     { title: 'ประเภท', field: 'catalog', lookup },
+    { title: 'ประเภท', field: 'catalog', lookup, defaultGroupOrder: 0 },
   ];
-  const products = useSelector((state) => state.products.products);
+  const products = useSelector((state) => state.products.storeProducts);
 
-  const catalogData = async (DATA) => {
-    await catalogs.map((catalog) => {
-      DATA.push(catalog);
-    });
-  };
   const productData = async (DATA) => {
     await products.map((product) => {
       let formPrductData = {
         id: product.id,
         name: product.name,
-        description: product.description,
-        price: product.price,
         pictureUrl: product.pictureUrl,
-        catalog: product.catalog,
+        price: product.price,
+        catalog: product.catalog?.id,
+        catalogName: product.catalog?.name,
+        stockOutDetail: product.stockOutDetail,
+        package: product.package,
       };
       DATA.push(formPrductData);
     });
   };
+
   const [state, setState] = useState([]);
   useEffect(() => {
     let DATA = [];
-    catalogData(DATA);
     productData(DATA);
     setState(DATA);
-  }, [products, catalogs]);
+  }, [products]);
 
   const action = useDispatch();
-  const [deleteCatalog] = useMutation(MUTAION_DELETECATALOG, {
-    onCompleted: (data) => {
-      action(deleteCatalogs(data.deleteCatalog.id));
-      addToast('ลบประเภทสินค้าเรียบร้อย', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
-    },
-  });
+  // const [deleteCatalog] = useMutation(MUTAION_DELETECATALOG, {
+  //   onCompleted: (data) => {
+  //     action(deleteCatalogs(data.deleteCatalog.id));
+  //     addToast('ลบประเภทสินค้าเรียบร้อย', {
+  //       appearance: 'success',
+  //       autoDismiss: true,
+  //     });
+  //   },
+  // });
 
-  const [createProduct] = useMutation(MUTAION_CREATEPRODUCT, {
-    onCompleted: (data) => {
-      action(createProducts(data.createProduct));
-      addToast('เพิ่มสินค้าเรียบร้อย', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
-    },
-  });
+  // const [createProduct] = useMutation(MUTAION_CREATEPRODUCT, {
+  //   onCompleted: (data) => {
+  //     action(createProducts(data.createProduct));
+  //     addToast('เพิ่มสินค้าเรียบร้อย', {
+  //       appearance: 'success',
+  //       autoDismiss: true,
+  //     });
+  //   },
+  // });
 
-  const [deleteProduct] = useMutation(MUTAION_DELETEPRODUCT, {
+  const [deleteStoreProduct] = useMutation(MUTAION_DELETE_STOREPRODUCT, {
     onCompleted: (data) => {
-      action(deleteProducts(data.deleteProduct.id));
-      addToast('ลบสินค้าเรียบร้อย', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
-    },
-  });
+      action(deleteStoreProducts(data.deleteStoreProduct.id));
 
-  const [updateProduct] = useMutation(MUTAION_UPDATERODUCT, {
-    onCompleted: async (data) => {
-      await setPictureUploading(false);
-      await action(updateProducts(data.updateProduct));
       let DATA = [];
-      catalogData(DATA);
       productData(DATA);
       setState(DATA);
-      addToast('แก้ไขสินค้าเรียบร้อย', {
+
+      const content = (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar
+            src={data.deleteStoreProduct.pictureUrl}
+            alt={data.deleteStoreProduct.name}
+            style={{
+              marginRight: '1vh',
+              backgroundColor: '#fff',
+              boxShadow: theme.common.shadow.black,
+            }}
+          />
+          <Typography>
+            ลบสินค้า {data.deleteStoreProduct.name} ในร้านเรียบร้อย
+          </Typography>
+        </div>
+      );
+      addToast(content, {
+        appearance: 'warning',
+        autoDismiss: true,
+      });
+    },
+  });
+
+  const [updateStoreProduct] = useMutation(MUTAION_UPDATE_STOREPRODUCT, {
+    onCompleted: (data) => {
+      setPictureUploading(false);
+      action(updateStoreProducts(data.updateStoreProduct));
+
+      let DATA = [];
+      productData(DATA);
+      setState(DATA);
+
+      const content = (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar
+            src={data.updateStoreProduct.pictureUrl}
+            alt={data.updateStoreProduct.name}
+            style={{
+              marginRight: '1vh',
+              backgroundColor: '#fff',
+              boxShadow: theme.common.shadow.black,
+            }}
+          />
+          <Typography>
+            แก้ไขสินค้า {data.updateStoreProduct.name} ในร้านเรียบร้อย
+          </Typography>
+        </div>
+      );
+      addToast(content, {
         appearance: 'success',
         autoDismiss: true,
       });
@@ -300,84 +344,68 @@ const ProductTable = () => {
         options={{
           exportButton: true,
           pageSize: 5,
+          grouping: true,
+          draggable: false,
         }}
-        parentChildData={(row, rows) =>
-          rows.find((a) => a.name === row.catalog)
-        }
         editable={{
           isEditable: (rowData) => rowData.pictureUrl,
-          onRowAdd: (newData) =>
-            new Promise((resolve, reject) => {
-              if (
-                !newData.name ||
-                !newData.description ||
-                !newData.price ||
-                !newData.catalog
-              ) {
-                // TO DO popup message
-                console.log('กรุณาใส่ข้อมูลให้ครบถ้วน');
-                return resolve();
-              }
-              if (newData) {
-                createProduct({
-                  variables: {
-                    ...newData,
-                    pictureUrl: './images/product/no-product-picture.png',
-                    price: +newData.price,
-                  },
-                });
-                resolve();
-              }
-            }),
           onRowUpdate: (newData, oldData) =>
-            new Promise((resolve) => {
-              if (
-                !newData.name ||
-                !newData.description ||
-                !newData.price ||
-                !newData.catalog
-              ) {
-                // TO DO popup message
-                console.log('กรุณาใส่ข้อมูลให้ครบถ้วน');
+            new Promise(async (resolve) => {
+              if (!newData.name || !newData.price || !newData.catalog) {
+                addToast('กรุณาเติมข้อมูลให้ครบถ้วน', {
+                  appearance: 'error',
+                  autoDismiss: true,
+                });
                 return resolve();
               }
-              if (newData) {
-                updateProduct({
-                  variables: {
-                    ...newData,
-                    price: +newData.price,
-                  },
+
+              if (
+                newData.name !== oldData.name ||
+                newData.price !== oldData.price ||
+                newData.catalog !== oldData.catalog
+              ) {
+                try {
+                  updateStoreProduct({
+                    variables: {
+                      id: newData.id,
+                      name: newData.name,
+                      price: +newData.price,
+                      catalogId: newData.catalog,
+                      pictureUrl: oldData.pictureUrl,
+                    },
+                  });
+                  resolve();
+                } catch (error) {
+                  addToast('ไม่สามารถแก้ไขสินค้าได้', {
+                    appearance: 'error',
+                    autoDismiss: true,
+                  });
+                  resolve();
+                }
+              } else {
+                addToast('ไม่มีการเปลี่ยนแปลงข้อมูล', {
+                  appearance: 'error',
+                  autoDismiss: true,
                 });
                 resolve();
               }
             }),
           onRowDelete: (oldData) =>
             new Promise(async (resolve, reject) => {
-              if (!oldData) return;
-              // Delete Catalog
-              if (!oldData.pictureUrl) {
-                try {
-                  await deleteCatalog({
-                    variables: {
-                      id: oldData.id,
-                    },
-                  });
-                } catch (error) {
-                  console.log(error.message);
-                }
+              try {
+                deleteStoreProduct({
+                  variables: {
+                    id: oldData.id,
+                  },
+                });
+                resolve();
+              } catch (error) {
+                addToast('ไม่มีสามารถลบสินค้าได้', {
+                  appearance: 'error',
+                  autoDismiss: true,
+                });
+                resolve();
               }
-              if (oldData.pictureUrl) {
-                try {
-                  deleteProduct({
-                    variables: {
-                      id: oldData.id,
-                    },
-                  });
-                } catch (error) {
-                  console.log(error.message);
-                }
-              }
-              resolve();
             }),
         }}
         localization={{
@@ -387,7 +415,7 @@ const ProductTable = () => {
             deleteTooltip: 'ลบ',
             addTooltip: 'เพิ่มสินค้า',
             editRow: {
-              deleteText: 'คุณต้องการลบสินค้า หรือ ประเภทสินค้า ใช่หรือไม่',
+              deleteText: 'คุณต้องการลบสินค้า ใช่ หรือ ไม่',
               cancelTooltip: 'ยกเลิก',
               saveTooltip: 'ตกลง',
             },
@@ -420,14 +448,32 @@ const ProductTable = () => {
             },
             hidden: !rowData.pictureUrl,
           }),
+          {
+            icon: 'add_box',
+            tooltip: 'เพิ่มสินค้า',
+            isFreeAction: true,
+            onClick: (event, rowData) => {
+              setAddStoreProductDialog(true);
+            },
+          },
         ]}
         style={{
           boxShadow: matches1024down ? 'none' : theme.common.shadow.main1,
           marginBottom: '100px',
         }}
       />
+      <Dialog
+        onClose={handleAddStoreProductDialogClose}
+        open={addStoreProductDialog}
+        fullWidth
+        maxWidth="md"
+      >
+        <CreateStoreProduct
+          handleAddStoreProductDialogClose={handleAddStoreProductDialogClose}
+        />
+      </Dialog>
     </React.Fragment>
   );
 };
 
-export default ProductTable;
+export default StoreProductTable;

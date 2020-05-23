@@ -1,53 +1,62 @@
 import {
-  SET_PRODUCT,
-  CREATE_PRODUCT,
-  DELETE_PRODUCT,
-  SET_CATALOG,
-  CREATE_CATALOG,
-  DELETE_CATALOG,
-  UPDATE_PRODUCT,
+  SET_STOREPRODUCTCATALOG,
+  CREATE_STOREPRODUCTCATALOG,
+  DELETE_STOREPRODUCTCATALOG,
+  SET_STOREPRODUCT,
+  CREATE_STOREPRODUCT,
+  DELETE_STOREPRODUCT,
+  UPDATE_STOREPRODUCT,
 } from '../types';
 
 let INITIAL_STATE = {
-  products: [],
-  catalogs: [],
+  storeProductCatalogs: [],
+  storeProducts: [],
+  onlineProductCatalogs: [],
+  onelineProducts: [],
 };
 
 const clientReducer = (state = INITIAL_STATE, action) => {
   let newProducts;
+  let index;
   switch (action.type) {
-    case SET_PRODUCT:
+    case SET_STOREPRODUCT:
       if (action.payload === undefined) {
         return state;
       }
-      return { ...state, products: [...action.payload] };
-    case SET_CATALOG:
+      return { ...state, storeProducts: [...action.payload] };
+    case SET_STOREPRODUCTCATALOG:
       if (action.payload === undefined) {
         return state;
       }
-      return { ...state, catalogs: [...action.payload] };
-    case CREATE_CATALOG:
-      return { ...state, catalogs: [...state.catalogs, action.payload] };
-    case DELETE_CATALOG:
+      return { ...state, storeProductCatalogs: [...action.payload] };
+    case CREATE_STOREPRODUCTCATALOG:
+      return {
+        ...state,
+        storeProductCatalogs: [...state.storeProductCatalogs, action.payload],
+      };
+    case DELETE_STOREPRODUCTCATALOG:
       let newCatalogs = state.catalogs.filter(
         (catalog) => catalog.id !== action.payload
       );
-      return { ...state, catalogs: newCatalogs };
-    case CREATE_PRODUCT:
-      return { ...state, products: [...state.products, action.payload] };
-    case UPDATE_PRODUCT:
-      newProducts = state.products;
-      let index = state.products.findIndex(
+      return { ...state, storeProductCatalogs: newCatalogs };
+    case CREATE_STOREPRODUCT:
+      return {
+        ...state,
+        storeProducts: [...state.storeProducts, action.payload],
+      };
+    case UPDATE_STOREPRODUCT:
+      newProducts = state.storeProducts;
+      index = state.storeProducts.findIndex(
         (product) => product.id === action.payload.id
       );
       newProducts[index] = action.payload;
-      return { ...state, products: newProducts };
-    case DELETE_PRODUCT:
-      newProducts = state.products.filter(
+      return { ...state, storeProducts: newProducts };
+    case DELETE_STOREPRODUCT:
+      newProducts = state.storeProducts.filter(
         (product) => product.id !== action.payload
       );
 
-      return { ...state, products: newProducts };
+      return { ...state, storeProducts: newProducts };
     default:
       return state;
   }

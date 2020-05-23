@@ -1,16 +1,8 @@
 import gql from 'graphql-tag';
 
 export const MUTATION_SIGNINWITHACCESSTOKEN = gql`
-  mutation MUTATION_SIGNINWITHACCESSTOKEN(
-    $accessToken: String
-    $branch: String
-    $table: String
-  ) {
-    signinWithAccessToken(
-      accessToken: $accessToken
-      branch: $branch
-      table: $table
-    ) {
+  mutation MUTATION_SIGNINWITHACCESSTOKEN($accessToken: String) {
+    signinWithAccessToken(accessToken: $accessToken) {
       id
       lineId
       firstName
@@ -300,7 +292,7 @@ export const MUTAION_DELETE_STOCKCATALOG = gql`
 `;
 
 export const MUTATION_CREATE_STOCK = gql`
-  mutation MUTAION_CREATE_STOCKCATALOG(
+  mutation MUTAION_CREATE_STOCK(
     $name: String!
     $catalogId: ID!
     $branchId: ID!
@@ -445,7 +437,7 @@ export const MUTATION_DELETE_STOCK = gql`
 `;
 
 export const MUTATION_CREATE_STOCKADD = gql`
-  mutation MUTATION_CREATE_STOCKAD(
+  mutation MUTATION_CREATE_STOCKADD(
     $stockId: ID!
     $buy: Float!
     $amount: Float!
@@ -487,6 +479,92 @@ export const MUTATION_CREATE_STOCKADD = gql`
           cost
         }
       }
+    }
+  }
+`;
+
+export const MUTAION_CREATE_STOREPRODUCTCATALOG = gql`
+  mutation MUTAION_CREATE_STOREPRODUCTCATALOG($name: String!, $th: String!) {
+    createStoreProductCatalog(name: $name, th: $th) {
+      id
+      name
+      th
+    }
+  }
+`;
+
+export const MUTAION_CREATE_STOREPRODUCT = gql`
+  mutation MUTAION_CREATE_STOREPRODUCT(
+    $name: String!
+    $price: Float!
+    $stockOutDetail: [StockOutDetailInput]!
+    $pictureUrl: String!
+    $catalogId: ID!
+  ) {
+    createStoreProduct(
+      name: $name
+      price: $price
+      stockOutDetail: $stockOutDetail
+      pictureUrl: $pictureUrl
+      catalogId: $catalogId
+    ) {
+      id
+      name
+      price
+      stockOutDetail {
+        name
+        out
+      }
+      pictureUrl
+      package
+      catalog {
+        id
+        name
+        th
+      }
+    }
+  }
+`;
+
+export const MUTAION_UPDATE_STOREPRODUCT = gql`
+  mutation MUTAION_UPDATE_STOREPRODUCT(
+    $id: ID!
+    $name: String
+    $price: Float
+    $pictureUrl: String
+    $catalogId: ID
+  ) {
+    updateStoreProduct(
+      id: $id
+      name: $name
+      price: $price
+      pictureUrl: $pictureUrl
+      catalogId: $catalogId
+    ) {
+      id
+      name
+      price
+      stockOutDetail {
+        name
+        out
+      }
+      pictureUrl
+      package
+      catalog {
+        id
+        name
+        th
+      }
+    }
+  }
+`;
+
+export const MUTAION_DELETE_STOREPRODUCT = gql`
+  mutation MUTAION_DELETE_STOREPRODUCT($id: ID!) {
+    deleteStoreProduct(id: $id) {
+      id
+      name
+      pictureUrl
     }
   }
 `;

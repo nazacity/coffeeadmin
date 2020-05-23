@@ -3,7 +3,7 @@ import { getUserByAccessToken } from '../../apollo/db';
 // Redux
 import { useDispatch } from 'react-redux';
 import { setPromotions } from '../../redux/actions/promotionActions';
-import { setProducts } from '../../redux/actions/productAction';
+// import { setProducts } from '../../redux/actions/productAction';
 import { setUser } from '../../redux/actions/userActions';
 
 // MUI
@@ -23,7 +23,7 @@ const Promotion = ({ promotions, products, user }) => {
   const action = useDispatch();
   useEffect(() => {
     action(setPromotions(promotions));
-    action(setProducts(products));
+    // action(setProducts(products));
     action(setUser(user ? user : null));
   }, [promotions, products]);
   return (
@@ -32,14 +32,14 @@ const Promotion = ({ promotions, products, user }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <Hidden smDown>
+      {/* <Hidden smDown>
         <DtPromotion />
       </Hidden>
       <Hidden mdUp>
         <div style={{ padding: '2vw' }}>
           <MbPromotion />
         </div>
-      </Hidden>
+      </Hidden> */}
     </motion.div>
   );
 };

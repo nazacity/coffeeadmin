@@ -171,3 +171,21 @@ export const QUERY_EMPLOYEE = gql`
     }
   }
 `;
+
+export const QUERY_STOREPRODUCTCATALOG = gql`
+  query QUERY_STOREPRODUCTCATALOG {
+    storeProductCatalog {
+      id
+      name
+      th
+    }
+  }
+`;
+
+export const QUERY_STOCKNAME = gql`
+  query QUERY_STOCKNAME {
+    stockName {
+      name
+    }
+  }
+`;

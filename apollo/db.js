@@ -351,3 +351,38 @@ export const getStockCatalog = async (accessToken) => {
   }
   return stockCatalog.data.stockCatalog;
 };
+
+export const QUERY_STOREPRODUCTCATALOG = {
+  query: `
+  query{
+    storeProductCatalog {
+      id
+      name
+      th
+    }
+  }
+  `,
+};
+
+export const QUERY_STOREPRODUCT = {
+  query: `
+  query{
+    storeProduct {
+      id
+      name
+      price
+      stockOutDetail{
+        name
+        out
+      }
+      pictureUrl
+      package
+      catalog{
+        id
+        name
+        th
+      }
+    }
+  }
+  `,
+};

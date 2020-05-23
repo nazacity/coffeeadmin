@@ -34,10 +34,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Dialog from '@material-ui/core/Dialog';
 import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import LensIcon from '@material-ui/icons/Lens';
 import NatureIcon from '@material-ui/icons/Nature';
@@ -45,7 +42,7 @@ import NatureIcon from '@material-ui/icons/Nature';
 // Toast
 import { useToasts } from 'react-toast-notifications';
 import CreateStockAdd from './CreateStockAdd';
-import StockAddItem from './StockAdditem';
+import StockAddItem from './StockAddItem';
 
 const useStyles = makeStyles((theme) => ({
   top: {
@@ -65,7 +62,7 @@ const StockTable = ({ stock, branchId, setRerender }) => {
   const matches1024down = useMediaQuery('(max-width:1024px)');
   const theme = useTheme();
   const classes = useStyles();
-  const stockCatalog = useSelector((state) => state.stock.stockCatalog);
+  const catalogs = useSelector((state) => state.stock.stockCatalog);
   const [lookup, setLookup] = useState({});
   const [row, setRow] = useState({});
   const [pictureUploading, setPictureUploading] = useState(false);
@@ -114,13 +111,6 @@ const StockTable = ({ stock, branchId, setRerender }) => {
                 pictureUrl: url,
               },
             });
-          })
-          .then(() => {
-            addToast('อัพโหลดรูปวัตถุดิบเรียบร้อย', {
-              appearance: 'success',
-              autoDismiss: true,
-            });
-            setRow({});
           });
       }
     );
@@ -136,11 +126,11 @@ const StockTable = ({ stock, branchId, setRerender }) => {
 
   useEffect(() => {
     let lookupmap = {};
-    stockCatalog.map((catalog) => {
+    catalogs.map((catalog) => {
       lookupmap = { ...lookupmap, [catalog.id]: catalog.th };
     });
     setLookup(lookupmap);
-  }, [stockCatalog]);
+  }, [catalogs]);
 
   const columnTitle = [
     { title: 'ประเภท', field: 'th', editable: 'never' },
@@ -221,12 +211,6 @@ const StockTable = ({ stock, branchId, setRerender }) => {
     { title: 'ต้นทุน', field: 'amount', editable: 'never' },
   ];
 
-  // const catalogData = async (DATA) => {
-  //   await stockCatalog.map((catalog) => {
-  //     DATA.push({ id: catalog.id, th: catalog.th });
-  //   });
-  // };
-
   const stockData = async (DATA) => {
     await stock.map((product) => {
       let formPrductData = {
@@ -250,7 +234,7 @@ const StockTable = ({ stock, branchId, setRerender }) => {
     // catalogData(DATA);
     stockData(DATA);
     setState(DATA);
-  }, [stock, stockCatalog]);
+  }, [stock, catalogs]);
 
   const action = useDispatch();
   const [deleteStockCatalog] = useMutation(MUTAION_DELETE_STOCKCATALOG, {
@@ -281,10 +265,12 @@ const StockTable = ({ stock, branchId, setRerender }) => {
   const [deleteStock] = useMutation(MUTATION_DELETE_STOCK, {
     onCompleted: (data) => {
       action(updateBranch(data.deleteStock));
+
       setRerender(true);
       setRerender(false);
+
       addToast('ลบวัตถุดิบเรียบร้อย', {
-        appearance: 'success',
+        appearance: 'warning',
         autoDismiss: true,
       });
     },
@@ -296,6 +282,12 @@ const StockTable = ({ stock, branchId, setRerender }) => {
       await action(updateBranch(data.updateStock));
       setRerender(true);
       setRerender(false);
+      setRow({});
+
+      addToast('แก้ไขวัตถุดิบเรียบร้อย', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
     },
   });
 
@@ -325,6 +317,7 @@ const StockTable = ({ stock, branchId, setRerender }) => {
         options={{
           exportButton: true,
           pageSize: 10,
+          grouping: true,
         }}
         detailPanel={[
           {
@@ -362,9 +355,6 @@ const StockTable = ({ stock, branchId, setRerender }) => {
             },
           },
         ]}
-        options={{
-          grouping: true,
-        }}
         // parentChildData={(row, rows) => rows.find((a) => a.id === row.catalog)}
         editable={{
           isEditable: (rowData) => rowData.pictureUrl,
@@ -472,21 +462,21 @@ const StockTable = ({ stock, branchId, setRerender }) => {
         }}
         localization={{
           body: {
-            emptyDataSourceMessage: 'ยังสินค้า',
+            emptyDataSourceMessage: 'ยังไม่มีวัตถุดิบ',
             editTooltip: 'แก้ไข',
             deleteTooltip: 'ลบ',
-            addTooltip: 'เพิ่มสินค้า',
+            addTooltip: 'เพิ่มวัตถุดิบ',
             editRow: {
-              deleteText: 'คุณต้องการลบสินค้า หรือ ประเภทสินค้า ใช่หรือไม่',
+              deleteText: 'คุณต้องการลบวัตถุดิบ ใช่ หรือ ไม่',
               cancelTooltip: 'ยกเลิก',
               saveTooltip: 'ตกลง',
             },
           },
           toolbar: {
-            searchTooltip: 'ค้นหาสินค้า',
-            searchPlaceholder: 'ค้นหาสินค้า',
+            searchTooltip: 'ค้นหาวัตถุดิบ',
+            searchPlaceholder: 'ค้นหาวัตถุดิบ',
             exportName: 'ดาวโหลด รายงาน',
-            nRowsSelected: 'เลือกสินค้า {0}',
+            nRowsSelected: 'เลือกวัตถุดิบ {0}',
           },
           pagination: {
             labelRowsSelect: 'แถว',

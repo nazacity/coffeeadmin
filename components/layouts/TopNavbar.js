@@ -14,7 +14,6 @@ import {
   setDrawerTopNavbar,
   setMenuIndex,
 } from '../../redux/actions/layoutActions';
-import { userSignOut } from '../../redux/actions/userActions';
 
 // Mui
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,15 +26,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Icon from '@material-ui/core/Icon';
-import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
 
 // components
 import DrawerTopNavbar from './DrawerTopNavbar';
+import UserMenu from './components/UserMenu';
+import ProductMenu from './components/ProductMenu';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,12 +70,8 @@ const TopNavbar = () => {
   const action = useDispatch();
   const route = useRouter();
 
-  const cartQuantity = (carts) => {
-    const quantity = carts.reduce((sum, cart) => sum + cart.quantity, 0);
-    return quantity;
-  };
-
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [productAnchorEl, setProductAnchorEl] = React.useState(null);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -86,6 +79,14 @@ const TopNavbar = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleProductMenu = (event) => {
+    setProductAnchorEl(event.currentTarget);
+  };
+
+  const handleProductMenuClose = () => {
+    setProductAnchorEl(null);
   };
 
   const adminMenuOptions = [
@@ -126,6 +127,10 @@ const TopNavbar = () => {
           />
         </Tooltip>
       ),
+      action: (e) => {
+        handleProductMenu(e);
+        setMenuIndex(3);
+      },
     },
     {
       name: 'โปรโมชั่น',
@@ -217,23 +222,25 @@ const TopNavbar = () => {
             <div>
               {user.state == 'admin' &&
                 adminMenuOptions.map((menu) => (
-                  <Link
-                    href={menu.link}
-                    style={{ marginRight: '2em' }}
+                  <IconButton
+                    component={!menu.action ? Link : undefined}
+                    href={!menu.action ? menu.link : undefined}
                     key={menu.name}
-                    onClick={() => setMenuIndex(menu.selectedIndex)}
+                    style={{
+                      color:
+                        menuIndex === menu.selectedIndex
+                          ? theme.palette.primary.main
+                          : '#ffffff',
+                      marginRight: '2em',
+                    }}
+                    onClick={
+                      menu.action
+                        ? menu.action
+                        : () => setMenuIndex(menu.selectedIndex)
+                    }
                   >
-                    <IconButton
-                      style={{
-                        color:
-                          menuIndex === menu.selectedIndex
-                            ? theme.palette.primary.main
-                            : '#ffffff',
-                      }}
-                    >
-                      {menu.icon}
-                    </IconButton>
-                  </Link>
+                    {menu.icon}
+                  </IconButton>
                 ))}
               {user.state == 'employee' &&
                 employeeMenuOptions.map((menu) => (
@@ -306,118 +313,16 @@ const TopNavbar = () => {
           </Toolbar>
           <DrawerTopNavbar />
         </AppBar>
-        <Menu
-          id="simple-menu"
+        <UserMenu
+          state={user.state}
           anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-          elevation={2}
-          style={{ top: '10px' }}
-          transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          style={{ top: '30px', left: '10px' }}
-        >
-          {user.state === 'admin' && (
-            <Link href="/employee" onClick={handleClose}>
-              <MenuItem
-                style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
-              >
-                <ListItemIcon>
-                  <Icon
-                    className="fas fa-user"
-                    color="primary"
-                    fontSize="small"
-                  />
-                </ListItemIcon>
-                <Typography variant="inherit">พนักงาน</Typography>
-              </MenuItem>
-              <Divider style={{ width: '60%', margin: '0px auto' }} />
-            </Link>
-          )}
-          {user.state === 'admin' && (
-            <Link href="/table" onClick={handleClose}>
-              <MenuItem
-                style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
-              >
-                <ListItemIcon>
-                  <Icon
-                    className="fab fa-buffer"
-                    color="primary"
-                    fontSize="small"
-                  />
-                </ListItemIcon>
-                <Typography variant="inherit">สาขา และ โต๊ะ</Typography>
-              </MenuItem>
-              <Divider style={{ width: '60%', margin: '0px auto' }} />
-            </Link>
-          )}
-          {user.state === 'admin' && (
-            <Link href="/stock" onClick={handleClose}>
-              <MenuItem
-                style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
-              >
-                <ListItemIcon>
-                  <Icon
-                    className="fab fa-cloudversify"
-                    color="primary"
-                    fontSize="small"
-                  />
-                </ListItemIcon>
-                <Typography variant="inherit">คลังสินค้า</Typography>
-              </MenuItem>
-              <Divider style={{ width: '60%', margin: '0px auto' }} />
-            </Link>
-          )}
-          {user.state === 'admin' && (
-            <Link href="/order" onClick={handleClose}>
-              <MenuItem
-                style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
-              >
-                <ListItemIcon>
-                  <Icon
-                    className="fas fa-list-ul"
-                    color="primary"
-                    fontSize="small"
-                  />
-                </ListItemIcon>
-                <Typography variant="inherit">รายการสั่งอาหาร</Typography>
-              </MenuItem>
-              <Divider style={{ width: '60%', margin: '0px auto' }} />
-            </Link>
-          )}
-          <Link href="/kitchen" onClick={handleClose}>
-            <MenuItem
-              style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
-            >
-              <ListItemIcon>
-                <Icon
-                  className="fas fa-concierge-bell"
-                  color="primary"
-                  fontSize="small"
-                />
-              </ListItemIcon>
-              <Typography variant="inherit">รายการครัว</Typography>
-            </MenuItem>
-          </Link>
-          <Divider style={{ width: '60%', margin: '0px auto' }} />
-          <MenuItem
-            onClick={() => {
-              action(userSignOut());
-              handleClose();
-            }}
-          >
-            <ListItemIcon>
-              <Icon
-                className="fas fa-sign-out-alt"
-                color="primary"
-                fontSize="small"
-              />
-            </ListItemIcon>
-            <Typography variant="inherit" color="primary">
-              ลงชื่อออก
-            </Typography>
-          </MenuItem>
-        </Menu>
+          handleClose={handleClose}
+        />
+        <ProductMenu
+          state={user.state}
+          productAnchorEl={productAnchorEl}
+          handleProductMenuClose={handleProductMenuClose}
+        />
       </motion.div>
     </>
   );

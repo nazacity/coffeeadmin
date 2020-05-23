@@ -1,58 +1,58 @@
 import {
-  SET_PRODUCT,
-  SET_CATALOG,
-  CREATE_CATALOG,
-  DELETE_CATALOG,
-  CREATE_PRODUCT,
-  DELETE_PRODUCT,
-  UPDATE_PRODUCT,
+  SET_STOREPRODUCTCATALOG,
+  CREATE_STOREPRODUCTCATALOG,
+  DELETE_STOREPRODUCTCATALOG,
+  SET_STOREPRODUCT,
+  CREATE_STOREPRODUCT,
+  DELETE_STOREPRODUCT,
+  UPDATE_STOREPRODUCT,
 } from '../types';
 
-export const setCatalogs = (catalogs) => (dispatch) => {
+export const setStoreProductCatalogs = (catalogs) => (dispatch) => {
   dispatch({
-    type: SET_CATALOG,
+    type: SET_STOREPRODUCTCATALOG,
     payload: catalogs,
   });
 };
 
-export const createCatalogs = (catalog) => (dispatch) => {
+export const createStoreProductCatalogs = (catalog) => (dispatch) => {
   dispatch({
-    type: CREATE_CATALOG,
+    type: CREATE_STOREPRODUCTCATALOG,
     payload: catalog,
   });
 };
 
-export const deleteCatalogs = (id) => (dispatch) => {
+export const deleteStoreProductCatalogs = (id) => (dispatch) => {
   dispatch({
-    type: DELETE_CATALOG,
+    type: DELETE_STOREPRODUCTCATALOG,
     payload: id,
   });
 };
 
-export const setProducts = (products) => (dispatch) => {
+export const setStoreProducts = (products) => (dispatch) => {
   dispatch({
-    type: SET_PRODUCT,
+    type: SET_STOREPRODUCT,
     payload: products,
   });
 };
 
-export const createProducts = (product) => (dispatch) => {
+export const createStoreProducts = (product) => (dispatch) => {
   dispatch({
-    type: CREATE_PRODUCT,
+    type: CREATE_STOREPRODUCT,
     payload: product,
   });
 };
 
-export const updateProducts = (product) => (dispatch) => {
+export const updateStoreProducts = (product) => (dispatch) => {
   dispatch({
-    type: UPDATE_PRODUCT,
+    type: UPDATE_STOREPRODUCT,
     payload: product,
   });
 };
 
-export const deleteProducts = (id) => (dispatch) => {
+export const deleteStoreProducts = (id) => (dispatch) => {
   dispatch({
-    type: DELETE_PRODUCT,
+    type: DELETE_STOREPRODUCT,
     payload: id,
   });
 };
