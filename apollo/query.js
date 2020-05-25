@@ -11,16 +11,6 @@ export const QUERY_USER = gql`
       phone
       pictureUrl
       state
-      carts {
-        id
-        product {
-          id
-          name
-          pictureUrl
-          price
-        }
-        quantity
-      }
     }
   }
 `;
@@ -36,53 +26,7 @@ export const QUERY_USERS = gql`
       phone
       pictureUrl
       state
-      carts {
-        id
-        product {
-          id
-          name
-          pictureUrl
-          price
-        }
-        quantity
-      }
       createdAt
-    }
-  }
-`;
-
-export const QUERY_CATALOGS = gql`
-  query QUERY_CATALOGS {
-    catalogs {
-      id
-      name
-      th
-    }
-  }
-`;
-
-export const QUERY_PRODUCTS = gql`
-  query QUERY_PRODUCTS {
-    products {
-      id
-      name
-      description
-      pictureUrl
-      price
-      catalog
-    }
-  }
-`;
-
-export const QUERY_PRODUCT = gql`
-  query QUERY_PRODUCT($id: String!) {
-    product(id: $id) {
-      id
-      name
-      description
-      pictureUrl
-      price
-      catalog
     }
   }
 `;
@@ -157,16 +101,6 @@ export const QUERY_EMPLOYEE = gql`
         phone
         pictureUrl
         state
-        carts {
-          id
-          product {
-            id
-            name
-            pictureUrl
-            price
-          }
-          quantity
-        }
       }
     }
   }

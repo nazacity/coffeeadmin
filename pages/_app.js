@@ -82,6 +82,7 @@ const MyApp = ({ Component, pageProps, apollo }) => {
           <ThemeProvider theme={theme}>
             <ToastProvider
               placement={matches600down ? 'bottom-center' : 'top-center'}
+              autoDismissTimeout={2000}
             >
               <React.Fragment>
                 <Hidden smDown>

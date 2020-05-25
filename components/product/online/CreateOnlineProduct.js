@@ -16,7 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme, makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Select from '@material-ui/core/Select';
@@ -28,11 +28,31 @@ import Avatar from '@material-ui/core/Avatar';
 // Toast
 import { useToasts } from 'react-toast-notifications';
 
+const useStyles = makeStyles((theme) => ({
+  top: {
+    color: theme.palette.primary.dark,
+  },
+  bottom: {
+    color: theme.palette.primary.light,
+    animationDuration: '550ms',
+    position: 'absolute',
+    left: 0,
+  },
+  buttonRoot: {
+    '&$disabled': {
+      color: theme.palette.primary.light,
+      backgroundColor: '#e2e2e2',
+    },
+  },
+  disabled: {},
+}));
+
 const defaultValues = {
   title: 'hey',
 };
 
 const CreateOnlineProduct = ({ handleAddProductDialogClose }) => {
+  const classes = useStyles();
   const [indexes, setIndexes] = React.useState([0]);
   const [counter, setCounter] = React.useState(1);
   const { addToast } = useToasts();
@@ -291,8 +311,28 @@ const CreateOnlineProduct = ({ handleAddProductDialogClose }) => {
               type="submit"
               style={{ marginBottom: '2vh' }}
               color="primary"
+              disabled={loading}
+              classes={{ root: classes.buttonRoot, disabled: classes.disabled }}
             >
               เพิ่มสินค้า
+              {loading && (
+                <div style={{ position: 'absolute', display: 'flex' }}>
+                  <CircularProgress
+                    variant="determinate"
+                    value={100}
+                    className={classes.top}
+                    size={24}
+                    thickness={4}
+                  />
+                  <CircularProgress
+                    variant="indeterminate"
+                    disableShrink
+                    className={classes.bottom}
+                    size={24}
+                    thickness={4}
+                  />
+                </div>
+              )}
             </Button>
           </Card>
         </div>

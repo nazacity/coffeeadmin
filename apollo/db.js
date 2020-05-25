@@ -15,33 +15,6 @@ export const getData = async (METHOD) => {
   }
 };
 
-export const QUERY_PRODUCTS = {
-  query: `
-  query{
-    products{
-      id
-      name
-      description
-      price
-      pictureUrl
-      catalog
-    }
-  }
-  `,
-};
-
-export const QUERY_CATALOGS = {
-  query: `
-  query{
-    catalogs {
-      id
-      name
-      th
-    }
-  }
-  `,
-};
-
 export const QUERY_PROMOTIONS = {
   query: `
   query{
@@ -103,16 +76,6 @@ export const QUERY_USER = {
       pictureUrl
       state
       createdAt
-      carts{
-        id
-        product{
-          id
-          name
-          pictureUrl
-          price
-        }
-        quantity
-      }
     }
   }
   `,
@@ -130,16 +93,6 @@ export const QUERY_USERS = {
       pictureUrl
       state
       createdAt
-      carts{
-        id
-        product{
-          id
-          name
-          pictureUrl
-          price
-        }
-        quantity
-      }
     }
   }
   `,

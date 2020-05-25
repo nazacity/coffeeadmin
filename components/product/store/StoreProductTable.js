@@ -106,13 +106,6 @@ const StoreProductTable = ({ setRerender }) => {
                 pictureUrl: url,
               },
             });
-          })
-          .then(() => {
-            addToast('อัพโหลดรูปสินค้าเรียบร้อย', {
-              appearance: 'success',
-              autoDismiss: true,
-            });
-            setRow({});
           });
       }
     );
@@ -270,7 +263,7 @@ const StoreProductTable = ({ setRerender }) => {
     onCompleted: (data) => {
       setPictureUploading(false);
       action(updateStoreProducts(data.updateStoreProduct));
-
+      setRow({});
       let DATA = [];
       productData(DATA);
       setState(DATA);

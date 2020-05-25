@@ -7,9 +7,6 @@ import { setOrder } from '../../redux/actions/orderActions';
 // Apollo
 import { getData, QUERY_ORDERS, getUserByAccessToken } from '../../apollo/db';
 
-// MUI
-import Hidden from '@material-ui/core/Hidden';
-
 // Components
 import OrderTable from '../../components/order/OrderTable';
 

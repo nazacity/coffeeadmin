@@ -263,6 +263,7 @@ const OnlineProductTable = ({ setRerender }) => {
     onCompleted: (data) => {
       setPictureUploading(false);
       action(updateOnlineProducts(data.updateOnlineProduct));
+      setRow({});
 
       let DATA = [];
       productData(DATA);

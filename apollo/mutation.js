@@ -11,16 +11,6 @@ export const MUTATION_SIGNINWITHACCESSTOKEN = gql`
       phone
       pictureUrl
       state
-      carts {
-        id
-        product {
-          id
-          name
-          pictureUrl
-          price
-        }
-        quantity
-      }
     }
   }
 `;
