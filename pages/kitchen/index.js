@@ -41,6 +41,7 @@ const Kitchen = ({ branchs, user }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      style={{ marginBottom: 300 }}
     >
       <Tabs value={index} variant="fullWidth" onChange={handleChange}>
         {branchs.map((branch) => (

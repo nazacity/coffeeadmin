@@ -49,7 +49,7 @@ const OrderView = ({ branch }) => {
   }, 5000);
 
   let orderCard = state.map((order) => {
-    return <OrderList key={order.id} order={order} />;
+    return <OrderList key={order.key} order={order} />;
   });
   return (
     <div
@@ -57,7 +57,6 @@ const OrderView = ({ branch }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       style={{
-        marginBottom: '200px',
         maxWidth: theme.layer.maxwidth,
         width: matches600down ? '100%' : '80%',
         margin: 'auto',

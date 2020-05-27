@@ -20,17 +20,15 @@ const OrderList = ({ order }) => {
     <Card
       key={order.id}
       style={{
-        margin: '1vh',
+        margin: '3vh 1vh',
         display: 'flex',
         padding: '1vh',
-        boxShadow: theme.common.shadow.main1,
       }}
     >
-      <Card
+      <div
         style={{
           marginRight: '1vh',
           padding: '1vh',
-          boxShadow: theme.common.shadow.main1,
         }}
       >
         <Avatar
@@ -45,7 +43,7 @@ const OrderList = ({ order }) => {
         />
         <div style={{ margin: '1vh 0' }}>
           <Typography variant="h6" color="primary">
-            {order.user.firstName}
+            คุณ {order.user.firstName}
           </Typography>
           <Typography variant="body1" color="primary">
             {order.user.phone}
@@ -57,12 +55,11 @@ const OrderList = ({ order }) => {
             เวลา {moment(+order.createdAt).format('HH:mm')}
           </Typography>
         </div>
-      </Card>
+      </div>
       <div style={{ flexGrow: 1 }}>
-        <Card
+        <div
           style={{
             marginRight: '1vh',
-            boxShadow: theme.common.shadow.main1,
           }}
         >
           <SwipeableList threshold={0.5}>
@@ -70,7 +67,7 @@ const OrderList = ({ order }) => {
               <SwipeableItem item={item} key={item.id} order={order} />
             ))}
           </SwipeableList>
-        </Card>
+        </div>
         <div style={{ margin: '1vh auto' }}>
           <Typography align="center" variant="body2" style={{ color: 'green' }}>
             *เลื่อนไปด้านซ้ายเมื่อเมนูเรียบร้อย
