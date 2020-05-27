@@ -54,15 +54,9 @@ const MbSignIn = () => {
   const lineloginlink = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect}&state=${state}&scope=${scope}`;
 
   return (
-    <>
-      <Head>
-        <link rel="stylesheet" type="text/css" href="/styles/float.css" />
-      </Head>
+    <React.Fragment>
       <div className={classes.signinborder}>
-        <motion.div
-          initial={{ opacity: 0, y: '-20%' }}
-          animate={{ opacity: 1, y: '0%' }}
-          exit={{ opacity: 0, y: '-20%' }}
+        <div
           transition={{ duration: 0.6, ease: 'easeInOut' }}
           style={{ marginTop: '10%', marginBottom: '30px' }}
           className="nav-logo"
@@ -72,15 +66,13 @@ const MbSignIn = () => {
             src="./images/logo/logo.jpg"
             className={classes.logo}
           />
-        </motion.div>
+        </div>
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.6, ease: 'easeInOut' }}
           style={{ display: 'flex', justifyContent: 'center' }}
+          whileTap={{ scale: 0.9 }}
         >
-          <motion.a href={lineloginlink} whileTap={{ scale: 0.95 }}>
+          <a href={lineloginlink} style={{ textDecoration: 'none' }}>
             <Button variant="contained" className={classes.loginbutton}>
               <img
                 src="./images/signin/linebutton.png"
@@ -89,10 +81,10 @@ const MbSignIn = () => {
               />
               <span style={{ color: '#fff' }}>Log in with LINE</span>
             </Button>
-          </motion.a>
+          </a>
         </motion.div>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 

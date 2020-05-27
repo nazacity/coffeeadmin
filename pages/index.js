@@ -122,101 +122,87 @@ const HomePage = ({ userFromAccessToken, client }) => {
   }, [router]);
 
   return (
-    <React.Fragment>
-      <Container maxWidth={false} style={{ margin: 0, padding: 0 }}>
-        {user?.state === 'guess' && !userLoading && (
-          <React.Fragment>
-            <Hidden smDown>
-              <DtSignIn />
-            </Hidden>
-            <Hidden mdUp>
-              <MbSignIn />
-            </Hidden>
-          </React.Fragment>
-        )}
-        {userLoading && (
-          <div
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%,-50%)',
-            }}
-          >
-            <CircularProgress
-              variant="determinate"
-              value={100}
-              className={classes.top}
-              size={matches600down ? 60 : 120}
-              thickness={4}
-            />
-            <CircularProgress
-              variant="indeterminate"
-              disableShrink
-              className={classes.bottom}
-              size={matches600down ? 60 : 120}
-              thickness={4}
-            />
-          </div>
-        )}
-        <Hidden smDown>
-          <motion.div
-            style={{
-              maxWidth: theme.layer.maxWidth,
-              width: '80%',
-              margin: 'auto',
-              padding: '5vh 0',
-            }}
-          >
-            {user?.state === 'employee' && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <DtEmployeeInfo />
-              </motion.div>
-            )}
-            {user?.state === 'admin' && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <DtBrief />
-                <Chart />
-                <NewClientReport />
-              </motion.div>
-            )}
-          </motion.div>
-        </Hidden>
-        <Hidden mdUp>
-          <motion.div>
-            {user?.state === 'employee' && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <MbEmployeeInfo />
-              </motion.div>
-            )}
-            {user?.state === 'admin' && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                style={{ marginBottom: 100 }}
-              >
-                <MbBrief />
-                <Chart />
-                <NewClientReport />
-              </motion.div>
-            )}
-          </motion.div>
-        </Hidden>
-      </Container>
-    </React.Fragment>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{ margin: 0, padding: 0 }}
+    >
+      {user?.state === 'guess' && !userLoading && (
+        <React.Fragment>
+          <Hidden smDown>
+            <DtSignIn />
+          </Hidden>
+          <Hidden mdUp>
+            <MbSignIn />
+          </Hidden>
+        </React.Fragment>
+      )}
+      {userLoading && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%,-50%)',
+          }}
+        >
+          <CircularProgress
+            variant="determinate"
+            value={100}
+            className={classes.top}
+            size={matches600down ? 60 : 120}
+            thickness={4}
+          />
+          <CircularProgress
+            variant="indeterminate"
+            disableShrink
+            className={classes.bottom}
+            size={matches600down ? 60 : 120}
+            thickness={4}
+          />
+        </div>
+      )}
+      <Hidden smDown>
+        <div
+          style={{
+            maxWidth: theme.layer.maxWidth,
+            width: '80%',
+            margin: 'auto',
+            padding: '5vh 0',
+          }}
+        >
+          {user?.state === 'employee' && (
+            <div>
+              <DtEmployeeInfo />
+            </div>
+          )}
+          {user?.state === 'admin' && (
+            <div>
+              <DtBrief />
+              <Chart />
+              <NewClientReport />
+            </div>
+          )}
+        </div>
+      </Hidden>
+      <Hidden mdUp>
+        <motion.div>
+          {user?.state === 'employee' && (
+            <div>
+              <MbEmployeeInfo />
+            </div>
+          )}
+          {user?.state === 'admin' && (
+            <div style={{ marginBottom: 100 }}>
+              <MbBrief />
+              <Chart />
+              <NewClientReport />
+            </div>
+          )}
+        </motion.div>
+      </Hidden>
+    </motion.div>
   );
 };
 
