@@ -27,6 +27,7 @@ const NewClientReport = () => {
       render: (rowData) => (
         <img
           src={rowData.pictureUrl}
+          alt={rowData.id}
           style={{ width: 40, borderRadius: '50%' }}
         />
       ),

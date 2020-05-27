@@ -5,11 +5,17 @@ import { storage } from '../../../firebase';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
-import { MUTAION_UPDATEEMPLOYEE } from '../../../apollo/mutation';
+import {
+  MUTAION_UPDATEEMPLOYEE,
+  MUTAION_DELETEEMPLOYEE,
+} from '../../../apollo/mutation';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { updateEmployees } from '../../../redux/actions/employeeActions';
+import {
+  updateEmployees,
+  deleteEmployees,
+} from '../../../redux/actions/employeeActions';
 
 // Moment
 import moment from 'moment';
@@ -47,6 +53,35 @@ const EmployeeTable = () => {
   const [row, setRow] = useState({});
   const [pictureUploading, setPictureUploading] = useState(false);
   const matches600down = useMediaQuery('(max-width:600px)');
+  const employees = useSelector((state) => state.employees);
+
+  const [state, setState] = useState([]);
+
+  const convertForm = async () => {
+    let employeeData = [];
+    await employees.map((employee) => {
+      let formUserData = {
+        id: employee.id,
+        user: {
+          lineId: employee.user.lineId,
+          pictureUrl: employee.user.pictureUrl,
+          firstName: employee.user.firstName,
+          lastName: employee.user.lastName,
+          phone: employee.user.phone,
+          state: employee.user.state,
+        },
+        state: employee.state,
+        IDcardPictureUrl: employee.IDcardPictureUrl,
+        position: employee.position,
+      };
+      employeeData.push(formUserData);
+    });
+    setState(employeeData);
+  };
+
+  useEffect(() => {
+    convertForm();
+  }, [employees]);
 
   const imageInput = useRef();
 
@@ -81,6 +116,15 @@ const EmployeeTable = () => {
       },
     }
   );
+
+  const [deleteEmployee] = useMutation(MUTAION_DELETEEMPLOYEE, {
+    onCompleted: async (data) => {
+      await action(deleteEmployees(data.deleteEmployee));
+      setRow({});
+    },
+  });
+  console.log('employ redux', employees);
+  console.log('employ state', state);
 
   const handleEditPicture = () => {
     imageInput.current.click();
@@ -170,29 +214,6 @@ const EmployeeTable = () => {
       },
     },
   ];
-  const employees = useSelector((state) => state.employees);
-
-  const [state, setState] = useState(() => {
-    let employeeData = [];
-    employees.map((employee) => {
-      let formUserData = {
-        id: employee.id,
-        user: {
-          lineId: employee.user.lineId,
-          pictureUrl: employee.user.pictureUrl,
-          firstName: employee.user.firstName,
-          lastName: employee.user.lastName,
-          phone: employee.user.phone,
-          state: employee.user.state,
-        },
-        state: employee.state,
-        IDcardPictureUrl: employee.IDcardPictureUrl,
-        position: employee.position,
-      };
-      employeeData.push(formUserData);
-    });
-    return employeeData;
-  });
 
   return (
     <React.Fragment>
@@ -225,7 +246,6 @@ const EmployeeTable = () => {
         editable={{
           onRowUpdate: (newData, oldData) =>
             new Promise(async (resolve) => {
-              resolve();
               if (!oldData || newData === oldData) {
                 return;
               }
@@ -243,8 +263,24 @@ const EmployeeTable = () => {
                       : oldData.IDcardPictureUrl,
                   },
                 });
+                resolve();
               } catch (error) {
                 console.log(error.message);
+                resolve();
+              }
+            }),
+          onRowDelete: (oldData) =>
+            new Promise(async (resolve) => {
+              try {
+                deleteEmployee({
+                  variables: {
+                    id: oldData.id,
+                  },
+                });
+                resolve();
+              } catch (error) {
+                console.log(error.message);
+                resolve();
               }
             }),
         }}

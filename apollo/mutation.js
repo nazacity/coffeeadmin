@@ -151,7 +151,7 @@ export const MUTAION_CREATEPROMOTION = gql`
 `;
 
 export const MUTAION_UPDATEEMPLOYEE = gql`
-  mutation MUTAION_CREATEPROMOTION(
+  mutation MUTAION_UPDATEEMPLOYEE(
     $id: ID!
     $IDcardPictureUrl: String
     $state: String
@@ -181,6 +181,14 @@ export const MUTAION_UPDATEEMPLOYEE = gql`
       pin
       IDcardPictureUrl
       createdAt
+    }
+  }
+`;
+
+export const MUTAION_DELETEEMPLOYEE = gql`
+  mutation MUTAION_DELETEEMPLOYEE($id: ID!) {
+    deleteEmployee(id: $id) {
+      id
     }
   }
 `;

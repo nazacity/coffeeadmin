@@ -179,6 +179,17 @@ export const QUERY_BRANCH = {
   `,
 };
 
+export const QUERY_BRANCHID = {
+  query: `
+  query{
+    branch{
+          id
+          branch
+        }
+    }
+  `,
+};
+
 export const getUserByAccessToken = async (accessToken) => {
   const uri = process.env.APOLLO_URL;
   let user;

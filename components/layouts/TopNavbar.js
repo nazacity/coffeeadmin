@@ -172,6 +172,21 @@ const TopNavbar = () => {
         case `/`:
           action(setMenuIndex(0));
           break;
+        case `/employee`:
+          action(setMenuIndex(5));
+          break;
+        case `/table`:
+          action(setMenuIndex(5));
+          break;
+        case `/stock`:
+          action(setMenuIndex(5));
+          break;
+        case `/order`:
+          action(setMenuIndex(5));
+          break;
+        case `/kitchen`:
+          action(setMenuIndex(5));
+          break;
         default:
           break;
       }

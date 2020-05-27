@@ -13,9 +13,7 @@ import Hidden from '@material-ui/core/Hidden';
 import { motion } from 'framer-motion';
 
 // Apollo
-import { getData, QUERY_PROMOTIONS, QUERY_PRODUCTS } from '../../apollo/db';
-import MbPromotion from '../../components/promotion/MbPromotion';
-import DtPromotion from '../../components/promotion/DtPromotion';
+// import { getData, QUERY_PROMOTIONS, QUERY_PRODUCTS } from '../../apollo/db';
 
 import cookie from 'cookie';
 
@@ -55,16 +53,16 @@ export const getServerSideProps = async ({ req, res }) => {
     res.end();
     return { props: {} };
   } else {
-    const resultPromotions = await getData(QUERY_PROMOTIONS);
-    const resultProducts = await getData(QUERY_PRODUCTS);
-    let promotions = resultPromotions.data.promotion;
-    let products = resultProducts.data.products;
+    // const resultPromotions = await getData(QUERY_PROMOTIONS);
+    // const resultProducts = await getData(QUERY_PRODUCTS);
+    // let promotions = resultPromotions.data.promotion;
+    // let products = resultProducts.data.products;
     const user = await getUserByAccessToken(accessToken);
     if (user.state !== 'admin') {
       res.writeHead(302, { Location: '/' });
       res.end();
     }
-    return { props: { user, promotions, products } };
+    return { props: { user } };
   }
 };
 

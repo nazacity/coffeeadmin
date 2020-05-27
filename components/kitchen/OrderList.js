@@ -14,7 +14,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 
-const DtOrderList = ({ order }) => {
+const OrderList = ({ order }) => {
   const theme = useTheme();
   return (
     <Card
@@ -73,10 +73,10 @@ const DtOrderList = ({ order }) => {
         </Card>
         <div style={{ margin: '1vh auto' }}>
           <Typography align="center" variant="body2" style={{ color: 'green' }}>
-            *เลื่อนไปด้านขวาเมื่อเมนูเรียบร้อย
+            *เลื่อนไปด้านซ้ายเมื่อเมนูเรียบร้อย
           </Typography>
           <Typography align="center" variant="body2" style={{ color: 'red' }}>
-            *เลื่อนไปด้านซ้ายเพื่อยกเลิกเมนู
+            *เลื่อนไปด้านขวาเพื่อยกเลิกเมนู
           </Typography>
         </div>
       </div>
@@ -84,4 +84,4 @@ const DtOrderList = ({ order }) => {
   );
 };
 
-export default DtOrderList;
+export default OrderList;

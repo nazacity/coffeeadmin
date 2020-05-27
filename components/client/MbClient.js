@@ -141,8 +141,8 @@ const MbClient = () => {
           editable={{
             onRowUpdate: (newData, oldData) =>
               new Promise(async (resolve) => {
-                resolve();
                 if (!oldData || newData === oldData) {
+                  resolve();
                   return;
                 }
                 try {
@@ -161,8 +161,10 @@ const MbClient = () => {
                       state: newData.state ? newData.state : oldData.state,
                     },
                   });
+                  resolve();
                 } catch (error) {
                   console.log(error.message);
+                  resolve();
                 }
               }),
           }}

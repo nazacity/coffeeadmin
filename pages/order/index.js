@@ -5,7 +5,7 @@ import { setUser } from '../../redux/actions/userActions';
 import { setOrder } from '../../redux/actions/orderActions';
 
 // Apollo
-import { getData, QUERY_ORDERS, getUserByAccessToken } from '../../apollo/db';
+import { getData, getUserByAccessToken } from '../../apollo/db';
 
 // Components
 import OrderTable from '../../components/order/OrderTable';
@@ -44,13 +44,11 @@ export const getServerSideProps = async ({ req, res }) => {
     return { props: {} };
   } else {
     const user = await getUserByAccessToken(accessToken);
-    const resultOrders = await getData(QUERY_ORDERS);
     if (user.state !== 'admin') {
       res.writeHead(302, { Location: '/' });
       res.end();
     }
-    let orders = resultOrders.data.orders;
-    return { props: { orders, user } };
+    return { props: { orders: [], user } };
   }
 };
 

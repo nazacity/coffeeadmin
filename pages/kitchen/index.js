@@ -1,85 +1,61 @@
 import React, { useEffect, useState } from 'react';
-import _ from 'lodash';
-import 'moment/locale/th';
-import moment from 'moment';
-import cookie from 'cookie';
 
-moment.locale('th');
+import cookie from 'cookie';
 
 // Redux
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/actions/userActions';
 
 // Apollo
-import { getUserByAccessToken } from '../../apollo/db';
-
-import { db } from '../../firebase';
-
-// MUI
-import { useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { getUserByAccessToken, getData, QUERY_BRANCHID } from '../../apollo/db';
 
 // framer motion
 import { motion } from 'framer-motion';
 
 // Components
-import DtOrderList from '../../components/kitchen/DtOrderList';
+import OrderView from '../../components/kitchen/OrderView';
 
-const Kitchen = ({ orders, user }) => {
+// MUI
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import SwipeableViews from 'react-swipeable-views';
+
+const Kitchen = ({ branchs, user }) => {
   const action = useDispatch();
-  const theme = useTheme();
-  const matches600down = useMediaQuery('(max-width:600px)');
   useEffect(() => {
     action(setUser(user ? user : null));
-  }, [orders, user]);
-  const [state, setState] = useState([]);
+  }, [user]);
 
-  const convert = async (values) => {
-    let orders = Object.entries(values);
-    let returnForm = [];
-    await orders.map((order) => {
-      returnForm.push({ key: order[0], ...order[1] });
-    });
+  const [index, setIndex] = useState(0);
 
-    return returnForm;
+  const handleChange = (event, value) => {
+    setIndex(value);
   };
 
-  setTimeout(() => {
-    db.ref('/order').on('value', async (snapshot) => {
-      let convertForm = [];
-      if (snapshot.val()) {
-        convertForm = await convert(snapshot.val());
-      }
-
-      let rearrange = convertForm.sort((a, b) => {
-        return b.createdAt - a.createdAt;
-      });
-      let a = snapshot.val();
-      let b;
-      if (a !== b) {
-        setState(rearrange);
-        b = a;
-      }
-    });
-  }, 5000);
-
-  let orderCard = state.map((order) => {
-    return <DtOrderList key={order.id} order={order} />;
-  });
+  const handleChangeIndex = (index) => {
+    setIndex(index);
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{
-        marginBottom: '200px',
-        maxWidth: theme.layer.maxwidth,
-        width: matches600down ? '100%' : '80%',
-        margin: 'auto',
-      }}
     >
-      {orderCard}
+      <Tabs value={index} variant="fullWidth" onChange={handleChange}>
+        {branchs.map((branch) => (
+          <Tab label={branch.branch} key={branch.id} />
+        ))}
+      </Tabs>
+      <SwipeableViews
+        index={index}
+        onChangeIndex={handleChangeIndex}
+        enableMouseEvents
+      >
+        {branchs.map((branch) => (
+          <OrderView key={branch.id} branch={branch} />
+        ))}
+      </SwipeableViews>
     </motion.div>
   );
 };
@@ -96,8 +72,11 @@ export const getServerSideProps = async ({ req, res }) => {
     return { props: {} };
   } else {
     const user = await getUserByAccessToken(accessToken);
+    const branchResult = await getData(QUERY_BRANCHID);
 
-    return { props: { user } };
+    const branchs = branchResult.data.branch;
+
+    return { props: { user, branchs } };
   }
 };
 

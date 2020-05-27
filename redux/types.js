@@ -41,6 +41,7 @@ export const UPDATE_PROMOTION = 'UPDATE_PROMOTION';
 // Employee
 export const SET_EMPLOYEES = 'SET_EMPLOYEES';
 export const UPDATE_EMPLOYEE = 'UPDATE_EMPLOYEE';
+export const DELETE_EMPLOYEE = 'DELETE_EMPLOYEE';
 
 // Order
 export const SET_ORDER = 'SET_ORDER';
