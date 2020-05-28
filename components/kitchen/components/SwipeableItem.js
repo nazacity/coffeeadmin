@@ -27,7 +27,7 @@ import { db } from '../../../firebase';
 // Toast
 import { useToasts } from 'react-toast-notifications';
 
-const SwipeableItem = ({ order, item }) => {
+const SwipeableItem = ({ order, item, branchId }) => {
   const theme = useTheme();
   const matchesLGDown = useMediaQuery('(max-width:1300px)');
   const matchesMDDown = useMediaQuery('(max-width:1200px)');
@@ -96,82 +96,87 @@ const SwipeableItem = ({ order, item }) => {
                 orderItemId: item.id,
               },
             });
-            db.ref(`/order/${order.key}`).remove();
+            db.ref(`/${branchId}/${order.key}`).remove();
             if (order.items.length > 1) {
               let newOrder;
               newOrder = {
                 user: order.user,
                 createdAt: order.createdAt,
-                id: order.id,
+                pictureUrl: order.user.pictureUrl ? order.user.pictureUrl : '',
                 items: order.items.filter((key) => item.id !== key.id),
               };
-              db.ref('/order').push(newOrder);
+              db.ref(`/${branchId}`).push(newOrder);
             }
           }, 600);
         },
         actionAnimation: ActionAnimations.REMOVE,
       }}
-      swipeRight={{
-        content: (
-          <div
-            style={{
-              backgroundColor: '#c62828',
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-            }}
-          >
-            <ListItemIcon
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                paddingLeft: matchesSMDown
-                  ? '2%'
-                  : matchesMDDown
-                  ? '4%'
-                  : matchesLGDown
-                  ? '4.5%'
-                  : '5%',
-              }}
-            >
-              <CancelIcon style={{ color: '#fff' }} />
-            </ListItemIcon>
-            <Typography style={{ color: '#fff' }}>
-              ยกเลิก รายการอาหาร
-            </Typography>
-          </div>
-        ),
-        action: () => {
-          setTimeout(async () => {
-            try {
-              await cancelOrderItemByID({
-                variables: {
-                  orderId: order.id,
-                  orderItemId: item.id,
-                },
-              });
-            } catch (error) {
-              console.log(error.message);
-            }
+      swipeRight={
+        !order.user.pictureUrl
+          ? {
+              content: (
+                <div
+                  style={{
+                    backgroundColor: '#c62828',
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                  }}
+                >
+                  <ListItemIcon
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'flex-start',
+                      paddingLeft: matchesSMDown
+                        ? '2%'
+                        : matchesMDDown
+                        ? '4%'
+                        : matchesLGDown
+                        ? '4.5%'
+                        : '5%',
+                    }}
+                  >
+                    <CancelIcon style={{ color: '#fff' }} />
+                  </ListItemIcon>
+                  <Typography style={{ color: '#fff' }}>
+                    ยกเลิก รายการอาหาร
+                  </Typography>
+                </div>
+              ),
+              action: () => {
+                console.log(order);
+                setTimeout(async () => {
+                  try {
+                    await cancelOrderItemByID({
+                      variables: {
+                        orderId: order.id,
+                        orderItemId: item.id,
+                      },
+                    });
+                  } catch (error) {
+                    console.log(error.message);
+                  }
 
-            db.ref(`/order/${order.key}`).remove();
-            if (order.items.length > 1) {
-              let newOrder;
-              newOrder = {
-                user: order.user,
-                createdAt: order.createdAt,
-                id: order.id,
-                items: order.items.filter((key) => item.id !== key.id),
-              };
-              db.ref('/order').push(newOrder);
+                  db.ref(`/${branchId}/${order.key}`).remove();
+                  if (order.items.length > 1) {
+                    let newOrder;
+                    newOrder = {
+                      user: order.user,
+                      createdAt: order.createdAt,
+                      id: order.id,
+                      items: order.items.filter((key) => item.id !== key.id),
+                    };
+                    db.ref(`/${branchId}`).push(newOrder);
+                  }
+                }, 600);
+              },
+              actionAnimation: ActionAnimations.REMOVE,
             }
-          }, 600);
-        },
-        actionAnimation: ActionAnimations.REMOVE,
-      }}
+          : undefined
+      }
     >
       <CardActionArea
         style={{

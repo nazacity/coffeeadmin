@@ -14,7 +14,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 
-const OrderList = ({ order }) => {
+const OrderList = ({ order, branchId }) => {
   const theme = useTheme();
   return (
     <Card
@@ -43,7 +43,7 @@ const OrderList = ({ order }) => {
         />
         <div style={{ margin: '1vh 0' }}>
           <Typography variant="h6" color="primary">
-            คุณ {order.user.firstName}
+            {order.user.pictureUrl ? 'คุณ' : 'โต๊ะ'} {order.user.firstName}
           </Typography>
           <Typography variant="body1" color="primary">
             {order.user.phone}
@@ -64,7 +64,12 @@ const OrderList = ({ order }) => {
         >
           <SwipeableList threshold={0.5}>
             {order?.items?.map((item) => (
-              <SwipeableItem item={item} key={item.id} order={order} />
+              <SwipeableItem
+                item={item}
+                key={item.id}
+                order={order}
+                branchId={branchId}
+              />
             ))}
           </SwipeableList>
         </div>

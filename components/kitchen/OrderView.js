@@ -49,7 +49,7 @@ const OrderView = ({ branch }) => {
   }, 5000);
 
   let orderCard = state.map((order) => {
-    return <OrderList key={order.key} order={order} />;
+    return <OrderList key={order.key} order={order} branchId={branch.id} />;
   });
   return (
     <div
