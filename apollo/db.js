@@ -140,6 +140,9 @@ export const QUERY_BRANCH = {
           place{
             id
             table
+            order {
+              id
+            }
             adult
             children
             package

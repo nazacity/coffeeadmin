@@ -12,10 +12,13 @@ import Box from '@material-ui/core/Box';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
 import Dialog from '@material-ui/core/Dialog';
-import EditTableState from './EditTableState';
 
 // Moment
 import moment from 'moment';
+
+// Components
+import EditTableState from './EditTableState';
+import BillDisplay from './BillDisplay';
 
 const useStyles = makeStyles(({ palette }) => ({
   statLabel: {
@@ -42,6 +45,7 @@ const useStyles = makeStyles(({ palette }) => ({
 
 const TableItem = ({ table, setRerender }) => {
   const [open, setOpen] = useState(false);
+  const [billDisplayOpen, setBillDisplayOpen] = useState(false);
   const handleClickOpen = (e) => {
     setOpen(true);
   };
@@ -49,7 +53,6 @@ const TableItem = ({ table, setRerender }) => {
     setOpen(false);
   };
   const classes = useStyles();
-
   return (
     <Card
       style={{
@@ -130,8 +133,17 @@ const TableItem = ({ table, setRerender }) => {
           table={table}
           handleClose={handleClose}
           setRerender={setRerender}
+          setBillDisplayOpen={setBillDisplayOpen}
         />
       </Dialog>
+      {table.order && (
+        <BillDisplay
+          billDisplayOpen={billDisplayOpen}
+          setBillDisplayOpen={setBillDisplayOpen}
+          orderId={table.order?.id}
+          setRerender={setRerender}
+        />
+      )}
     </Card>
   );
 };

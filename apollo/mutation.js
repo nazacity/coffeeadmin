@@ -599,6 +599,39 @@ export const MUTAION_DELETE_ONLINEPRODUCTCATALOG = gql`
   }
 `;
 
+export const MUTAION_CREATE_ORDERFROMSTOREORDER = gql`
+  mutation MUTAION_CREATE_ORDERFROMSTOREORDER($tableId: ID!, $discount: Float) {
+    createOrderFromStoreOrder(tableId: $tableId, discount: $discount) {
+      id
+      place {
+        id
+        state
+      }
+      branch {
+        id
+      }
+    }
+  }
+`;
+
+export const MUTAION_CLEAR_PLACE = gql`
+  mutation MUTAION_CREATE_ORDERFROMSTOREORDER($placeId: ID!) {
+    clearPlace(placeId: $placeId) {
+      id
+      bill {
+        id
+      }
+      branch {
+        id
+      }
+      state
+      table
+      adult
+      children
+    }
+  }
+`;
+
 export const MUTAION_CREATE_ONLINEPRODUCT = gql`
   mutation MUTAION_CREATE_ONLINEPRODUCT(
     $name: String!

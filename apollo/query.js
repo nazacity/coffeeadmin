@@ -63,6 +63,33 @@ export const QUERY_ORDERS = gql`
   }
 `;
 
+export const QUERY_ORDER_FORPAYING = gql`
+  query QUERY_ORDER_FORPAYING($orderId: ID!) {
+    order(orderId: $orderId) {
+      id
+      amount
+      discount
+      net
+      by
+      status
+      discount
+      items {
+        id
+        storeProduct {
+          id
+          name
+          pictureUrl
+          price
+        }
+        quantity
+      }
+      place {
+        id
+      }
+    }
+  }
+`;
+
 export const QUERY_BESTSALEMONTHLY = gql`
   query QUERY_BESTSALEMONTHLY($year: Float, $month: Float) {
     bestSaleMonthly(year: $year, month: $month) {

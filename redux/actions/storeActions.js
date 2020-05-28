@@ -7,6 +7,8 @@ import {
   CREATE_TABLE,
   DELETE_TABLE,
   UPDATE_TABLE,
+  UPDATE_TABLE_ORDER,
+  CLEAR_TABLE,
 } from '../types';
 
 export const setBranch = (branch) => (dispatch) => {
@@ -55,6 +57,20 @@ export const updateTables = (table) => (dispatch) => {
   dispatch({
     type: UPDATE_TABLE,
     payload: table,
+  });
+};
+
+export const updateTableOrder = (order) => (dispatch) => {
+  dispatch({
+    type: UPDATE_TABLE_ORDER,
+    payload: order,
+  });
+};
+
+export const clearTable = (place) => (dispatch) => {
+  dispatch({
+    type: CLEAR_TABLE,
+    payload: place,
   });
 };
 

@@ -24,9 +24,11 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import Avatar from '@material-ui/core/Avatar';
 
 // Components
-import { Avatar } from '@material-ui/core';
+import CheckBillForm from './CheckBillForm';
+import BillDisplay from './BillDisplay';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -73,10 +75,17 @@ const defaultValues = {
 
 const number = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const EditTableState = ({ table, handleClose, setRerender }) => {
+const EditTableState = ({
+  table,
+  handleClose,
+  setRerender,
+  setBillDisplayOpen,
+}) => {
   const matches600down = useMediaQuery('(max-width:600px)');
   const { control, handleSubmit, reset, errors } = useForm();
   const action = useDispatch();
+  const [state, setState] = useState(0);
+
   const classes = useStyles();
   const [updatePlaceAndCreateTable, { loading, error }] = useMutation(
     MUTATION_UPDATEPLACE_CREATETABLE,
@@ -224,7 +233,7 @@ const EditTableState = ({ table, handleClose, setRerender }) => {
     );
   }
   return (
-    <div>
+    <React.Fragment>
       <CardActionArea>
         <CardHeader
           avatar={
@@ -253,30 +262,59 @@ const EditTableState = ({ table, handleClose, setRerender }) => {
           title={table.status}
         />
       </CardActionArea>
-      <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          style={{ margin: 'auto', marginBottom: '2vh', width: '50%' }}
-          disabled={loading}
-          classes={{ root: classes.buttonRoot, disabled: classes.disabled }}
-        >
-          เช็คบิล
-        </Button>
-        <Button
-          type="button"
-          onClick={() => {
-            reset(defaultValues);
-          }}
-          variant="outlined"
-          color="primary"
-          style={{ margin: 'auto', marginBottom: '2vh', width: '50%' }}
-        >
-          ย้ายโต๊ะ
-        </Button>
-      </CardActions>
-    </div>
+      {state === 0 ? (
+        <CardActions style={{ display: 'flex', flexDirection: 'column' }}>
+          {table.state === 'Close' && (
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ margin: 'auto', marginBottom: '2vh', width: '80%' }}
+              //สั่งเช็คบิล ปิด editstatedialog เปิดfullscreendialog แบบใบเสร็จ
+              classes={{ root: classes.buttonRoot, disabled: classes.disabled }}
+              onClick={() => setState(1)}
+            >
+              เช็คบิล
+            </Button>
+          )}
+          {table.state === 'Wait' && (
+            <React.Fragment>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ margin: 'auto', marginBottom: '2vh', width: '80%' }}
+                //สั่งลบ table id เพื่อปิดโต๊ะ
+                classes={{
+                  root: classes.buttonRoot,
+                  disabled: classes.disabled,
+                }}
+                onClick={() => {
+                  setBillDisplayOpen(true);
+                  handleClose();
+                }}
+              >
+                ใบเสร็จ
+              </Button>
+            </React.Fragment>
+          )}
+
+          <Button
+            type="button"
+            onClick={handleClose}
+            variant="outlined"
+            color="primary"
+            style={{ margin: 'auto', marginBottom: '2vh', width: '80%' }}
+          >
+            ยกเลิก
+          </Button>
+        </CardActions>
+      ) : (
+        <CheckBillForm
+          table={table}
+          setState={setState}
+          handleClose={handleClose}
+        />
+      )}
+    </React.Fragment>
   );
 };
 

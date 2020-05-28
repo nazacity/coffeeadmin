@@ -32,7 +32,7 @@ const Table = ({ user, branch }) => {
     action(setBranch(branch ? branch : null));
   }, [user, branch]);
 
-  const [reRender, setRerender] = useState(false);
+  const [rerender, setRerender] = useState(false);
 
   const handleChange = (event, value) => {
     setState(value);

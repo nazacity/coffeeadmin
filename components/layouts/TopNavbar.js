@@ -132,16 +132,16 @@ const TopNavbar = () => {
         setMenuIndex(3);
       },
     },
-    {
-      name: 'โปรโมชั่น',
-      link: '/promotion',
-      selectedIndex: 4,
-      icon: (
-        <Tooltip title="โปรโมชั่น">
-          <Icon className="fas fa-smile-wink" fontSize="small" />
-        </Tooltip>
-      ),
-    },
+    // {
+    //   name: 'โปรโมชั่น',
+    //   link: '/promotion',
+    //   selectedIndex: 4,
+    //   icon: (
+    //     <Tooltip title="โปรโมชั่น">
+    //       <Icon className="fas fa-smile-wink" fontSize="small" />
+    //     </Tooltip>
+    //   ),
+    // },
   ];
 
   const employeeMenuOptions = [

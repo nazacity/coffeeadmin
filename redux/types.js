@@ -56,6 +56,8 @@ export const CREATE_TABLE = 'CREATE_TABLE';
 export const DELETE_TABLE = 'DELETE_TABLE';
 export const UPDATE_TABLE = 'UPDATE_TABLE';
 export const UPDATE_BRANCH = 'UPDATE_BRANCH';
+export const UPDATE_TABLE_ORDER = 'UPDATE_TABLE_ORDER';
+export const CLEAR_TABLE = 'CLEAR_TABLE';
 
 // Stock
 export const SET_STOCKCATALOG = 'SET_STOCKCATALOG';
