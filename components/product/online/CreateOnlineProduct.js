@@ -65,7 +65,6 @@ const CreateOnlineProduct = ({ handleAddProductDialogClose }) => {
     MUTAION_CREATE_ONLINEPRODUCT,
     {
       onCompleted: (data) => {
-        console.log(data.createOnlineProduct);
         action(createOnlineProducts(data.createOnlineProduct));
         const content = (
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -102,7 +101,6 @@ const CreateOnlineProduct = ({ handleAddProductDialogClose }) => {
   } = useForm({ defaultValues });
 
   const onSubmit = async (data) => {
-    console.log(data);
     let convertStockOutDetail = [];
     data.stockOutDetail?.map((detail) => {
       convertStockOutDetail.push({ name: detail.name, out: +detail.out });

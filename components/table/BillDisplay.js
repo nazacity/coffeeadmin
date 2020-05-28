@@ -67,9 +67,7 @@ const BillDisplay = ({
 
   const { data, loading, error } = useQuery(QUERY_ORDER_FORPAYING, {
     variables: { orderId: orderId },
-    onCompleted: (data) => {
-      console.log(data.order);
-    },
+    onCompleted: (data) => {},
   });
 
   const [clearPlace] = useMutation(MUTAION_CLEAR_PLACE, {
@@ -232,7 +230,6 @@ const BillDisplay = ({
           disabled: classes.disabled,
         }}
         onClick={() => {
-          console.log(data.order.place.id);
           clearPlace({
             variables: {
               placeId: data.order.place.id,

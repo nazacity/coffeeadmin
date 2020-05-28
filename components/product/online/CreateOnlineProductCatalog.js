@@ -65,7 +65,6 @@ const CreateOnlineProductCatalog = ({ setRerender }) => {
     MUTAION_CREATE_ONLINEPRODUCTCATALOG,
     {
       onCompleted: (data) => {
-        console.log(data);
         action(createOnlineProductCatalogs(data.createOnlineProductCatalog));
         reset(defaultValues);
         addToast('เพิ่มประเภทสินค้าออนไลน์เรียบร้อย', {
@@ -79,7 +78,6 @@ const CreateOnlineProductCatalog = ({ setRerender }) => {
   );
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       await createOnlineProductCatalog({
         variables: {
@@ -88,7 +86,6 @@ const CreateOnlineProductCatalog = ({ setRerender }) => {
         },
       });
     } catch (error) {
-      console.log(error);
       addToast(
         error.message === 'GraphQL error: StcokCatalog already exsit' &&
           'ไม่สามารถเพิ่มประเภทสินค้าออนไลน์ซ้ำได้',

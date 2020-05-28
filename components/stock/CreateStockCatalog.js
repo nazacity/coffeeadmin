@@ -62,7 +62,6 @@ const CreateStockCatalog = ({ setRerender }) => {
     MUTAION_CREATE_STOCKCATALOG,
     {
       onCompleted: (data) => {
-        console.log(data);
         action(createStockCatalogs(data.createStockCatalog));
         reset(defaultValues);
         addToast('เพิ่มประเภทวัตถุดิบเรียบร้อย', {

@@ -65,7 +65,6 @@ const CreateStoreProductCatalog = ({ setRerender }) => {
     MUTAION_CREATE_STOREPRODUCTCATALOG,
     {
       onCompleted: (data) => {
-        console.log(data);
         action(createStoreProductCatalogs(data.createStoreProductCatalog));
         reset(defaultValues);
         addToast('เพิ่มประเภทสินค้าในร้านเรียบร้อย', {
@@ -79,7 +78,6 @@ const CreateStoreProductCatalog = ({ setRerender }) => {
   );
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       await createStoreProductCatalog({
         variables: {

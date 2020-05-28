@@ -62,7 +62,6 @@ const CreateTable = ({ setRerender }) => {
   const classes = useStyles();
   const [createTable, { loading, error }] = useMutation(MUTATION_CREATE_TABLE, {
     onCompleted: (data) => {
-      console.log(data);
       action(createTables(data.createPlace));
       reset(defaultValues);
       addToast('เพิ่มโต๊ะในสาขาเรียบร้อย', {

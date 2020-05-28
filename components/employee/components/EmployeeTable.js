@@ -123,8 +123,6 @@ const EmployeeTable = () => {
       setRow({});
     },
   });
-  console.log('employ redux', employees);
-  console.log('employ state', state);
 
   const handleEditPicture = () => {
     imageInput.current.click();
