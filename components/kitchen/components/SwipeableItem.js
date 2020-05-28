@@ -18,8 +18,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme, makeStyles } from '@material-ui/core/styles';
 import CancelIcon from '@material-ui/icons/Cancel';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Firebase
 import { db } from '../../../firebase';
@@ -27,24 +28,41 @@ import { db } from '../../../firebase';
 // Toast
 import { useToasts } from 'react-toast-notifications';
 
+const useStyles = makeStyles((theme) => ({
+  top: {
+    color: theme.palette.primary.dark,
+  },
+  bottom: {
+    color: theme.palette.primary.light,
+    animationDuration: '550ms',
+    position: 'absolute',
+    left: 0,
+  },
+}));
+
 const SwipeableItem = ({ order, item, branchId }) => {
+  const classes = useStyles();
+
   const theme = useTheme();
   const matchesLGDown = useMediaQuery('(max-width:1300px)');
   const matchesMDDown = useMediaQuery('(max-width:1200px)');
   const matchesSMDown = useMediaQuery('(max-width:600px)');
   const { addToast } = useToasts();
 
-  const [cancelOrderItemByID] = useMutation(MUTATION_CANCEL_ORDERITEM_BY_ID, {
-    onCompleted: (data) => {
-      // if (data.cancelOrderItemByID.items.length >= 1) {
-      //   db.ref('/order').push(data.cancelOrderItemByID);
-      // }
-      addToast('ยกเลิกรายการอาหารเรียบร้อย', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
-    },
-  });
+  const [cancelOrderItemByID, { loading }] = useMutation(
+    MUTATION_CANCEL_ORDERITEM_BY_ID,
+    {
+      onCompleted: (data) => {
+        // if (data.cancelOrderItemByID.items.length >= 1) {
+        //   db.ref('/order').push(data.cancelOrderItemByID);
+        // }
+        addToast('ยกเลิกรายการอาหารเรียบร้อย', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      },
+    }
+  );
 
   const [doneOrderItemByID] = useMutation(MUTATION_DONE_ORDERITEM_BY_ID, {
     onCompleted: (data) => {
@@ -139,7 +157,32 @@ const SwipeableItem = ({ order, item, branchId }) => {
                         : '5%',
                     }}
                   >
-                    <CancelIcon style={{ color: '#fff' }} />
+                    {loading ? (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          display: 'flex',
+                          marginLeft: '1vh',
+                        }}
+                      >
+                        <CircularProgress
+                          variant="determinate"
+                          value={100}
+                          className={classes.top}
+                          size={24}
+                          thickness={4}
+                        />
+                        <CircularProgress
+                          variant="indeterminate"
+                          disableShrink
+                          className={classes.bottom}
+                          size={24}
+                          thickness={4}
+                        />
+                      </div>
+                    ) : (
+                      <CancelIcon style={{ color: '#fff' }} />
+                    )}
                   </ListItemIcon>
                   <Typography style={{ color: '#fff' }}>
                     ยกเลิก รายการอาหาร
@@ -147,13 +190,13 @@ const SwipeableItem = ({ order, item, branchId }) => {
                 </div>
               ),
               action: () => {
-                console.log(order);
                 setTimeout(async () => {
                   try {
                     await cancelOrderItemByID({
                       variables: {
                         orderId: order.id,
                         orderItemId: item.id,
+                        quantity: +item.quantity,
                       },
                     });
                   } catch (error) {

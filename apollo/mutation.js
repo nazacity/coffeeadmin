@@ -197,8 +197,13 @@ export const MUTATION_CANCEL_ORDERITEM_BY_ID = gql`
   mutation MUTATION_CANCEL_ORDERITEM_BY_ID(
     $orderId: String!
     $orderItemId: String!
+    $quantity: Float!
   ) {
-    cancelOrderItemByID(orderId: $orderId, orderItemId: $orderItemId) {
+    cancelOrderItemByID(
+      orderId: $orderId
+      orderItemId: $orderItemId
+      quantity: $quantity
+    ) {
       id
     }
   }
