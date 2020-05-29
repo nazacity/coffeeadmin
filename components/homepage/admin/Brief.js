@@ -55,7 +55,7 @@ const briefData = [
   },
 ];
 
-const MbBrief = () => {
+const Brief = () => {
   const matches400down = useMediaQuery('(max-width:400px)');
   const classes = useStyles();
   return (
@@ -127,4 +127,4 @@ const MbBrief = () => {
   );
 };
 
-export default MbBrief;
+export default Brief;

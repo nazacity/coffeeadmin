@@ -102,27 +102,47 @@ export const QUERY_ORDERS = {
   query: `
   query{
     orders{
-    id
-    amount
-    discount
-    net
-    by
-    status
-    discount
-    step
-    createdAt
-    user{
       id
-      firstName
-      pictureUrl
-      phone
-    }
-    items{
+      branch {
         id
-        product{
+        branch
+      }
+      place {
+        id
+        table
+      }
+      amount
+      discount
+      net
+      fee
+      fee_vat
+      by
+      status
+      discount
+      createdAt
+      user {
+        id
+        firstName
+        pictureUrl
+        phone
+      }
+      position{
+        lat
+        lng
+      }
+      items {
+        id
+        storeProduct {
           id
           name
           pictureUrl
+          price
+        }
+        onlineProduct {
+          id
+          name
+          pictureUrl
+          price
         }
         quantity
       }

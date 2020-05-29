@@ -90,12 +90,6 @@ const DrawerTopNavbar = () => {
         />
       ),
     },
-    {
-      name: 'โปรโมชั่น',
-      link: '/promotion',
-      selectedIndex: 4,
-      icon: <Icon className="fas fa-smile-wink" fontSize="small" />,
-    },
   ];
 
   const employeeMenuOptions = [

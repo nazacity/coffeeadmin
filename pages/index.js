@@ -30,9 +30,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import MbSignIn from '../components/homepage/signin/MbSignIn';
 import DtSignIn from '../components/homepage/signin/DtSignIn';
 import Chart from '../components/homepage/admin/Chart';
-import DtBrief from '../components/homepage/admin/DtBrief';
-import MbBrief from '../components/homepage/admin/MbBrief';
-import NewClientReport from '../components/homepage/admin/NewClientReport';
+import Brief from '../components/homepage/admin/Brief';
 
 // Other
 import axios from 'axios';
@@ -43,8 +41,7 @@ import queryString from 'query-string';
 import cookie from 'cookie';
 
 import { MUTATION_SIGNINWITHACCESSTOKEN } from '../apollo/mutation';
-import DtEmployeeInfo from '../components/homepage/employee/DtEmployeeInfo';
-import MbEmployeeInfo from '../components/homepage/employee/MbEmployeeInfo';
+import EmployeeInfo from '../components/homepage/employee/EmployeeInfo';
 
 const useStyles = makeStyles((theme) => ({
   top: {
@@ -62,6 +59,7 @@ const HomePage = ({ userFromAccessToken, client }) => {
   const userLoading = useSelector((state) => state.layout.userLoading);
   const classes = useStyles();
   const matches600down = useMediaQuery('(max-width:600px)');
+  const matches1024down = useMediaQuery('(max-width:1024px)');
   const action = useDispatch();
   const theme = useTheme();
 
@@ -163,45 +161,25 @@ const HomePage = ({ userFromAccessToken, client }) => {
           />
         </div>
       )}
-      <Hidden smDown>
-        <div
-          style={{
-            maxWidth: theme.layer.maxWidth,
-            width: '80%',
-            margin: 'auto',
-            padding: '5vh 0',
-          }}
-        >
-          {user?.state === 'employee' && (
-            <div>
-              <DtEmployeeInfo />
-            </div>
-          )}
-          {user?.state === 'admin' && (
-            <div>
-              <DtBrief />
-              <Chart />
-              <NewClientReport />
-            </div>
-          )}
-        </div>
-      </Hidden>
-      <Hidden mdUp>
-        <motion.div>
-          {user?.state === 'employee' && (
-            <div>
-              <MbEmployeeInfo />
-            </div>
-          )}
-          {user?.state === 'admin' && (
-            <div style={{ marginBottom: 100 }}>
-              <MbBrief />
-              <Chart />
-              <NewClientReport />
-            </div>
-          )}
-        </motion.div>
-      </Hidden>
+      <div
+        style={{
+          maxWidth: theme.layer.maxWidth,
+          width: matches1024down ? undefined : '80%',
+          margin: 'auto',
+        }}
+      >
+        {user?.state === 'employee' && (
+          <div>
+            <EmployeeInfo />
+          </div>
+        )}
+        {user?.state === 'admin' && (
+          <div>
+            <Brief />
+            <Chart />
+          </div>
+        )}
+      </div>
     </motion.div>
   );
 };

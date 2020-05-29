@@ -1,22 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-// Apollo
-import { useMutation } from '@apollo/react-hooks';
-// import {
-//   MUTAION_DELETECATALOG,
-//   MUTAION_CREATEPRODUCT,
-//   MUTAION_DELETEPRODUCT,
-//   MUTAION_UPDATERODUCT,
-// } from '../../../apollo/mutation';
-
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-// import {
-//   deleteCatalogs,
-//   createProducts,
-//   deleteProducts,
-//   updateProducts,
-// } from '../../../redux/actions/productAction';
 
 // Moment
 import moment from 'moment';
@@ -33,7 +18,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Card from '@material-ui/core/Card';
-import { Avatar, Typography } from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -50,22 +37,32 @@ const OrderTable = () => {
 
   const columnTitle = [
     {
-      title: 'ยอดทั้งหมด',
+      title: 'วันเวลา',
+      field: 'createdAt',
+      render: (rowData) => moment(rowData.createdAt).format('DD/MM/YY HH:mm'),
+      filtering: false,
+      editable: 'never',
+    },
+    {
+      title: 'ราคาก่อนส่วนลด',
       field: 'amount',
       render: (rowData) => (rowData.amount / 100).toFixed(2),
       editable: 'never',
+      filtering: false,
     },
     {
       title: 'ส่วนลด',
       field: 'discount',
       render: (rowData) => (rowData.discount / 100).toFixed(2),
       editable: 'never',
+      filtering: false,
     },
     {
-      title: 'ยอดรับเงิน',
+      title: 'ยอดสุทธิ',
       field: 'net',
       render: (rowData) => (rowData.net / 100).toFixed(2),
       editable: 'never',
+      filtering: false,
     },
     {
       title: 'วิธีการจ่าย',
@@ -73,21 +70,19 @@ const OrderTable = () => {
       lookup: {
         omise: 'omise',
         cash: 'เงินสด',
+        creditcard: 'บัตรเครดิต',
+        store: 'ยังไม่ได้เคลียร์โต๊ะ',
       },
       editable: 'never',
     },
     {
       title: 'สถานะ',
       field: 'status',
+      editable: 'never',
       lookup: {
-        paid: 'จ่ายเงินแล้ว',
-        pending: 'ยังไม่จ่ายเงิน',
-        failed: 'ล้มเหลว',
+        pending: 'กำลังชำระ',
+        successful: 'สำเร็จ',
       },
-    },
-    {
-      title: 'ลำดับ',
-      field: 'step',
     },
   ];
 
@@ -123,6 +118,7 @@ const OrderTable = () => {
           exportButton: true,
           pageSize: 10,
           draggable: false,
+          filtering: true,
         }}
         editable={{
           onRowUpdate: (newData, oldData) =>
@@ -178,80 +174,69 @@ const OrderTable = () => {
             actions: '',
           },
         }}
-        actions={[
-          (rowData) => ({
-            icon: 'photo',
-            tooltip: 'อัพโหลดรูปภาพ',
-            onClick: (event, rowData) => {
-              setRow(rowData);
-              handleEditPicture();
-            },
-            hidden: !rowData.pictureUrl,
-          }),
-        ]}
         style={{
           boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
           marginBottom: '100px',
         }}
         detailPanel={(rowData) => {
           return (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-              <Card
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-around',
-                  alignItems: 'center',
-                  margin: '1vh',
-                }}
-              >
-                <div>
+            <div style={{ padding: '2vh' }}>
+              {rowData.user && (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Avatar
                     src={rowData.user.pictureUrl}
                     alt={rowData.user.firstName}
-                    className={classes.avatar}
+                    style={{ marginRight: '2vh' }}
                   />
-                </div>
-                <div>
-                  <Typography variant="h6">{rowData.user.firstName}</Typography>
-                  <Typography variant="h6">{rowData.user.phone}</Typography>
-                </div>
-                <div>
+                  <Typography style={{ marginRight: '2vh' }}>
+                    คุณ {rowData.user.firstName}
+                  </Typography>
+                  <Typography style={{ marginRight: '2vh' }}>
+                    คุณ {rowData.user.phone}
+                  </Typography>
                   <div>
-                    <Typography variant="h6">สาขา</Typography>
-                    <Typography variant="h6">โต๊ะ</Typography>
+                    <Typography align="center">พิกัด</Typography>
+
+                    <Typography>lat: {rowData.position.lat}</Typography>
+                    <Typography>lng: {rowData.position.lng}</Typography>
                   </div>
                 </div>
-              </Card>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr ',
-                }}
-              >
-                {rowData.items.map((item) => (
-                  <Card
+              )}
+              {rowData.place && (
+                <div>
+                  สาขา {rowData.branch.branch} โต๊ะ {rowData.place.table}
+                </div>
+              )}
+              <Divider style={{ width: '80%', margin: '2vh auto' }} />
+              {rowData.items.map((item, index) => {
+                let itemData;
+                if (item.storeProduct) itemData = item.storeProduct;
+                if (item.onlineProduct) itemData = item.onlineProduct;
+
+                return (
+                  <div
                     style={{
-                      display: 'flex',
-                      justifyContent: 'space-around',
-                      alignItems: 'center',
-                      height: '60px',
-                      margin: '1vh',
-                      padding: '1vh',
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 2fr 1fr 1fr',
+                      width: '100%',
+                      color: theme.palette.secondary.main,
                     }}
-                    key={item.id}
+                    key={`${itemData.id}${index}`}
                   >
                     <Avatar
-                      src={item.product.pictureUrl}
-                      alt={item.product.name}
-                      style={{
-                        boxShadow: theme.common.shadow.black,
-                      }}
+                      src={itemData.pictureUrl}
+                      alt={itemData.name}
+                      style={{ margin: 'auto' }}
                     />
-                    <Typography>{item.product.name}</Typography>
-                    <Typography>{item.quantity}</Typography>
-                  </Card>
-                ))}
-              </div>
+
+                    <p style={{ margin: 'auto' }}>{itemData.name}</p>
+                    <p style={{ margin: 'auto' }}>{item.quantity}</p>
+                    <p style={{ margin: 'auto' }}>
+                      {itemData.price * item.quantity}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           );
         }}

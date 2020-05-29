@@ -3,7 +3,6 @@ import moment from 'moment';
 
 // Apollo
 import { useQuery } from '@apollo/react-hooks';
-import { QUERY_BESTSALEMONTHLY } from '../../../apollo/query';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,16 +11,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-import Badge from '@material-ui/core/Badge';
-import Tooltip from '@material-ui/core/Tooltip';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Chartjs
 import { Line } from 'react-chartjs-2';
-
-// Components
-import MotionSlider from './motionslider';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -112,18 +104,12 @@ const Chart = () => {
   const matches600down = useMediaQuery('(max-width:600px)');
   const matches840down = useMediaQuery('(max-width:840px)');
   const classes = useStyles();
-  const { data, loading, error } = useQuery(QUERY_BESTSALEMONTHLY, {
-    variables: {
-      year: moment(new Date()).get('year'),
-      month: moment(new Date()).get('month') + 1,
-    },
-  });
 
   return (
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: matches840down ? '1fr' : '1fr 1fr',
+        gridTemplateColumns: '1fr',
         gridGap: '2vw',
         padding: '2vw',
       }}
@@ -134,95 +120,13 @@ const Chart = () => {
             <Typography>รายได้ประจำเดือน</Typography>
           </div>
         </CardContent>
-        <CardActionArea style={{ padding: '2vw' }}>
+        <div style={{ padding: '2vw' }}>
           <Line
             data={dashboardNASDAQChart.data}
             options={dashboardNASDAQChart.options}
             width={400}
             height={200}
           />
-        </CardActionArea>
-      </Card>
-      <Card>
-        <CardContent>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Typography>สินค้าขายดีประจำเดือน</Typography>
-          </div>
-        </CardContent>
-        <div>
-          {loading ? (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                padding: '2vh',
-              }}
-            >
-              <CircularProgress
-                variant="determinate"
-                value={100}
-                className={classes.top}
-                size={matches600down ? 60 : 120}
-                thickness={4}
-              />
-              <CircularProgress
-                variant="indeterminate"
-                disableShrink
-                className={classes.bottom}
-                size={matches600down ? 60 : 120}
-                thickness={4}
-              />
-            </div>
-          ) : (
-            data && (
-              <MotionSlider
-                padding={30}
-                gap={30}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '100%',
-                }}
-                allowSlideToLast
-              >
-                {data?.bestSaleMonthly.map((product) => (
-                  <div key={product.id}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Badge
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        color="primary"
-                        badgeContent={product.totalSales}
-                        max={999}
-                        classes={{
-                          colorPrimary: classes.BadgeColor,
-                          anchorOriginTopLeftRectangle: classes.topLeft10,
-                        }}
-                      >
-                        <Tooltip title={product.name} placement="bottom">
-                          <Avatar
-                            src={product.pictureUrl}
-                            style={{
-                              height: matches450down ? '100px' : '150px',
-                              width: matches450down ? '100px' : '150px',
-                            }}
-                          />
-                        </Tooltip>
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </MotionSlider>
-            )
-          )}
         </div>
       </Card>
     </div>

@@ -6,6 +6,7 @@ import {
   setStartDate,
   setEndDate,
 } from '../../../redux/actions/reportDateAction';
+import { setOrder } from '../../../redux/actions/orderActions';
 
 // MUI DATE PICKER
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -13,25 +14,38 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import 'moment/locale/th';
 import moment from 'moment';
-
 moment.locale('th');
 
 // MUI
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-const MbDatePicker = () => {
+// Apollo
+import { useMutation } from '@apollo/react-hooks';
+import { MUTATION_ORDERS_BYDATE } from '../../../apollo/mutation';
+
+const DatePicker = () => {
   const theme = useTheme();
   const matches450down = useMediaQuery('(max-width:450px)');
+  const matches1024down = useMediaQuery('(max-width:1024px)');
   const startDate = useSelector((state) => state.reportDate.startDate);
   const endDate = useSelector((state) => state.reportDate.endDate);
   const action = useDispatch();
+
+  const [ordersByDate, { loading, error }] = useMutation(
+    MUTATION_ORDERS_BYDATE,
+    {
+      onCompleted: (data) => {
+        action(setOrder(data.ordersByDate));
+      },
+    }
+  );
+
   return (
     <React.Fragment>
-      <Card
+      <div
         style={{
           padding: '1vh 1vw',
           margin: '1vh 0',
@@ -39,7 +53,7 @@ const MbDatePicker = () => {
           flexDirection: matches450down ? 'column' : 'row',
           justifyContent: 'center',
           alignItems: 'center',
-          boxShadow: theme.common.shadow.main1,
+          boxShadow: matches1024down ? undefined : theme.common.shadow.black,
         }}
       >
         <div
@@ -63,21 +77,47 @@ const MbDatePicker = () => {
             <KeyboardDatePicker
               placeholder="10/10/2020"
               value={endDate}
-              onChange={(date) =>
-                action(setEndDate(parseFloat(date.format('x'))))
-              }
+              onChange={(date) => {
+                action(
+                  setEndDate(
+                    parseFloat(
+                      date
+                        .set({
+                          hour: 23,
+                          minute: 59,
+                          second: 59,
+                          millisecond: 59,
+                        })
+                        .format('x')
+                    )
+                  )
+                );
+              }}
               format="DD/MMM/YY"
             />
           </MuiPickersUtilsProvider>
         </div>
         <div style={{ margin: '2vw' }}>
-          <Button variant="outlined" color="primary">
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => {
+              console.log(startDate);
+              console.log(endDate);
+              ordersByDate({
+                variables: {
+                  startDate: startDate,
+                  endDate: endDate,
+                },
+              });
+            }}
+          >
             ค้นหา
           </Button>
         </div>
-      </Card>
+      </div>
     </React.Fragment>
   );
 };
 
-export default MbDatePicker;
+export default DatePicker;

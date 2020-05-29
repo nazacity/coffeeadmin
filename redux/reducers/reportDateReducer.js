@@ -1,8 +1,10 @@
 import { SET_STARTDATE, SET_ENDDATE } from '../types';
 import moment from 'moment';
 
-const now = moment(new Date().getTime());
-const endDate = parseFloat(now.format('x'));
+const now = moment(new Date());
+const endDate = parseFloat(
+  now.set({ hour: 23, minute: 59, second: 59, millisecond: 59 }).format('x')
+);
 // const startDate = parseFloat(
 //   now
 //     .set({ date: 1, hour: 0, minute: 0, second: 0, millisecond: 0 })

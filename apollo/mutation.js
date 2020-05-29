@@ -615,8 +615,8 @@ export const MUTAION_CREATE_ORDERFROMSTOREORDER = gql`
 `;
 
 export const MUTAION_CLEAR_PLACE = gql`
-  mutation MUTAION_CREATE_ORDERFROMSTOREORDER($placeId: ID!) {
-    clearPlace(placeId: $placeId) {
+  mutation MUTAION_CREATE_ORDERFROMSTOREORDER($placeId: ID!, $by: String!) {
+    clearPlace(placeId: $placeId, by: $by) {
       id
       bill {
         id
@@ -704,6 +704,57 @@ export const MUTAION_DELETE_ONLINEPRODUCT = gql`
       id
       name
       pictureUrl
+    }
+  }
+`;
+
+export const MUTATION_ORDERS_BYDATE = gql`
+  mutation MUTATION_ORDERS_BYDATE($startDate: Float, $endDate: Float) {
+    ordersByDate(startDate: $startDate, endDate: $endDate) {
+      id
+      branch {
+        id
+        branch
+      }
+      place {
+        id
+        table
+      }
+      amount
+      discount
+      net
+      fee
+      fee_vat
+      by
+      status
+      discount
+      createdAt
+      user {
+        id
+        firstName
+        pictureUrl
+        phone
+      }
+      position {
+        lat
+        lng
+      }
+      items {
+        id
+        storeProduct {
+          id
+          name
+          pictureUrl
+          price
+        }
+        onlineProduct {
+          id
+          name
+          pictureUrl
+          price
+        }
+        quantity
+      }
     }
   }
 `;

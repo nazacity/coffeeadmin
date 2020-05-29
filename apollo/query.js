@@ -31,38 +31,6 @@ export const QUERY_USERS = gql`
   }
 `;
 
-export const QUERY_ORDERS = gql`
-  query QUERY_ORDERS {
-    orders {
-      id
-      amount
-      discount
-      net
-      by
-      status
-      discount
-      place {
-        branch
-        table
-      }
-      user {
-        id
-        firstName
-        pictureUrl
-      }
-      items {
-        id
-        product {
-          id
-          name
-          pictureUrl
-        }
-        quantity
-      }
-    }
-  }
-`;
-
 export const QUERY_ORDER_FORPAYING = gql`
   query QUERY_ORDER_FORPAYING($orderId: ID!) {
     order(orderId: $orderId) {
@@ -90,9 +58,9 @@ export const QUERY_ORDER_FORPAYING = gql`
   }
 `;
 
-export const QUERY_BESTSALEMONTHLY = gql`
-  query QUERY_BESTSALEMONTHLY($year: Float, $month: Float) {
-    bestSaleMonthly(year: $year, month: $month) {
+export const QUERY_SALESTOREPRODUCTDAILY = gql`
+  query QUERY_SALESTOREPRODUCTDAILY($year: Float, $month: Float, $day: Float) {
+    saleStoreProductDaily(year: $year, month: $month, day: $day) {
       id
       name
       pictureUrl
@@ -101,9 +69,9 @@ export const QUERY_BESTSALEMONTHLY = gql`
   }
 `;
 
-export const QUERY_SALEDAILY = gql`
-  query QUERY_SALEDAILY($year: Float, $month: Float, $day: Float) {
-    saleDaily(year: $year, month: $month, day: $day) {
+export const QUERY_SALEONLINEPRODUCTDAILY = gql`
+  query QUERY_SALEONLINEPRODUCTDAILY($year: Float, $month: Float, $day: Float) {
+    saleOnlineProductDaily(year: $year, month: $month, day: $day) {
       id
       name
       pictureUrl
