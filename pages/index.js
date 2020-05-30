@@ -20,11 +20,11 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/react-hooks';
 
 // MUI
-import Container from '@material-ui/core/Container';
 import Hidden from '@material-ui/core/Hidden';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Avatar, Typography } from '@material-ui/core';
 
 // components
 import MbSignIn from '../components/homepage/signin/MbSignIn';
@@ -145,20 +145,35 @@ const HomePage = ({ userFromAccessToken, client }) => {
             transform: 'translate(-50%,-50%)',
           }}
         >
-          <CircularProgress
-            variant="determinate"
-            value={100}
-            className={classes.top}
-            size={matches600down ? 60 : 120}
-            thickness={4}
+          <Avatar
+            src="./images/logo/logo.jpg"
+            alt="logo"
+            style={{ width: 200, height: 200, margin: 'auto' }}
           />
-          <CircularProgress
-            variant="indeterminate"
-            disableShrink
-            className={classes.bottom}
-            size={matches600down ? 60 : 120}
-            thickness={4}
-          />
+          <Typography
+            align="center"
+            color="primary"
+            variant="h6"
+            style={{ letterSpacing: 2, marginBottom: '2vh' }}
+          >
+            ยินดีต้อนรับ
+          </Typography>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress
+              variant="determinate"
+              value={100}
+              className={classes.top}
+              size={60}
+              thickness={4}
+            />
+            <CircularProgress
+              variant="indeterminate"
+              disableShrink
+              className={classes.bottom}
+              size={60}
+              thickness={4}
+            />
+          </div>
         </div>
       )}
       <div
