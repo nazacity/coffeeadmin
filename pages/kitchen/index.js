@@ -48,11 +48,7 @@ const Kitchen = ({ branchs, user }) => {
           <Tab label={branch.branch} key={branch.id} />
         ))}
       </Tabs>
-      <SwipeableViews
-        index={index}
-        onChangeIndex={handleChangeIndex}
-        enableMouseEvents
-      >
+      <SwipeableViews index={index} onChangeIndex={handleChangeIndex}>
         {branchs.map((branch) => (
           <OrderView key={branch.id} branch={branch} />
         ))}

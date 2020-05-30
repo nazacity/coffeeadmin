@@ -50,7 +50,15 @@ const MyApp = ({ Component, pageProps, apollo }) => {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
         <link rel="icon" href="./images/logo/logo.jpg" />
-
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
+        />
         <meta
           name="description"
           content="ระบบ full system e-commerce รองรับการยืนยันตัวตนด้วย Line

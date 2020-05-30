@@ -106,7 +106,12 @@ const CreateOnlineProductCatalog = ({ setRerender }) => {
         gridTemplateColumns: '1.4fr 0.6fr',
       }}
     >
-      <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
+      <Card
+        style={{
+          margin: '2vh',
+          boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
+        }}
+      >
         <Typography align="center">เพิ่มประเภทสินค้าออนไลน์</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>

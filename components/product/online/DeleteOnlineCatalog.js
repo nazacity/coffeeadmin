@@ -73,7 +73,7 @@ const DeleteOnlineCatalog = ({ setRerender }) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             margin: '1vh',
-            boxShadow: theme.common.shadow.main1,
+            boxShadow: theme.common.shadow.black,
           }}
         >
           <Typography color="primary" style={{ margin: '0 1vh' }} variant="h6">
@@ -81,7 +81,7 @@ const DeleteOnlineCatalog = ({ setRerender }) => {
           </Typography>
           <IconButton
             variant="contained"
-            style={{ color: '#d32f2f' }}
+            style={{ color: '#ef9a9a' }}
             onClick={() => handleClickOpen(catalog.id)}
           >
             <HighlightOffIcon />

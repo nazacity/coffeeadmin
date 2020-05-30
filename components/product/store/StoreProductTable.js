@@ -431,8 +431,9 @@ const StoreProductTable = ({ setRerender }) => {
           },
         ]}
         style={{
-          boxShadow: matches1024down ? 'none' : theme.common.shadow.main1,
-          marginBottom: '100px',
+          boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
+          width: matches1024down ? undefined : '80%',
+          margin: '0 auto 150px auto',
         }}
       />
       <Dialog

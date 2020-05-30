@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 
 // Next
 import Link from '../../src/Link';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 // Framer-motion
@@ -32,7 +31,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 // components
 import DrawerTopNavbar from './DrawerTopNavbar';
 import UserMenu from './components/UserMenu';
-import ProductMenu from './components/ProductMenu';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,7 +69,6 @@ const TopNavbar = () => {
   const route = useRouter();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [productAnchorEl, setProductAnchorEl] = React.useState(null);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -79,14 +76,6 @@ const TopNavbar = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleProductMenu = (event) => {
-    setProductAnchorEl(event.currentTarget);
-  };
-
-  const handleProductMenuClose = () => {
-    setProductAnchorEl(null);
   };
 
   const adminMenuOptions = [
@@ -115,33 +104,11 @@ const TopNavbar = () => {
       ),
     },
     {
-      name: 'สินค้า',
-      link: '/product',
+      name: 'ห้องครัว',
+      link: '/kitchen',
       selectedIndex: 3,
-      icon: (
-        <Tooltip title="สินค้า">
-          <Icon
-            className="fas fa-box-open"
-            fontSize="small"
-            classes={{ root: classes.MuiIcon }}
-          />
-        </Tooltip>
-      ),
-      action: (e) => {
-        handleProductMenu(e);
-        setMenuIndex(3);
-      },
+      icon: <Icon className="fas fa-concierge-bell" fontSize="small" />,
     },
-    // {
-    //   name: 'โปรโมชั่น',
-    //   link: '/promotion',
-    //   selectedIndex: 4,
-    //   icon: (
-    //     <Tooltip title="โปรโมชั่น">
-    //       <Icon className="fas fa-smile-wink" fontSize="small" />
-    //     </Tooltip>
-    //   ),
-    // },
   ];
 
   const employeeMenuOptions = [
@@ -181,10 +148,10 @@ const TopNavbar = () => {
         case `/stock`:
           action(setMenuIndex(5));
           break;
-        case `/order`:
+        case `/product/store`:
           action(setMenuIndex(5));
           break;
-        case `/kitchen`:
+        case `/product/online`:
           action(setMenuIndex(5));
           break;
         default:
@@ -194,14 +161,7 @@ const TopNavbar = () => {
   }, [menuIndex, window.location.pathname]);
 
   return (
-    <>
-      <Head>
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
-        />
-      </Head>
+    <React.Fragment>
       <motion.div
         initial={{ opacity: 0, y: '-100%' }}
         animate={{ opacity: 1, y: '0%' }}
@@ -333,13 +293,8 @@ const TopNavbar = () => {
           anchorEl={anchorEl}
           handleClose={handleClose}
         />
-        <ProductMenu
-          state={user.state}
-          productAnchorEl={productAnchorEl}
-          handleProductMenuClose={handleProductMenuClose}
-        />
       </motion.div>
-    </>
+    </React.Fragment>
   );
 };
 

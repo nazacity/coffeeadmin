@@ -1,29 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 // firebase
-import { storage } from '../../../firebase';
+import { storage } from '../../firebase';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
 import {
   MUTAION_UPDATEEMPLOYEE,
   MUTAION_DELETEEMPLOYEE,
-} from '../../../apollo/mutation';
+} from '../../apollo/mutation';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import {
   updateEmployees,
   deleteEmployees,
-} from '../../../redux/actions/employeeActions';
+} from '../../redux/actions/employeeActions';
 
 // Moment
 import moment from 'moment';
 import 'moment/locale/th';
 moment.locale('th');
-
-// Next
-import Head from 'next/head';
 
 // MUI
 import MaterialTable from 'material-table';
@@ -53,6 +50,7 @@ const EmployeeTable = () => {
   const [row, setRow] = useState({});
   const [pictureUploading, setPictureUploading] = useState(false);
   const matches600down = useMediaQuery('(max-width:600px)');
+  const matches1024down = useMediaQuery('(max-width:1024px)');
   const employees = useSelector((state) => state.employees);
 
   const [state, setState] = useState([]);
@@ -215,17 +213,6 @@ const EmployeeTable = () => {
 
   return (
     <React.Fragment>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
-        />
-      </Head>
       <input
         type="file"
         ref={imageInput}
@@ -315,7 +302,11 @@ const EmployeeTable = () => {
             actions: '',
           },
         }}
-        style={{ border: 'none', boxShadow: 'none', marginBottom: '100px' }}
+        style={{
+          boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
+          width: matches1024down ? undefined : '80%',
+          margin: matches1024down ? '0 0 150px 0' : '1vh auto',
+        }}
         detailPanel={(rowData) => {
           return (
             <div style={{ marginLeft: '10%', padding: '1vh', display: 'flex' }}>

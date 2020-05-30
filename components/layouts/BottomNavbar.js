@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 
 // Next
 import Link from '../../src/Link';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 // Redux
@@ -24,7 +23,6 @@ import Icon from '@material-ui/core/Icon';
 
 // Components
 import UserMenu from './components/UserMenu';
-import ProductMenu from './components/ProductMenu';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,10 +67,8 @@ const BottomNavbar = () => {
   const menuIndex = useSelector((state) => state.layout.menuIndex);
   const action = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [productAnchorEl, setProductAnchorEl] = React.useState(null);
 
   const userIcon = useRef();
-  const menuIcon = useRef();
 
   const handleUserNavbarClick = () => {
     userIcon.current.click();
@@ -85,19 +81,6 @@ const BottomNavbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const handleProductMenu = (event) => {
-    setProductAnchorEl(event.currentTarget);
-  };
-
-  const handleProductMenuClose = () => {
-    setProductAnchorEl(null);
-  };
-
-  const handleMenuIconClick = (e) => {
-    menuIcon.current.click();
-  };
-
   const adminMenuOptions = [
     {
       name: 'รายงาน',
@@ -118,34 +101,29 @@ const BottomNavbar = () => {
       ),
     },
     {
-      name: 'สินค้า',
-      link: '/product',
+      name: 'ห้องครัว',
+      link: '/kitchen',
       selectedIndex: 3,
-      icon: (
-        <Icon
-          className="fas fa-box-open"
-          fontSize="small"
-          classes={{ root: classes.MuiIcon }}
-          ref={menuIcon}
-          onClick={(e) => handleProductMenu(e)}
-        />
-      ),
-      action: () => {
-        handleMenuIconClick();
-      },
+      icon: <Icon className="fas fa-concierge-bell" fontSize="small" />,
     },
-    // {
-    //   name: 'โปรโมชั่น',
-    //   link: '/promotion',
-    //   selectedIndex: 4,
-    //   icon: <Icon className="fas fa-smile-wink" fontSize="small" />,
-    // },
   ];
 
   const employeeMenuOptions = [
     {
+      name: 'โต๊ะ',
+      link: '/branch/table',
+      selectedIndex: 1,
+      icon: (
+        <Icon
+          className="fas fa-concierge-bell"
+          fontSize="small"
+          classes={{ root: classes.MuiIcon }}
+        />
+      ),
+    },
+    {
       name: 'ห้องครัว',
-      link: '/kitchen',
+      link: '/branch/kitchen',
       selectedIndex: 1,
       icon: (
         <Icon
@@ -183,10 +161,10 @@ const BottomNavbar = () => {
         case `/stock`:
           action(setMenuIndex(5));
           break;
-        case `/order`:
+        case `/product/store`:
           action(setMenuIndex(5));
           break;
-        case `/kitchen`:
+        case `/product/online`:
           action(setMenuIndex(5));
           break;
         default:
@@ -196,14 +174,7 @@ const BottomNavbar = () => {
   };
 
   return (
-    <>
-      <Head>
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
-        />
-      </Head>
+    <React.Fragment>
       <motion.div
         initial={{ opacity: 0, y: '100%' }}
         animate={{ opacity: 1, y: '0%' }}
@@ -337,13 +308,8 @@ const BottomNavbar = () => {
           anchorEl={anchorEl}
           handleClose={handleClose}
         />
-        <ProductMenu
-          state={user.state}
-          productAnchorEl={productAnchorEl}
-          handleProductMenuClose={handleProductMenuClose}
-        />
       </motion.div>
-    </>
+    </React.Fragment>
   );
 };
 

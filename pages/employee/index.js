@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import cookie from 'cookie';
 
-// MUI
-import Hidden from '@material-ui/core/Hidden';
-
 // Redux
 import { useDispatch } from 'react-redux';
 import { setEmployees } from '../../redux/actions/employeeActions';
@@ -17,7 +14,7 @@ import {
 
 // framer motion
 import { motion } from 'framer-motion';
-import MbEmployee from '../../components/employee/MbEmployee';
+import EmployeeTable from '../../components/employee/EmployeeTable';
 
 const index = ({ employees, user }) => {
   const action = useDispatch();
@@ -31,14 +28,7 @@ const index = ({ employees, user }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <Hidden smDown>
-        <MbEmployee />
-      </Hidden>
-      <Hidden mdUp>
-        <div style={{ padding: '2vw' }}>
-          <MbEmployee />
-        </div>
-      </Hidden>
+      <EmployeeTable />
     </motion.div>
   );
 };

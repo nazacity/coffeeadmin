@@ -70,26 +70,45 @@ const UserMenu = ({ state, anchorEl, handleClose }) => {
                 fontSize="small"
               />
             </ListItemIcon>
-            <Typography variant="inherit">คลังสินค้า</Typography>
+            <Typography variant="inherit">คลังวัตถุดิบ</Typography>
           </MenuItem>
           <Divider style={{ width: '60%', margin: '0px auto' }} />
         </Link>
       )}
-      <Link href="/kitchen" onClick={handleClose}>
-        <MenuItem
-          style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
-        >
-          <ListItemIcon>
-            <Icon
-              className="fas fa-concierge-bell"
-              color="primary"
-              fontSize="small"
-            />
-          </ListItemIcon>
-          <Typography variant="inherit">รายการครัว</Typography>
-        </MenuItem>
-      </Link>
-      <Divider style={{ width: '60%', margin: '0px auto' }} />
+      {state === 'admin' && (
+        <div>
+          <Link href="/product/store" onClick={handleClose}>
+            <MenuItem
+              style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
+            >
+              <ListItemIcon>
+                <Icon
+                  className="fas fa-store"
+                  color="primary"
+                  fontSize="small"
+                />
+              </ListItemIcon>
+              <Typography variant="inherit">สินค้าในร้าน</Typography>
+            </MenuItem>
+          </Link>
+          <Divider style={{ width: '60%', margin: '0px auto' }} />
+          <Link href="/product/online" onClick={handleClose}>
+            <MenuItem
+              style={{ width: '40%', minWidth: '250px', maxWidth: '400px' }}
+            >
+              <ListItemIcon>
+                <Icon
+                  className="fas fa-store-alt"
+                  color="primary"
+                  fontSize="small"
+                />
+              </ListItemIcon>
+              <Typography variant="inherit">สินค้าในร้านออนไลน์</Typography>
+            </MenuItem>
+          </Link>
+          <Divider style={{ width: '60%', margin: '0px auto' }} />
+        </div>
+      )}
       <MenuItem
         onClick={() => {
           action(userSignOut());

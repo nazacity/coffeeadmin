@@ -223,15 +223,16 @@ const CreateOnlineProduct = ({ handleAddProductDialogClose }) => {
                     position: 'relative',
                   }}
                 >
-                  <IconButton
-                    variant="outlined"
-                    color="primary"
-                    onClick={removeFriend(index)}
-                    style={{ position: 'absolute', top: 0, right: 0 }}
-                    disabled={index === 0}
-                  >
-                    <HighlightOffIcon />
-                  </IconButton>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <IconButton
+                      variant="outlined"
+                      color="primary"
+                      onClick={removeFriend(index)}
+                      disabled={index === 0}
+                    >
+                      <HighlightOffIcon />
+                    </IconButton>
+                  </div>
                   <FormControl
                     variant="outlined"
                     style={{
@@ -293,7 +294,7 @@ const CreateOnlineProduct = ({ handleAddProductDialogClose }) => {
               flexDirection: 'column',
               padding: '2vh',
               marginLeft: '2vh',
-              boxShadow: theme.common.shadow.main1,
+              boxShadow: theme.common.shadow.black,
             }}
           >
             <Button

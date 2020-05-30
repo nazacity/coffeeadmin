@@ -59,6 +59,7 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
   const { addToast } = useToasts();
   const action = useDispatch();
   const matches600down = useMediaQuery('(max-width:600px)');
+  const matches1024down = useMediaQuery('(max-width:1024px)');
   const { data } = useQuery(QUERY_STOCKNAME);
 
   const catalogs = useSelector((state) => state.products.storeProductCatalogs);
@@ -205,7 +206,7 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
         </FormControl>
         <div
           style={{
-            padding: '2vh',
+            padding: matches1024down ? undefined : '2vh',
             display: 'grid',
             gridTemplateColumns: '1.3fr 0.7fr',
           }}
@@ -220,19 +221,20 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
                   style={{
                     padding: '2vh',
                     marginBottom: '1vh',
-                    boxShadow: theme.common.shadow.main1,
+                    boxShadow: theme.common.shadow.black,
                     position: 'relative',
                   }}
                 >
-                  <IconButton
-                    variant="outlined"
-                    color="primary"
-                    onClick={removeFriend(index)}
-                    style={{ position: 'absolute', top: 0, right: 0 }}
-                    disabled={index === 0}
-                  >
-                    <HighlightOffIcon />
-                  </IconButton>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <IconButton
+                      variant="outlined"
+                      color="primary"
+                      onClick={removeFriend(index)}
+                      disabled={index === 0}
+                    >
+                      <HighlightOffIcon />
+                    </IconButton>
+                  </div>
                   <FormControl
                     variant="outlined"
                     style={{
@@ -294,7 +296,7 @@ const CreateStoreProduct = ({ handleAddStoreProductDialogClose }) => {
               flexDirection: 'column',
               padding: '2vh',
               marginLeft: '2vh',
-              boxShadow: theme.common.shadow.main1,
+              boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
             }}
           >
             <Button
