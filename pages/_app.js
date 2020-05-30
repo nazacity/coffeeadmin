@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import '@sandstreamdev/react-swipeable-list/dist/styles.css';
+import '../public/styles/nprogress.css';
 
 // Apollo
 import { ApolloProvider } from '@apollo/react-hooks';
@@ -15,6 +16,7 @@ import store from '../redux/store';
 // Next
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 
 // Mui
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -28,6 +30,15 @@ import TopNavbar from '../components/layouts/TopNavbar';
 
 // Toast
 import { ToastProvider } from 'react-toast-notifications';
+
+import NProgress from 'nprogress';
+
+Router.events.on('routeChangeStart', (url) => {
+  console.log(`Loading: ${url}`);
+  NProgress.start();
+});
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 const MyApp = ({ Component, pageProps, apollo }) => {
   React.useEffect(() => {

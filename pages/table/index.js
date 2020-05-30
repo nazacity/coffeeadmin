@@ -73,13 +73,14 @@ const Table = ({ user, branch }) => {
               padding: '1vh',
             }}
           >
-            {branch.place.map((table) => (
-              <TableItem
-                key={table.id}
-                table={table}
-                setRerender={setRerender}
-              />
-            ))}
+            {branch.place &&
+              branch.place.map((table) => (
+                <TableItem
+                  key={table.id}
+                  table={table}
+                  setRerender={setRerender}
+                />
+              ))}
           </div>
         ))}
         <div>

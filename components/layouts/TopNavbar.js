@@ -29,7 +29,6 @@ import Icon from '@material-ui/core/Icon';
 import Tooltip from '@material-ui/core/Tooltip';
 
 // components
-import DrawerTopNavbar from './DrawerTopNavbar';
 import UserMenu from './components/UserMenu';
 
 const useStyles = makeStyles((theme) => ({
@@ -172,15 +171,6 @@ const TopNavbar = () => {
       >
         <AppBar position="static" classes={{ root: classes.navbar }}>
           <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-              onClick={() => action(setDrawerTopNavbar())}
-            >
-              <MenuIcon />
-            </IconButton>
             <div
               onClick={() => action(setMenuIndex(0))}
               className={classes.title}
@@ -286,7 +276,6 @@ const TopNavbar = () => {
               </IconButton>
             </div>
           </Toolbar>
-          <DrawerTopNavbar />
         </AppBar>
         <UserMenu
           state={user.state}
