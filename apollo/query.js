@@ -58,28 +58,6 @@ export const QUERY_ORDER_FORPAYING = gql`
   }
 `;
 
-export const QUERY_SALESTOREPRODUCTDAILY = gql`
-  query QUERY_SALESTOREPRODUCTDAILY($year: Float, $month: Float, $day: Float) {
-    saleStoreProductDaily(year: $year, month: $month, day: $day) {
-      id
-      name
-      pictureUrl
-      totalSales
-    }
-  }
-`;
-
-export const QUERY_SALEONLINEPRODUCTDAILY = gql`
-  query QUERY_SALEONLINEPRODUCTDAILY($year: Float, $month: Float, $day: Float) {
-    saleOnlineProductDaily(year: $year, month: $month, day: $day) {
-      id
-      name
-      pictureUrl
-      totalSales
-    }
-  }
-`;
-
 export const QUERY_EMPLOYEE = gql`
   query QUERY_EMPLOYEE {
     employee {

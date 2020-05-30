@@ -8,87 +8,62 @@ import Divider from '@material-ui/core/Divider';
 // Redux
 import { useSelector } from 'react-redux';
 
+// MUI
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import SwipeableViews from 'react-swipeable-views';
+
+// Component
+import BranchDetailItem from './BranchDetailItem';
+
 const Detail = () => {
   const theme = useTheme();
-  const orders = useSelector((state) => state.orders);
-  const startDate = useSelector((state) => state.reportDate.startDate);
-  const endDate = useSelector((state) => state.reportDate.startDate);
+  const branchs = useSelector((state) => state.store.branch);
+  const matches600down = useMediaQuery('(max-width:600px)');
+  const matches1200down = useMediaQuery('(max-width:1200px)');
 
-  const [state, setState] = useState([]);
-  useEffect(() => {
-    let filterOrders = orders.filter((order) => order.createdAt >= startDate);
-    setState(filterOrders);
-  }, [orders]);
+  const [state, setState] = useState(0);
 
-  const calculateAmount = (orders) => {
-    const amount = orders.reduce((sum, order) => sum + order.amount, 0);
-    return amount / 100;
+  const [rerender, setRerender] = useState(false);
+
+  const handleChange = (event, value) => {
+    setState(value);
   };
 
-  const calculateDiscount = (orders) => {
-    const discount = orders.reduce((sum, order) => sum + order.discount, 0);
-    return discount / 100;
+  const handleChangeIndex = (index) => {
+    setState(index);
   };
 
-  const calculateNet = (orders) => {
-    const net = orders.reduce((sum, order) => sum + order.net, 0);
-    return net / 100;
-  };
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
 
-  const calculateFeeAndFeeVat = (orders) => {
-    const fee = orders.reduce(
-      (sum, order) => sum + order.fee + order.fee_vat,
-      0
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <React.Fragment>{children}</React.Fragment>}
+      </div>
     );
-    return fee / 100;
-  };
+  }
 
   return (
-    <div
-      style={{
-        padding: '2vh',
-      }}
-    >
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '3fr 1fr 0.2fr',
-        }}
-      >
-        <div>
-          <Typography>ยอดรวม</Typography>
-          <Typography>ส่วนลด</Typography>
-          <Typography>ค่า Fee Omise</Typography>
-          <Typography>คงเหลือ</Typography>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-end',
-            marginRight: '2vw',
-          }}
-        >
-          <Typography>{calculateAmount(state).toFixed(2)}</Typography>
-          <Typography>{calculateDiscount(state).toFixed(2)}</Typography>
-          <Typography>{calculateFeeAndFeeVat(state).toFixed(2)}</Typography>
-          <Typography>{calculateNet(state).toFixed(2)}</Typography>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-          }}
-        >
-          <Typography>บาท</Typography>
-          <Typography>บาท</Typography>
-          <Typography>บาท</Typography>
-          <Typography>บาท</Typography>
-        </div>
-      </div>
-      <Divider variant="middle" style={{ width: '80%', margin: '2vh auto' }} />
-    </div>
+    <React.Fragment>
+      <Tabs value={state} variant="fullWidth" onChange={handleChange}>
+        {branchs.map((branch) => (
+          <Tab label={branch.branch} key={branch.id} />
+        ))}
+      </Tabs>
+      {branchs.map((branch, i) => (
+        <TabPanel key={branch.id} value={state} index={i}>
+          <BranchDetailItem key={branch.id} branchId={branch.id} />
+        </TabPanel>
+      ))}
+    </React.Fragment>
   );
 };
 

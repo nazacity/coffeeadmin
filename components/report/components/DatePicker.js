@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -42,6 +42,15 @@ const DatePicker = () => {
       },
     }
   );
+
+  useEffect(() => {
+    ordersByDate({
+      variables: {
+        startDate,
+        endDate,
+      },
+    });
+  }, [startDate, endDate]);
 
   return (
     <React.Fragment>
@@ -96,24 +105,6 @@ const DatePicker = () => {
               format="DD/MMM/YY"
             />
           </MuiPickersUtilsProvider>
-        </div>
-        <div style={{ margin: '2vw' }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => {
-              console.log(startDate);
-              console.log(endDate);
-              ordersByDate({
-                variables: {
-                  startDate: startDate,
-                  endDate: endDate,
-                },
-              });
-            }}
-          >
-            ค้นหา
-          </Button>
         </div>
       </div>
     </React.Fragment>

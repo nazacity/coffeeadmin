@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 // Apollo
-import { useQuery } from '@apollo/react-hooks';
-import { QUERY_SALEONLINEPRODUCTDAILY } from '../../../apollo/query';
+import { useMutation } from '@apollo/react-hooks';
+import { MUTATION_SALEONLINEPRODUCT } from '../../../apollo/mutation';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,6 +16,9 @@ import { useTheme } from '@material-ui/core/styles';
 
 // Components
 import MotionSlider from '../../homepage/admin/motionslider';
+
+// Redux
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -50,24 +53,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OnlineProductSale = () => {
+const OnlineProductSale = ({ branchId }) => {
   const classes = useStyles();
   const theme = useTheme();
   const matches450down = useMediaQuery('(max-width:450px)');
   const matches600down = useMediaQuery('(max-width:600px)');
   const matches1024down = useMediaQuery('(max-width:1024px)');
+  const startDate = useSelector((state) => state.reportDate.startDate);
+  const endDate = useSelector((state) => state.reportDate.endDate);
+  const catalogs = useSelector((state) => state.products.onlineProductCatalogs);
   const [onlineProductSaleData, setOnlineProductSaleData] = useState([]);
 
-  const { data, loading } = useQuery(QUERY_SALEONLINEPRODUCTDAILY, {
-    variables: {
-      year: moment(new Date()).get('year'),
-      month: moment(new Date()).get('month') + 1,
-      day: moment(new Date()).get('date'),
-    },
-    onCompleted: (data) => {
-      setOnlineProductSaleData(data.saleOnlineProductDaily);
-    },
-  });
+  const [saleOnlineProduct, { loading }] = useMutation(
+    MUTATION_SALEONLINEPRODUCT,
+    {
+      onCompleted: (data) => {
+        setOnlineProductSaleData(data.saleOnlineProduct);
+      },
+    }
+  );
+
+  useEffect(() => {
+    saleOnlineProduct({ variables: { startDate, endDate, branchId } });
+  }, [startDate, endDate]);
 
   return (
     <React.Fragment>
@@ -79,7 +87,7 @@ const OnlineProductSale = () => {
       >
         <CardContent>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Typography>ยอดขายสินค้าออนไลน์ประจำวัน</Typography>
+            <Typography>ยอดขายสินค้าออนไลน์</Typography>
           </div>
         </CardContent>
         <div>
@@ -107,56 +115,62 @@ const OnlineProductSale = () => {
               />
             </div>
           ) : (
-            onlineProductSaleData && (
-              <MotionSlider
-                padding={30}
-                gap={30}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '100%',
-                }}
-                allowSlideToLast
-              >
-                {onlineProductSaleData?.map((product) => (
-                  <div key={product.id}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Badge
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        color="primary"
-                        badgeContent={product.totalSales}
-                        classes={{
-                          colorPrimary: classes.BadgeColor,
-                          anchorOriginTopLeftRectangle: classes.topLeft10,
+            onlineProductSaleData &&
+            catalogs.map((catalog) => {
+              let filterByCatalog = onlineProductSaleData.filter(
+                (product) => product.catalog.id === catalog.id
+              );
+              return (
+                <MotionSlider
+                  padding={30}
+                  gap={30}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100%',
+                  }}
+                  key={catalog.id}
+                >
+                  {filterByCatalog.map((product) => (
+                    <div key={product.id}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
                         }}
                       >
-                        <div
-                          style={{
-                            background: `url(${product.pictureUrl})`,
-                            backgroundSize: 'cover',
-                            height: matches450down ? '100px' : '150px',
-                            width: matches450down ? '100px' : '150px',
-                            borderRadius: '50%',
+                        <Badge
+                          anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left',
                           }}
-                        />
-                      </Badge>
+                          color="primary"
+                          badgeContent={product.totalSales}
+                          classes={{
+                            colorPrimary: classes.BadgeColor,
+                            anchorOriginTopLeftRectangle: classes.topLeft10,
+                          }}
+                        >
+                          <div
+                            style={{
+                              background: `url(${product.pictureUrl})`,
+                              backgroundSize: 'cover',
+                              height: matches450down ? '100px' : '150px',
+                              width: matches450down ? '100px' : '150px',
+                              borderRadius: '50%',
+                            }}
+                          />
+                        </Badge>
+                      </div>
+                      <Typography align="center" color="secondary">
+                        {product.name}
+                      </Typography>
                     </div>
-                    <Typography align="center" color="secondary">
-                      {product.name}
-                    </Typography>
-                  </div>
-                ))}
-              </MotionSlider>
-            )
+                  ))}
+                </MotionSlider>
+              );
+            })
           )}
         </div>
       </div>

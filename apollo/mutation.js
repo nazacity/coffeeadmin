@@ -758,3 +758,47 @@ export const MUTATION_ORDERS_BYDATE = gql`
     }
   }
 `;
+
+export const MUTATION_SALESTOREPRODUCT = gql`
+  mutation MUTATION_SALESTOREPRODUCT(
+    $startDate: Float!
+    $endDate: Float!
+    $branchId: ID!
+  ) {
+    saleStoreProduct(
+      startDate: $startDate
+      endDate: $endDate
+      branchId: $branchId
+    ) {
+      id
+      name
+      pictureUrl
+      totalSales
+      catalog {
+        id
+      }
+    }
+  }
+`;
+
+export const MUTATION_SALEONLINEPRODUCT = gql`
+  mutation MUTATION_SALEONLINEPRODUCT(
+    $startDate: Float!
+    $endDate: Float!
+    $branchId: ID!
+  ) {
+    saleOnlineProduct(
+      startDate: $startDate
+      endDate: $endDate
+      branchId: $branchId
+    ) {
+      id
+      name
+      pictureUrl
+      totalSales
+      catalog {
+        id
+      }
+    }
+  }
+`;

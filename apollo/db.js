@@ -202,6 +202,17 @@ export const QUERY_BRANCH = {
   `,
 };
 
+export const QUERY_ONLYBRANCHNAME = {
+  query: `
+  query{
+    branch{
+          id
+          branch
+        }
+    }
+  `,
+};
+
 export const QUERY_BRANCHID = {
   query: `
   query{

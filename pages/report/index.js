@@ -4,9 +4,21 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/actions/userActions';
 import { setOrder } from '../../redux/actions/orderActions';
+import { setBranch } from '../../redux/actions/storeActions';
+import {
+  setOnlineProductCatalogs,
+  setStoreProductCatalogs,
+} from '../../redux/actions/productAction';
 
 // Apollo
-import { getData, QUERY_ORDERS, getUserByAccessToken } from '../../apollo/db';
+import {
+  getData,
+  QUERY_ORDERS,
+  getUserByAccessToken,
+  QUERY_ONLYBRANCHNAME,
+  QUERY_ONLINEPRODUCTCATALOG,
+  QUERY_STOREPRODUCTCATALOG,
+} from '../../apollo/db';
 
 // framer motion
 import { motion } from 'framer-motion';
@@ -16,12 +28,21 @@ import Report from '../../components/report/Report';
 
 import cookie from 'cookie';
 
-const OrderList = ({ user, orders }) => {
+const OrderList = ({
+  user,
+  orders,
+  branch,
+  onlineProductCatalogs,
+  storeProductCatalogs,
+}) => {
   const action = useDispatch();
   useEffect(() => {
     action(setUser(user ? user : null));
     action(setOrder(orders ? orders : null));
-  }, [user, orders]);
+    action(setBranch(branch ? branch : null));
+    action(setOnlineProductCatalogs(onlineProductCatalogs));
+    action(setStoreProductCatalogs(storeProductCatalogs));
+  }, [user, orders, branch]);
 
   return (
     <motion.div
@@ -35,6 +56,14 @@ const OrderList = ({ user, orders }) => {
 };
 
 export const getServerSideProps = async ({ req, res }) => {
+  let resultOnlineProductCatalogs = await getData(QUERY_ONLINEPRODUCTCATALOG);
+  let onlineProductCatalogs =
+    resultOnlineProductCatalogs.data.onlineProductCatalog;
+  let resultStoreProductCatalogs = await getData(QUERY_STOREPRODUCTCATALOG);
+
+  let storeProductCatalogs =
+    resultStoreProductCatalogs.data.storeProductCatalog;
+
   const { headers } = req;
 
   const cookies = headers && cookie.parse(headers.cookie || '');
@@ -47,12 +76,22 @@ export const getServerSideProps = async ({ req, res }) => {
   } else {
     const user = await getUserByAccessToken(accessToken);
     const result = await getData(QUERY_ORDERS);
+    const result2 = await getData(QUERY_ONLYBRANCHNAME);
     const { orders } = result.data;
+    const { branch } = result2.data;
     if (user.state !== 'admin') {
       res.writeHead(302, { Location: '/' });
       res.end();
     }
-    return { props: { user, orders } };
+    return {
+      props: {
+        user,
+        orders,
+        branch,
+        onlineProductCatalogs,
+        storeProductCatalogs,
+      },
+    };
   }
 };
 
