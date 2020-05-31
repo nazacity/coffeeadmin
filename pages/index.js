@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { getUserByAccessToken, getUsersByAccessToken } from '../apollo/db';
+import { getUserByAccessToken } from '../apollo/db';
 
 // MUI
 import { useTheme } from '@material-ui/core/styles';
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HomePage = ({ userFromAccessToken, client }) => {
+const HomePage = ({ userFromAccessToken }) => {
   const user = useSelector((state) => state.user);
   const userLoading = useSelector((state) => state.layout.userLoading);
   const classes = useStyles();
@@ -62,10 +62,6 @@ const HomePage = ({ userFromAccessToken, client }) => {
   const matches1024down = useMediaQuery('(max-width:1024px)');
   const action = useDispatch();
   const theme = useTheme();
-
-  useEffect(() => {
-    action(setClient(client ? client : null));
-  }, [client]);
 
   const [signinWithAccessToken, { loading, error }] = useMutation(
     MUTATION_SIGNINWITHACCESSTOKEN,
@@ -209,9 +205,8 @@ export const getServerSideProps = async ({ req, res }) => {
     return { props: {} };
   } else {
     const user = await getUserByAccessToken(accessToken);
-    const client = await getUsersByAccessToken(accessToken);
 
-    return { props: { userFromAccessToken: user, client } };
+    return { props: { userFromAccessToken: user } };
   }
 };
 

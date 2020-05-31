@@ -11,6 +11,14 @@ export const MUTATION_SIGNINWITHACCESSTOKEN = gql`
       phone
       pictureUrl
       state
+      employee {
+        id
+        branch {
+          id
+        }
+        position
+        state
+      }
     }
   }
 `;
@@ -157,6 +165,7 @@ export const MUTAION_UPDATEEMPLOYEE = gql`
     $state: String
     $pin: String
     $position: String
+    $branchId: ID
   ) {
     updateEmployee(
       id: $id
@@ -164,6 +173,7 @@ export const MUTAION_UPDATEEMPLOYEE = gql`
       state: $state
       pin: $pin
       position: $position
+      branchId: $branchId
     ) {
       id
       user {
@@ -181,6 +191,9 @@ export const MUTAION_UPDATEEMPLOYEE = gql`
       pin
       IDcardPictureUrl
       createdAt
+      branch {
+        id
+      }
     }
   }
 `;

@@ -112,51 +112,91 @@ const TopNavbar = () => {
 
   const employeeMenuOptions = [
     {
-      name: 'ห้องครัว',
-      link: '/kitchen',
+      name: 'โต๊ะ',
+      link: '/branch/table',
+      position: ['waiter', 'manager'],
       selectedIndex: 1,
       icon: (
-        <Tooltip title="ครัว">
-          <Icon
-            className="fas fa-concierge-bell"
-            fontSize="small"
-            classes={{ root: classes.MuiIcon }}
-          />
-        </Tooltip>
+        <Icon
+          className="fab fa-buffer"
+          fontSize="small"
+          classes={{ root: classes.MuiIcon }}
+        />
+      ),
+    },
+    {
+      name: 'ห้องครัว',
+      link: '/branch/kitchen',
+      position: ['chef', 'manager'],
+      selectedIndex: 2,
+      icon: (
+        <Icon
+          className="fas fa-concierge-bell"
+          fontSize="small"
+          classes={{ root: classes.MuiIcon }}
+        />
+      ),
+    },
+    {
+      name: 'ส่งสินค้า',
+      link: '/branch/delivery',
+      position: ['rider', 'manager'],
+      selectedIndex: 3,
+      icon: (
+        <Icon
+          className="fas fa-biking"
+          fontSize="small"
+          classes={{ root: classes.MuiIcon }}
+        />
       ),
     },
   ];
 
   useEffect(() => {
-    adminMenuOptions.forEach((menu) => {
-      switch (route.pathname) {
-        case `${menu.link}`:
-          if (menuIndex !== menu.selectedIndex) {
-            action(setMenuIndex(menu.selectedIndex));
-          }
-          break;
-        case `/`:
-          action(setMenuIndex(0));
-          break;
-        case `/employee`:
-          action(setMenuIndex(5));
-          break;
-        case `/table`:
-          action(setMenuIndex(5));
-          break;
-        case `/stock`:
-          action(setMenuIndex(5));
-          break;
-        case `/product/store`:
-          action(setMenuIndex(5));
-          break;
-        case `/product/online`:
-          action(setMenuIndex(5));
-          break;
-        default:
-          break;
-      }
-    });
+    if (user.state === 'admin') {
+      adminMenuOptions.forEach((menu) => {
+        switch (route.pathname) {
+          case `${menu.link}`:
+            if (menuIndex !== menu.selectedIndex) {
+              action(setMenuIndex(menu.selectedIndex));
+            }
+            break;
+          case `/`:
+            action(setMenuIndex(0));
+            break;
+          case `/employee`:
+            action(setMenuIndex(5));
+            break;
+          case `/table`:
+            action(setMenuIndex(5));
+            break;
+          case `/stock`:
+            action(setMenuIndex(5));
+            break;
+          case `/product/store`:
+            action(setMenuIndex(5));
+            break;
+          case `/product/online`:
+            action(setMenuIndex(5));
+            break;
+          default:
+            break;
+        }
+      });
+    }
+    if (user.state === 'employee') {
+      employeeMenuOptions.forEach((menu) => {
+        switch (route.pathname) {
+          case `${menu.link}`:
+            if (menuIndex !== menu.selectedIndex) {
+              action(setMenuIndex(menu.selectedIndex));
+            }
+            break;
+          default:
+            break;
+        }
+      });
+    }
   }, [menuIndex, window.location.pathname]);
 
   return (
@@ -208,25 +248,31 @@ const TopNavbar = () => {
                   </IconButton>
                 ))}
               {user.state == 'employee' &&
-                employeeMenuOptions.map((menu) => (
-                  <Link
-                    href={menu.link}
-                    style={{ marginRight: '2em' }}
-                    key={menu.name}
-                    onClick={() => setMenuIndex(menu.selectedIndex)}
-                  >
-                    <IconButton
-                      style={{
-                        color:
-                          menuIndex === menu.selectedIndex
-                            ? theme.palette.primary.main
-                            : '#ffffff',
-                      }}
-                    >
-                      {menu.icon}
-                    </IconButton>
-                  </Link>
-                ))}
+                employeeMenuOptions.map((menu) => {
+                  if (menu.position.includes(user.employee.position)) {
+                    return (
+                      <Link
+                        href={menu.link}
+                        style={{ marginRight: '2em' }}
+                        key={menu.name}
+                        onClick={() => setMenuIndex(menu.selectedIndex)}
+                      >
+                        <IconButton
+                          style={{
+                            color:
+                              menuIndex === menu.selectedIndex
+                                ? theme.palette.primary.main
+                                : '#ffffff',
+                          }}
+                        >
+                          {menu.icon}
+                        </IconButton>
+                      </Link>
+                    );
+                  }
+
+                  return null;
+                })}
               <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"

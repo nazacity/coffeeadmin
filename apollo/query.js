@@ -11,6 +11,14 @@ export const QUERY_USER = gql`
       phone
       pictureUrl
       state
+      employee {
+        id
+        branch {
+          id
+        }
+        position
+        state
+      }
     }
   }
 `;
@@ -27,6 +35,14 @@ export const QUERY_USERS = gql`
       pictureUrl
       state
       createdAt
+      employee {
+        id
+        branch {
+          id
+        }
+        position
+        state
+      }
     }
   }
 `;

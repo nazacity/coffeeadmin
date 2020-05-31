@@ -15,7 +15,7 @@ import {
   getData,
   QUERY_ORDERS,
   getUserByAccessToken,
-  QUERY_ONLYBRANCHNAME,
+  QUERY_BRANCHID,
   QUERY_ONLINEPRODUCTCATALOG,
   QUERY_STOREPRODUCTCATALOG,
 } from '../../apollo/db';
@@ -76,7 +76,7 @@ export const getServerSideProps = async ({ req, res }) => {
   } else {
     const user = await getUserByAccessToken(accessToken);
     const result = await getData(QUERY_ORDERS);
-    const result2 = await getData(QUERY_ONLYBRANCHNAME);
+    const result2 = await getData(QUERY_BRANCHID);
     const { orders } = result.data;
     const { branch } = result2.data;
     if (user.state !== 'admin') {

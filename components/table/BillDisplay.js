@@ -300,7 +300,7 @@ const BillDisplay = ({
                       </Typography>
                     </div>
                   </MenuItem>
-                  <MenuItem value="creditcarก">
+                  <MenuItem value="creditcard">
                     <div
                       style={{
                         display: 'flex',

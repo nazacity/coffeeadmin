@@ -112,7 +112,21 @@ const BottomNavbar = () => {
     {
       name: 'โต๊ะ',
       link: '/branch/table',
+      position: ['waiter', 'manager'],
       selectedIndex: 1,
+      icon: (
+        <Icon
+          className="fab fa-buffer"
+          fontSize="small"
+          classes={{ root: classes.MuiIcon }}
+        />
+      ),
+    },
+    {
+      name: 'ห้องครัว',
+      link: '/branch/kitchen',
+      position: ['chef', 'manager'],
+      selectedIndex: 2,
       icon: (
         <Icon
           className="fas fa-concierge-bell"
@@ -122,12 +136,13 @@ const BottomNavbar = () => {
       ),
     },
     {
-      name: 'ห้องครัว',
-      link: '/branch/kitchen',
-      selectedIndex: 1,
+      name: 'ส่งสินค้า',
+      link: '/branch/delivery',
+      position: ['rider', 'manager'],
+      selectedIndex: 3,
       icon: (
         <Icon
-          className="fas fa-concierge-bell"
+          className="fas fa-biking"
           fontSize="small"
           classes={{ root: classes.MuiIcon }}
         />
@@ -142,35 +157,50 @@ const BottomNavbar = () => {
   const route = useRouter();
 
   const checkRoute = () => {
-    adminMenuOptions.forEach((menu) => {
-      switch (route.pathname) {
-        case `${menu.link}`:
-          if (menuIndex !== menu.selectedIndex) {
-            action(setMenuIndex(menu.selectedIndex));
-          }
-          break;
-        case `/`:
-          action(setMenuIndex(0));
-          break;
-        case `/employee`:
-          action(setMenuIndex(5));
-          break;
-        case `/table`:
-          action(setMenuIndex(5));
-          break;
-        case `/stock`:
-          action(setMenuIndex(5));
-          break;
-        case `/product/store`:
-          action(setMenuIndex(5));
-          break;
-        case `/product/online`:
-          action(setMenuIndex(5));
-          break;
-        default:
-          break;
-      }
-    });
+    if (user.state === 'admin') {
+      adminMenuOptions.forEach((menu) => {
+        switch (route.pathname) {
+          case `${menu.link}`:
+            if (menuIndex !== menu.selectedIndex) {
+              action(setMenuIndex(menu.selectedIndex));
+            }
+            break;
+          case `/`:
+            action(setMenuIndex(0));
+            break;
+          case `/employee`:
+            action(setMenuIndex(5));
+            break;
+          case `/table`:
+            action(setMenuIndex(5));
+            break;
+          case `/stock`:
+            action(setMenuIndex(5));
+            break;
+          case `/product/store`:
+            action(setMenuIndex(5));
+            break;
+          case `/product/online`:
+            action(setMenuIndex(5));
+            break;
+          default:
+            break;
+        }
+      });
+    }
+    if (user.state === 'employee') {
+      employeeMenuOptions.forEach((menu) => {
+        switch (route.pathname) {
+          case `${menu.link}`:
+            if (menuIndex !== menu.selectedIndex) {
+              action(setMenuIndex(menu.selectedIndex));
+            }
+            break;
+          default:
+            break;
+        }
+      });
+    }
   };
 
   return (
@@ -219,20 +249,27 @@ const BottomNavbar = () => {
               />
             ))}
           {user.state == 'employee' &&
-            employeeMenuOptions.map((menu) => (
-              <BottomNavigationAction
-                component={Link}
-                href={menu.link}
-                key={menu.name}
-                label={menu.name}
-                value={menu.selectedIndex}
-                icon={menu.icon}
-                classes={{
-                  root: classes.bottomnavroot,
-                  selected: classes.selected,
-                }}
-              />
-            ))}
+            employeeMenuOptions.map((menu) => {
+              if (menu.position.includes(user.employee.position)) {
+                return (
+                  <BottomNavigationAction
+                    component={!menu.action ? Link : undefined}
+                    href={!menu.action ? menu.link : undefined}
+                    key={menu.name}
+                    label={menu.name}
+                    value={menu.selectedIndex}
+                    icon={menu.icon}
+                    classes={{
+                      root: classes.bottomnavroot,
+                      selected: classes.selected,
+                    }}
+                    onClick={menu.action}
+                  />
+                );
+              }
+
+              return null;
+            })}
           <BottomNavigationAction
             label={
               userLoading

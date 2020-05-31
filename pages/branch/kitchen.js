@@ -3,36 +3,26 @@ import cookie from 'cookie';
 
 // Redux
 import { useDispatch } from 'react-redux';
-import { setEmployees } from '../../redux/actions/employeeActions';
 import { setUser } from '../../redux/actions/userActions';
-import { setBranch } from '../../redux/actions/storeActions';
 
 // Apollo
-import {
-  getUserByAccessToken,
-  getEmployeesByAccessToken,
-  QUERY_BRANCHID,
-  getData,
-} from '../../apollo/db';
+import { getUserByAccessToken } from '../../apollo/db';
 
 // framer motion
 import { motion } from 'framer-motion';
-import EmployeeTable from '../../components/employee/EmployeeTable';
 
-const index = ({ employees, user, branch }) => {
+const BranchKitchen = ({ user }) => {
   const action = useDispatch();
   useEffect(() => {
-    action(setEmployees(employees));
     action(setUser(user ? user : null));
-    action(setBranch(branch ? branch : null));
-  }, [employees, user]);
+  }, [user]);
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <EmployeeTable />
+      test
     </motion.div>
   );
 };
@@ -53,16 +43,18 @@ export const getServerSideProps = async ({ req, res }) => {
       return { props: {} };
     } else {
       const user = await getUserByAccessToken(accessToken);
-      const employees = await getEmployeesByAccessToken(accessToken);
-      const result = await getData(QUERY_BRANCHID);
-      const { branch } = result.data;
-      if (user.state !== 'admin') {
+      if (
+        user.employee.position === 'chef' ||
+        user.employee.position === 'manager'
+      ) {
+        return { props: { user } };
+      } else {
         res.writeHead(302, { Location: '/' });
         res.end();
       }
-      return { props: { user, employees, branch } };
+      return { props: {} };
     }
   }
 };
 
-export default index;
+export default BranchKitchen;

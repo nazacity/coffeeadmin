@@ -52,12 +52,23 @@ const EmployeeTable = () => {
   const matches600down = useMediaQuery('(max-width:600px)');
   const matches1024down = useMediaQuery('(max-width:1024px)');
   const employees = useSelector((state) => state.employees);
+  const branchs = useSelector((state) => state.store.branch);
 
   const [state, setState] = useState([]);
+  const [branchLookup, setBranchLookup] = useState({});
+
+  useEffect(() => {
+    let lookupmap = {};
+    branchs.map((branch) => {
+      lookupmap = { ...lookupmap, [branch.id]: branch.branch };
+    });
+    setBranchLookup(lookupmap);
+  }, [branchs]);
 
   const convertForm = async () => {
     let employeeData = [];
     await employees.map((employee) => {
+      console.log(employee.branch);
       let formUserData = {
         id: employee.id,
         user: {
@@ -68,6 +79,7 @@ const EmployeeTable = () => {
           phone: employee.user.phone,
           state: employee.user.state,
         },
+        branch: employee.branch?.id,
         state: employee.state,
         IDcardPictureUrl: employee.IDcardPictureUrl,
         position: employee.position,
@@ -103,6 +115,7 @@ const EmployeeTable = () => {
                 phone: employee.user.phone,
                 state: employee.user.state,
               },
+              branch: employee.branch?.id,
               state: employee.state,
               IDcardPictureUrl: employee.IDcardPictureUrl,
               position: employee.position,
@@ -194,11 +207,16 @@ const EmployeeTable = () => {
       title: 'ตำแหน่ง',
       field: 'position',
       lookup: {
-        admin: 'ผู้ดูแล',
         manager: 'ผู้จัดการ',
         waiter: 'พนักงานเสิร์ฟ',
-        chef: 'พ่อครัว',
+        chef: 'ครัว',
+        rider: 'คนส่ง',
       },
+    },
+    {
+      title: 'สาขา',
+      field: 'branch',
+      lookup: branchLookup,
     },
     {
       title: 'การทำงาน',
@@ -246,6 +264,7 @@ const EmployeeTable = () => {
                     IDcardPictureUrl: newData.IDcardPictureUrl
                       ? newData.IDcardPictureUrl
                       : oldData.IDcardPictureUrl,
+                    branchId: newData.branch,
                   },
                 });
                 resolve();

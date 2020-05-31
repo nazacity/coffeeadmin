@@ -58,6 +58,9 @@ export const QUERY_EMPLOYEES = {
       pin
       IDcardPictureUrl
       createdAt
+      branch{
+        id
+      }
     }
   }
   `,
@@ -76,6 +79,14 @@ export const QUERY_USER = {
       pictureUrl
       state
       createdAt
+      employee {
+        id
+        branch {
+          id
+        }
+        position
+        state
+      }
     }
   }
   `,
@@ -93,6 +104,14 @@ export const QUERY_USERS = {
       pictureUrl
       state
       createdAt
+      employee {
+        id
+        branch {
+          id
+        }
+        position
+        state
+      }
     }
   }
   `,
@@ -197,17 +216,6 @@ export const QUERY_BRANCH = {
               cost
             }
           }
-        }
-    }
-  `,
-};
-
-export const QUERY_ONLYBRANCHNAME = {
-  query: `
-  query{
-    branch{
-          id
-          branch
         }
     }
   `,
