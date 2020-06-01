@@ -191,17 +191,17 @@ const BottomNavbar = () => {
     if (user.state === 'employee') {
       switch (route.pathname) {
         case `/branch/table`:
-          if (1 !== menu.selectedIndex) {
+          if (menuIndex !== 1) {
             action(setMenuIndex(1));
           }
           break;
         case `/branch/kitchen`:
-          if (2 !== menu.selectedIndex) {
+          if (menuIndex !== 2) {
             action(setMenuIndex(2));
           }
           break;
         case `/branch/delivery`:
-          if (3 !== menu.selectedIndex) {
+          if (menuIndex !== 3) {
             action(setMenuIndex(3));
           }
           break;

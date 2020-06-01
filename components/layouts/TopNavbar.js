@@ -185,17 +185,25 @@ const TopNavbar = () => {
       });
     }
     if (user.state === 'employee') {
-      employeeMenuOptions.forEach((menu) => {
-        switch (route.pathname) {
-          case `${menu.link}`:
-            if (menuIndex !== menu.selectedIndex) {
-              action(setMenuIndex(menu.selectedIndex));
-            }
-            break;
-          default:
-            break;
-        }
-      });
+      switch (route.pathname) {
+        case `/branch/table`:
+          if (menuIndex !== 1) {
+            action(setMenuIndex(1));
+          }
+          break;
+        case `/branch/kitchen`:
+          if (menuIndex !== 2) {
+            action(setMenuIndex(2));
+          }
+          break;
+        case `/branch/delivery`:
+          if (menuIndex !== 3) {
+            action(setMenuIndex(3));
+          }
+          break;
+        default:
+          break;
+      }
     }
   }, [menuIndex, window.location.pathname]);
 
