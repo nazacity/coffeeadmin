@@ -1,5 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import cookie from 'cookie';
+
+// next
+import { useRouter } from 'next/router';
+
+// Apollo
+import { useQuery } from '@apollo/react-hooks';
+import { QUERY_BRANCHFROMID } from '../../apollo/query';
+
+// MUI
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 // Redux
 import { useDispatch } from 'react-redux';
@@ -11,8 +21,14 @@ import { getUserByAccessToken } from '../../apollo/db';
 // framer motion
 import { motion } from 'framer-motion';
 
+// Components
+import TablePage from '../../components/branch/TablePage';
+
 const BranchTable = ({ user }) => {
   const action = useDispatch();
+  const [rerender, setRerender] = useState(false);
+
+  const router = useRouter();
   useEffect(() => {
     action(setUser(user ? user : null));
   }, [user]);
@@ -22,7 +38,7 @@ const BranchTable = ({ user }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      test
+      <TablePage setRerender={setRerender} />
     </motion.div>
   );
 };
@@ -35,7 +51,6 @@ export const getServerSideProps = async ({ req, res }) => {
     const cookies = req.headers && cookie.parse(req.headers.cookie || '');
 
     const accessToken = cookies && cookies.accessToken;
-    const uri = process.env.APOLLO_URL;
 
     if (!accessToken) {
       res.writeHead(302, { Location: '/' });

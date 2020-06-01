@@ -113,7 +113,7 @@ const TopNavbar = () => {
   const employeeMenuOptions = [
     {
       name: 'โต๊ะ',
-      link: '/branch/table',
+      link: `/branch/table?branch=${user?.employee?.branch.id}`,
       position: ['waiter', 'manager'],
       selectedIndex: 1,
       icon: (
@@ -126,7 +126,7 @@ const TopNavbar = () => {
     },
     {
       name: 'ห้องครัว',
-      link: '/branch/kitchen',
+      link: `/branch/kitchen?branch=${user?.employee?.branch.id}`,
       position: ['chef', 'manager'],
       selectedIndex: 2,
       icon: (
@@ -139,7 +139,7 @@ const TopNavbar = () => {
     },
     {
       name: 'ส่งสินค้า',
-      link: '/branch/delivery',
+      link: `/branch/delivery?branch=${user?.employee?.branch.id}`,
       position: ['rider', 'manager'],
       selectedIndex: 3,
       icon: (

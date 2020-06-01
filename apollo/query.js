@@ -112,3 +112,29 @@ export const QUERY_STOCKNAME = gql`
     }
   }
 `;
+
+export const QUERY_BRANCHFROMID = gql`
+  query QUERY_BRANCHFROMID($branchId: ID) {
+    branchFromId(branchId: $branchId) {
+      id
+      branch
+      place {
+        id
+        table
+        order {
+          id
+        }
+        adult
+        children
+        package
+        state
+        bill {
+          id
+          adult
+          children
+          createdAt
+        }
+      }
+    }
+  }
+`;

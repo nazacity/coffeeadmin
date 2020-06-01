@@ -111,7 +111,7 @@ const BottomNavbar = () => {
   const employeeMenuOptions = [
     {
       name: 'โต๊ะ',
-      link: '/branch/table',
+      link: `/branch/table?branch=${user?.employee?.branch.id}`,
       position: ['waiter', 'manager'],
       selectedIndex: 1,
       icon: (
@@ -124,7 +124,7 @@ const BottomNavbar = () => {
     },
     {
       name: 'ห้องครัว',
-      link: '/branch/kitchen',
+      link: `/branch/kitchen?branch=${user?.employee?.branch.id}`,
       position: ['chef', 'manager'],
       selectedIndex: 2,
       icon: (
@@ -137,7 +137,7 @@ const BottomNavbar = () => {
     },
     {
       name: 'ส่งสินค้า',
-      link: '/branch/delivery',
+      link: `/branch/delivery?branch=${user?.employee?.branch.id}`,
       position: ['rider', 'manager'],
       selectedIndex: 3,
       icon: (
@@ -189,17 +189,25 @@ const BottomNavbar = () => {
       });
     }
     if (user.state === 'employee') {
-      employeeMenuOptions.forEach((menu) => {
-        switch (route.pathname) {
-          case `${menu.link}`:
-            if (menuIndex !== menu.selectedIndex) {
-              action(setMenuIndex(menu.selectedIndex));
-            }
-            break;
-          default:
-            break;
-        }
-      });
+      switch (route.pathname) {
+        case `/branch/table`:
+          if (1 !== menu.selectedIndex) {
+            action(setMenuIndex(1));
+          }
+          break;
+        case `/branch/kitchen`:
+          if (2 !== menu.selectedIndex) {
+            action(setMenuIndex(2));
+          }
+          break;
+        case `/branch/delivery`:
+          if (3 !== menu.selectedIndex) {
+            action(setMenuIndex(3));
+          }
+          break;
+        default:
+          break;
+      }
     }
   };
 

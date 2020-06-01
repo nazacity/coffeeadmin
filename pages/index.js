@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { getUserByAccessToken } from '../apollo/db';
 
 // MUI
-import { useTheme } from '@material-ui/core/styles';
+import {} from '@material-ui/core/styles';
 
 // Framer motion
 import { motion } from 'framer-motion';
@@ -21,7 +21,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 // MUI
 import Hidden from '@material-ui/core/Hidden';
-import { makeStyles } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Avatar, Typography } from '@material-ui/core';
@@ -42,23 +42,11 @@ import cookie from 'cookie';
 
 import { MUTATION_SIGNINWITHACCESSTOKEN } from '../apollo/mutation';
 import EmployeeInfo from '../components/homepage/employee/EmployeeInfo';
-
-const useStyles = makeStyles((theme) => ({
-  top: {
-    color: theme.palette.primary.dark,
-    position: 'absolute',
-  },
-  bottom: {
-    color: theme.palette.primary.light,
-    animationDuration: '550ms',
-  },
-}));
+import PageLoading from '../components/layouts/PageLoading';
 
 const HomePage = ({ userFromAccessToken }) => {
   const user = useSelector((state) => state.user);
   const userLoading = useSelector((state) => state.layout.userLoading);
-  const classes = useStyles();
-  const matches600down = useMediaQuery('(max-width:600px)');
   const matches1024down = useMediaQuery('(max-width:1024px)');
   const action = useDispatch();
   const theme = useTheme();
@@ -132,46 +120,7 @@ const HomePage = ({ userFromAccessToken }) => {
           </Hidden>
         </React.Fragment>
       )}
-      {userLoading && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%,-50%)',
-          }}
-        >
-          <Avatar
-            src="./images/logo/logo.jpg"
-            alt="logo"
-            style={{ width: 200, height: 200, margin: 'auto' }}
-          />
-          <Typography
-            align="center"
-            color="primary"
-            variant="h6"
-            style={{ letterSpacing: 2, marginBottom: '2vh' }}
-          >
-            ยินดีต้อนรับ
-          </Typography>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <CircularProgress
-              variant="determinate"
-              value={100}
-              className={classes.top}
-              size={60}
-              thickness={4}
-            />
-            <CircularProgress
-              variant="indeterminate"
-              disableShrink
-              className={classes.bottom}
-              size={60}
-              thickness={4}
-            />
-          </div>
-        </div>
-      )}
+      {userLoading && <PageLoading title="ยินดีต้อนรับ" />}
       <div
         style={{
           maxWidth: theme.layer.maxWidth,
