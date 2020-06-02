@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   disabled: {},
 }));
 
-const CheckBillForm = ({ table, setState, handleClose }) => {
+const CheckBillForm = ({ table, setState, handleClose, setRerender }) => {
   const { control, handleSubmit, reset, errors } = useForm();
   const matches600down = useMediaQuery('(max-width:600px)');
   const theme = useTheme();
@@ -44,7 +44,6 @@ const CheckBillForm = ({ table, setState, handleClose }) => {
     MUTAION_CREATE_ORDERFROMSTOREORDER,
     {
       onCompleted: (data) => {
-        console.log(data.createOrderFromStoreOrder);
         action(updateTableOrder(data.createOrderFromStoreOrder));
         handleClose();
       },

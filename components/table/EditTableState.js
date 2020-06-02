@@ -28,7 +28,6 @@ import Avatar from '@material-ui/core/Avatar';
 
 // Components
 import CheckBillForm from './CheckBillForm';
-import BillDisplay from './BillDisplay';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -312,6 +311,7 @@ const EditTableState = ({
           table={table}
           setState={setState}
           handleClose={handleClose}
+          setRerender={setRerender}
         />
       )}
     </React.Fragment>

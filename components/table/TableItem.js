@@ -4,10 +4,8 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
@@ -20,7 +18,7 @@ import moment from 'moment';
 import EditTableState from './EditTableState';
 import BillDisplay from './BillDisplay';
 
-const useStyles = makeStyles(({ palette }) => ({
+const useStyles = makeStyles((theme) => ({
   statLabel: {
     fontSize: 20,
     fontWeight: 500,
@@ -53,6 +51,8 @@ const TableItem = ({ table, setRerender }) => {
     setOpen(false);
   };
   const classes = useStyles();
+
+  console.log(table.order);
   return (
     <Card
       style={{

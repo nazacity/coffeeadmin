@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 // MUI
@@ -74,6 +74,7 @@ const BillDisplay = ({
   const classes = useStyles();
   const theme = useTheme();
   const { addToast } = useToasts();
+  const [clearPlaceLoading, setClearPlaceLoaing] = useState(false);
 
   const { data, loading, error } = useQuery(QUERY_ORDER_FORPAYING, {
     variables: { orderId: orderId },
@@ -82,6 +83,7 @@ const BillDisplay = ({
 
   const [clearPlace] = useMutation(MUTAION_CLEAR_PLACE, {
     onCompleted: (data) => {
+      setClearPlaceLoaing(false);
       action(clearTable(data.clearPlace));
       setBillDisplayOpen(false);
       setRerender(true);
@@ -97,6 +99,7 @@ const BillDisplay = ({
       });
       return;
     } else {
+      setClearPlaceLoaing(true);
       try {
         await clearPlace({
           variables: {
@@ -181,7 +184,7 @@ const BillDisplay = ({
           </div>
         ) : (
           <React.Fragment>
-            {data?.order?.items.map((item, index) => (
+            {data.order?.items.map((item, index) => (
               <motion.div
                 style={{
                   display: 'grid',
@@ -328,8 +331,34 @@ const BillDisplay = ({
               root: classes.buttonRoot,
               disabled: classes.disabled,
             }}
+            disabled={clearPlaceLoading}
           >
             เคลียร์โต๊ะ
+            {clearPlaceLoading && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%,-50%)',
+                }}
+              >
+                <CircularProgress
+                  variant="determinate"
+                  value={100}
+                  className={classes.top}
+                  size={24}
+                  thickness={4}
+                />
+                <CircularProgress
+                  variant="indeterminate"
+                  disableShrink
+                  className={classes.bottom}
+                  size={24}
+                  thickness={4}
+                />
+              </div>
+            )}
           </Button>
         </form>
       </AppBar>

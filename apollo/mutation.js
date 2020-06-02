@@ -641,6 +641,9 @@ export const MUTAION_CLEAR_PLACE = gql`
       table
       adult
       children
+      order {
+        id
+      }
     }
   }
 `;

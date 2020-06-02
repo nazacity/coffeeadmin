@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 // Redux
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setBranch } from '../../redux/actions/storeActions';
 
 // MUI
@@ -27,6 +27,7 @@ const TablePage = ({ setRerender }) => {
   const matches600down = useMediaQuery('(max-width:600px)');
   const matches1200down = useMediaQuery('(max-width:1200px)');
   const action = useDispatch();
+  const branch = useSelector((state) => state.store.branch[0]);
 
   const router = useRouter();
 
@@ -100,8 +101,8 @@ const TablePage = ({ setRerender }) => {
             padding: '1vh',
           }}
         >
-          {data?.branchFromId?.place &&
-            data.branchFromId.place.map((table) => (
+          {branch?.place &&
+            branch.place.map((table) => (
               <TableItem
                 key={table.id}
                 table={table}
