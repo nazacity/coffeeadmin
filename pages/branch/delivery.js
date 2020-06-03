@@ -22,7 +22,9 @@ const BranchKitchen = ({ user }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      test
+      <a href="https://www.google.co.th/maps/place/13.7684655,100.5443287">
+        test
+      </a>
     </motion.div>
   );
 };
