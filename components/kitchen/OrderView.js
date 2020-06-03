@@ -18,8 +18,6 @@ const OrderView = ({ branch }) => {
   const theme = useTheme();
   const matches600down = useMediaQuery('(max-width:600px)');
   const [state, setState] = useState([]);
-  const [eventListen, setEventListen] = useState(false);
-  const [protect, setProtect] = useState(false);
 
   useEffect(() => {
     firestore

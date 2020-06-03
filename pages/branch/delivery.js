@@ -1,5 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import cookie from 'cookie';
+
+// Next
+import { useRouter } from 'next/router';
 
 // Redux
 import { useDispatch } from 'react-redux';
@@ -11,20 +14,86 @@ import { getUserByAccessToken } from '../../apollo/db';
 // framer motion
 import { motion } from 'framer-motion';
 
-const BranchKitchen = ({ user }) => {
+// firebase
+import { firestore } from '../../firebase';
+
+// Components
+import DeliveryPage from '../../components/branch/DeliveryPage';
+
+const BranchDelivery = ({ user }) => {
   const action = useDispatch();
+  const [state, setState] = useState([]);
   useEffect(() => {
     action(setUser(user ? user : null));
   }, [user]);
+  const router = useRouter();
+  const [branch, setBranch] = useState({ id: router.query.branch });
+
+  useEffect(() => {
+    firestore
+      .collection(`delivery=${branch.id}`)
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            firestore
+              .collection(`delivery=${branch.id}`)
+              .orderBy('createdAt', 'desc')
+              .get()
+              .then(async (snapshot) => {
+                let data = [];
+                if (!snapshot.empty) {
+                  snapshot.forEach((doc) => {
+                    data = [...data, { key: doc.id, ...doc.data() }];
+                  });
+                }
+                setState(data);
+              });
+          }
+          if (change.type === 'modified') {
+            firestore
+              .collection(`delivery=${branch.id}`)
+              .orderBy('createdAt', 'desc')
+              .get()
+              .then(async (snapshot) => {
+                let data = [];
+                if (!snapshot.empty) {
+                  snapshot.forEach((doc) => {
+                    data = [...data, { key: doc.id, ...doc.data() }];
+                  });
+                }
+                setState(data);
+              });
+          }
+          if (change.type === 'removed') {
+            firestore
+              .collection(`delivery=${branch.id}`)
+              .orderBy('createdAt', 'desc')
+              .get()
+              .then(async (snapshot) => {
+                let data = [];
+                if (!snapshot.empty) {
+                  snapshot.forEach((doc) => {
+                    data = [...data, { key: doc.id, ...doc.data() }];
+                  });
+                }
+                setState(data);
+              });
+          }
+        });
+      });
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <a href="https://www.google.co.th/maps/place/13.7684655,100.5443287">
-        test
-      </a>
+      {state &&
+        state.map((order) => (
+          <DeliveryPage key={order.key} order={order} branchId={branch.id} />
+        ))}
     </motion.div>
   );
 };
@@ -59,4 +128,4 @@ export const getServerSideProps = async ({ req, res }) => {
   }
 };
 
-export default BranchKitchen;
+export default BranchDelivery;
