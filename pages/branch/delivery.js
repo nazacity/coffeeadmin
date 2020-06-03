@@ -18,7 +18,7 @@ import { motion } from 'framer-motion';
 import { firestore } from '../../firebase';
 
 // Components
-import DeliveryPage from '../../components/branch/DeliveryPage';
+import DeliveryList from '../../components/branch/DeliveryList';
 
 const BranchDelivery = ({ user }) => {
   const action = useDispatch();
@@ -92,7 +92,7 @@ const BranchDelivery = ({ user }) => {
     >
       {state &&
         state.map((order) => (
-          <DeliveryPage key={order.key} order={order} branchId={branch.id} />
+          <DeliveryList key={order.key} order={order} branchId={branch.id} />
         ))}
     </motion.div>
   );

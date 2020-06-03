@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { MUTATION_UPDATEPLACE_CREATETABLE } from '../../apollo/mutation';
 
 // Redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { updateBranch } from '../../redux/actions/storeActions';
 
 // Mui
@@ -16,7 +16,6 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';

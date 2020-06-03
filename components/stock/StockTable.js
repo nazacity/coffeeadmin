@@ -355,7 +355,6 @@ const StockTable = ({ stock, branchId, setRerender }) => {
             },
           },
         ]}
-        // parentChildData={(row, rows) => rows.find((a) => a.id === row.catalog)}
         editable={{
           isEditable: (rowData) => rowData.pictureUrl,
           onRowAdd: (newData) =>

@@ -41,14 +41,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FoodItem = ({ item }) => {
-  const classes = useStyles();
-
-  const theme = useTheme();
-  const matchesLGDown = useMediaQuery('(max-width:1300px)');
-  const matchesMDDown = useMediaQuery('(max-width:1200px)');
-  const matchesSMDown = useMediaQuery('(max-width:600px)');
-  const { addToast } = useToasts();
-
   return (
     <CardActionArea
       style={{

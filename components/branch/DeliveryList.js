@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 // Firebase
 import { firestore } from '../../firebase';
 
-const DeliveryPage = ({ order, branchId }) => {
+const DeliveryList = ({ order, branchId }) => {
   const theme = useTheme();
   return (
     <Card
@@ -113,4 +113,4 @@ const DeliveryPage = ({ order, branchId }) => {
 // test
 // </a>
 
-export default DeliveryPage;
+export default DeliveryList;

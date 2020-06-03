@@ -9,10 +9,7 @@ import { motion } from 'framer-motion';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  setDrawerTopNavbar,
-  setMenuIndex,
-} from '../../redux/actions/layoutActions';
+import { setMenuIndex } from '../../redux/actions/layoutActions';
 
 // Mui
 import { makeStyles } from '@material-ui/core/styles';

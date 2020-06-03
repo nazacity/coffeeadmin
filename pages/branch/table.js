@@ -4,13 +4,6 @@ import cookie from 'cookie';
 // next
 import { useRouter } from 'next/router';
 
-// Apollo
-import { useQuery } from '@apollo/react-hooks';
-import { QUERY_BRANCHFROMID } from '../../apollo/query';
-
-// MUI
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-
 // Redux
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../redux/actions/userActions';

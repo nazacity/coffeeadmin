@@ -23,8 +23,6 @@ import { useMutation } from '@apollo/react-hooks';
 import Hidden from '@material-ui/core/Hidden';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { Avatar, Typography } from '@material-ui/core';
 
 // components
 import MbSignIn from '../components/homepage/signin/MbSignIn';

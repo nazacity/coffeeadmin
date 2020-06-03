@@ -4,7 +4,6 @@ import 'moment/locale/th';
 import moment from 'moment';
 import { SwipeableList } from '@sandstreamdev/react-swipeable-list';
 import SwipeableItem from './components/SwipeableItem';
-//import OrderAction from './components/OrderAction';
 
 moment.locale('th');
 

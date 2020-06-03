@@ -1,8 +1,5 @@
 import React from 'react';
 
-// Next
-import Head from 'next/head';
-
 // Framer
 import { motion } from 'framer-motion';
 
@@ -60,13 +57,6 @@ const Brief = () => {
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Head>
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
-        />
-      </Head>
       <motion.div
         style={{
           display: 'grid',
