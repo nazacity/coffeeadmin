@@ -71,7 +71,7 @@ const MyApp = ({ Component, pageProps, apollo }) => {
         />
         <script
           src="https://kit.fontawesome.com/20efa4bcb4.js"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         ></script>
         <meta
           name="description"

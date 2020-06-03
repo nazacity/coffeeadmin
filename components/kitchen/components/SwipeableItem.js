@@ -23,7 +23,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Firebase
-import { db } from '../../../firebase';
+import { firestore } from '../../../firebase';
 
 // Toast
 import { useToasts } from 'react-toast-notifications';
@@ -53,9 +53,6 @@ const SwipeableItem = ({ order, item, branchId }) => {
     MUTATION_CANCEL_ORDERITEM_BY_ID,
     {
       onCompleted: (data) => {
-        // if (data.cancelOrderItemByID.items.length >= 1) {
-        //   db.ref('/order').push(data.cancelOrderItemByID);
-        // }
         addToast('ยกเลิกรายการอาหารเรียบร้อย', {
           appearance: 'success',
           autoDismiss: true,
@@ -108,22 +105,30 @@ const SwipeableItem = ({ order, item, branchId }) => {
           </div>
         ),
         action: () => {
-          setTimeout(() => {
-            doneOrderItemByID({
-              variables: {
-                orderItemId: item.id,
-              },
-            });
-            db.ref(`/${branchId}/${order.key}`).remove();
-            if (order.items.length > 1) {
-              let newOrder;
-              newOrder = {
-                user: order.user,
-                createdAt: order.createdAt,
-                pictureUrl: order.user.pictureUrl ? order.user.pictureUrl : '',
-                items: order.items.filter((key) => item.id !== key.id),
-              };
-              db.ref(`/${branchId}`).push(newOrder);
+          setTimeout(async () => {
+            try {
+              await doneOrderItemByID({
+                variables: {
+                  orderItemId: item.id,
+                },
+              });
+              let items = order.items.filter((key) => item.id !== key.id);
+
+              if (items.length === 0) {
+                firestore
+                  .collection(`branchId=${branchId}`)
+                  .doc(order.key)
+                  .delete();
+              } else {
+                firestore
+                  .collection(`branchId=${branchId}`)
+                  .doc(order.key)
+                  .update({
+                    items,
+                  });
+              }
+            } catch (error) {
+              console.log(error.message);
             }
           }, 600);
         },
@@ -199,20 +204,23 @@ const SwipeableItem = ({ order, item, branchId }) => {
                         quantity: +item.quantity,
                       },
                     });
+
+                    let items = order.items.filter((key) => item.id !== key.id);
+                    if (items.length === 0) {
+                      firestore
+                        .collection(`branchId=${branchId}`)
+                        .doc(order.key)
+                        .delete();
+                    } else {
+                      firestore
+                        .collection(`branchId=${branchId}`)
+                        .doc(order.key)
+                        .update({
+                          items,
+                        });
+                    }
                   } catch (error) {
                     console.log(error.message);
-                  }
-
-                  db.ref(`/${branchId}/${order.key}`).remove();
-                  if (order.items.length > 1) {
-                    let newOrder;
-                    newOrder = {
-                      user: order.user,
-                      createdAt: order.createdAt,
-                      id: order.id,
-                      items: order.items.filter((key) => item.id !== key.id),
-                    };
-                    db.ref(`/${branchId}`).push(newOrder);
                   }
                 }, 600);
               },

@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import 'firebase/storage';
+import 'firebase/firestore';
 
 var fbConfig = {
   apiKey: 'AIzaSyCoMqwHENNQXz57RnFxYSY1ZBaVakfhVps',
@@ -15,5 +16,5 @@ if (!firebase.apps.length) {
   firebase.initializeApp(fbConfig);
 }
 
-export const db = firebase.database();
 export const storage = firebase.storage();
+export const firestore = firebase.firestore();

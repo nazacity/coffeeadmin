@@ -33,7 +33,7 @@ const OrderList = ({ order, branchId }) => {
       >
         <Avatar
           src={order.user.pictureUrl}
-          alt={order.user.name}
+          alt={order.user.firstName}
           style={{
             margin: 'auto',
             boxShadow: theme.common.shadow.black,
