@@ -98,13 +98,13 @@ const CreateStockCatalog = ({ setRerender }) => {
   return (
     <div
       style={{
-        maxWidth: matches1024down ? undefined : theme.layer.maxwidth,
-        margin: 'auto',
+        maxWidth: theme.layer.maxwidth,
         display: matches600down ? undefined : 'grid',
+        margin: 'auto',
         gridTemplateColumns: '1.4fr 0.6fr',
       }}
     >
-      <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
+      <div style={{ marginTop: '1vh' }}>
         <Typography align="center">เพิ่มประเภทวัตถุดิบ</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
@@ -185,7 +185,7 @@ const CreateStockCatalog = ({ setRerender }) => {
             </Button>
           </CardActions>
         </form>
-      </Card>
+      </div>
       <div
         style={{
           marginTop: '1vh',

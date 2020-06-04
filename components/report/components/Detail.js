@@ -20,8 +20,6 @@ import BranchDetailItem from './BranchDetailItem';
 const Detail = () => {
   const theme = useTheme();
   const branchs = useSelector((state) => state.store.branch);
-  const matches600down = useMediaQuery('(max-width:600px)');
-  const matches1200down = useMediaQuery('(max-width:1200px)');
 
   const [state, setState] = useState(0);
 
@@ -53,7 +51,17 @@ const Detail = () => {
 
   return (
     <React.Fragment>
-      <Tabs value={state} variant="fullWidth" onChange={handleChange}>
+      <Tabs
+        value={state}
+        variant="fullWidth"
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        style={{
+          maxWidth: theme.layer.maxwidth,
+          margin: '0 auto',
+        }}
+      >
         {branchs.map((branch) => (
           <Tab label={branch.branch} key={branch.id} />
         ))}

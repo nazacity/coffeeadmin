@@ -7,7 +7,7 @@ import { setUser } from '../../redux/actions/userActions';
 import { setClient } from '../../redux/actions/clientActions';
 
 // MUI
-import Hidden from '@material-ui/core/Hidden';
+import { useTheme } from '@material-ui/core/styles';
 
 // framer motion
 import { motion } from 'framer-motion';
@@ -21,12 +21,16 @@ const Client = ({ user, client }) => {
     action(setUser(user ? user : null));
     action(setClient(client ? client : null));
   }, [user, client]);
-
+  const theme = useTheme();
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      style={{
+        maxWidth: theme.layer.maxwidth,
+        margin: '0 auto 1vh',
+      }}
     >
       <ClientTable />
     </motion.div>

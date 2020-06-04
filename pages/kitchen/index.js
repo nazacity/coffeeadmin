@@ -18,10 +18,12 @@ import OrderView from '../../components/kitchen/OrderView';
 // MUI
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { useTheme } from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
 
 const Kitchen = ({ branchs, user }) => {
   const action = useDispatch();
+  const theme = useTheme();
   useEffect(() => {
     action(setUser(user ? user : null));
   }, [user]);
@@ -43,7 +45,18 @@ const Kitchen = ({ branchs, user }) => {
       exit={{ opacity: 0 }}
       style={{ marginBottom: 300 }}
     >
-      <Tabs value={index} variant="fullWidth" onChange={handleChange}>
+      <Tabs
+        value={index}
+        variant="fullWidth"
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        style={{
+          maxWidth: theme.layer.maxwidth,
+          margin: '0 auto',
+          boxShadow: theme.common.shadow.black,
+        }}
+      >
         {branchs.map((branch) => (
           <Tab label={branch.branch} key={branch.id} />
         ))}

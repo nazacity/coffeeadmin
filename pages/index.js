@@ -106,7 +106,10 @@ const HomePage = ({ userFromAccessToken }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ margin: 0, padding: 0 }}
+      style={{
+        maxWidth: theme.layer.maxwidth,
+        margin: '0 auto',
+      }}
     >
       {user?.state === 'guess' && !userLoading && (
         <React.Fragment>
@@ -119,25 +122,18 @@ const HomePage = ({ userFromAccessToken }) => {
         </React.Fragment>
       )}
       {userLoading && <PageLoading title="ยินดีต้อนรับ" />}
-      <div
-        style={{
-          maxWidth: theme.layer.maxWidth,
-          width: matches1024down ? undefined : '80%',
-          margin: 'auto',
-        }}
-      >
-        {user?.state === 'employee' && (
-          <div>
-            <EmployeeInfo />
-          </div>
-        )}
-        {user?.state === 'admin' && (
-          <div>
-            <Brief />
-            <Chart />
-          </div>
-        )}
-      </div>
+
+      {user?.state === 'employee' && (
+        <div>
+          <EmployeeInfo />
+        </div>
+      )}
+      {user?.state === 'admin' && (
+        <div>
+          <Brief />
+          <Chart />
+        </div>
+      )}
     </motion.div>
   );
 };

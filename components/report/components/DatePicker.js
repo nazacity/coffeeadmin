@@ -20,7 +20,6 @@ moment.locale('th');
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
@@ -62,7 +61,6 @@ const DatePicker = () => {
           flexDirection: matches450down ? 'column' : 'row',
           justifyContent: 'center',
           alignItems: 'center',
-          boxShadow: matches1024down ? undefined : theme.common.shadow.black,
         }}
       >
         <div

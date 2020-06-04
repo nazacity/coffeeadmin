@@ -18,6 +18,7 @@ import TableItem from '../../components/table/TableItem';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { useTheme } from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
 
 const Table = ({ user, branch }) => {
@@ -25,6 +26,7 @@ const Table = ({ user, branch }) => {
   const branchs = useSelector((state) => state.store.branch);
   const matches600down = useMediaQuery('(max-width:600px)');
   const matches1200down = useMediaQuery('(max-width:1200px)');
+  const theme = useTheme();
 
   const [state, setState] = useState(0);
   useEffect(() => {
@@ -47,8 +49,21 @@ const Table = ({ user, branch }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      style={{
+        maxWidth: theme.layer.maxwidth,
+        margin: '0 auto',
+      }}
     >
-      <Tabs value={state} variant="fullWidth" onChange={handleChange}>
+      <Tabs
+        value={state}
+        variant="fullWidth"
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        style={{
+          boxShadow: theme.common.shadow.black,
+        }}
+      >
         {branchs.map((branch) => (
           <Tab label={branch.branch} key={branch.id} />
         ))}

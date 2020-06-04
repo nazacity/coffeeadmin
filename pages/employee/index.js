@@ -17,6 +17,11 @@ import {
 
 // framer motion
 import { motion } from 'framer-motion';
+
+// MUI
+import { useTheme } from '@material-ui/core/styles';
+
+// Component
 import EmployeeTable from '../../components/employee/EmployeeTable';
 
 const index = ({ employees, user, branch }) => {
@@ -26,11 +31,17 @@ const index = ({ employees, user, branch }) => {
     action(setUser(user ? user : null));
     action(setBranch(branch ? branch : null));
   }, [employees, user]);
+  const theme = useTheme();
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      style={{
+        maxWidth: theme.layer.maxwidth,
+        margin: '0 auto 1vh',
+      }}
     >
       <EmployeeTable />
     </motion.div>

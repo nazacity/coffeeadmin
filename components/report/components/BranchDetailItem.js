@@ -54,7 +54,6 @@ const Detail = ({ branchId }) => {
       <div
         style={{
           padding: '2vh',
-          width: '',
         }}
       >
         <div

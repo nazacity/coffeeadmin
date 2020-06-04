@@ -29,61 +29,47 @@ const Report = () => {
   };
   return (
     <React.Fragment>
-      <Paper square className={classes.root}>
-        <Tabs
-          value={index}
-          onChange={handleChange}
-          variant="fullWidth"
-          indicatorColor="secondary"
-          textColor="secondary"
-          aria-label="icon label tabs example"
-        >
-          <Tab
-            icon={<Icon className="fas fa-file-medical-alt" />}
-            label="รายงาน"
-          />
-          <Tab
-            icon={<Icon className="fas fa-list-ul" fontSize="small" />}
-            label="ใบเสร็จ"
-          />
-        </Tabs>
-      </Paper>
-      {index === 0 && (
-        <div
-          style={{
-            maxWidth: theme.layer.maxWidth,
-            width: matches1024down ? '100%' : '80%',
-            margin: 'auto',
-          }}
-        >
-          <DatePicker />
-          <div
-            style={{
-              marginTop: '2vh',
-            }}
-          >
+      <Tabs
+        value={index}
+        onChange={handleChange}
+        variant="fullWidth"
+        indicatorColor="primary"
+        textColor="primary"
+        style={{
+          maxWidth: theme.layer.maxwidth,
+          margin: '0 auto',
+          boxShadow: theme.common.shadow.black,
+        }}
+      >
+        <Tab
+          icon={<Icon className="fas fa-file-medical-alt" />}
+          label="รายงาน"
+        />
+        <Tab
+          icon={<Icon className="fas fa-list-ul" fontSize="small" />}
+          label="ใบเสร็จ"
+        />
+      </Tabs>
+      <div
+        style={{
+          maxWidth: theme.layer.maxwidth,
+          margin: '0 auto',
+          boxShadow: theme.common.shadow.black,
+        }}
+      >
+        {index === 0 && (
+          <div>
+            <DatePicker />
             <Detail />
           </div>
-        </div>
-      )}
-      {index === 1 && (
-        <div
-          style={{
-            maxWidth: theme.layer.maxWidth,
-            width: matches1024down ? '100%' : '80%',
-            margin: 'auto',
-          }}
-        >
-          <DatePicker />
-          <div
-            style={{
-              marginTop: '2vh',
-            }}
-          >
+        )}
+        {index === 1 && (
+          <div>
+            <DatePicker />
             <OrderTable />
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </React.Fragment>
   );
 };

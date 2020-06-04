@@ -106,10 +106,9 @@ const CreateOnlineProductCatalog = ({ setRerender }) => {
         gridTemplateColumns: '1.4fr 0.6fr',
       }}
     >
-      <Card
+      <div
         style={{
           margin: '2vh 0',
-          boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
         }}
       >
         <Typography align="center">เพิ่มประเภทสินค้าออนไลน์</Typography>
@@ -190,7 +189,7 @@ const CreateOnlineProductCatalog = ({ setRerender }) => {
             </Button>
           </CardActions>
         </form>
-      </Card>
+      </div>
       <DeleteOnlineCatalog setRerender={setRerender} />
     </div>
   );

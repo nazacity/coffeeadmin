@@ -73,7 +73,6 @@ const DeleteStockCatalog = ({ setRerender }) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             margin: '1vh',
-            boxShadow: theme.common.shadow.main1,
           }}
         >
           <Typography color="primary" style={{ margin: '0 1vh' }} variant="h6">

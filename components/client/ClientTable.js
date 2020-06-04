@@ -184,8 +184,6 @@ const ClientTable = () => {
           },
         }}
         style={{
-          boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
-          width: matches1024down ? undefined : '80%',
           margin: matches1024down ? '0 0 150px 0' : '1vh auto',
         }}
       />

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
 
 // Apollo
 import { useMutation } from '@apollo/react-hooks';
@@ -79,100 +78,93 @@ const ProductSale = ({ branchId }) => {
 
   return (
     <React.Fragment>
-      <div
-        style={{
-          boxShadow: matches1024down ? undefined : theme.common.shadow.black,
-          margin: '2vh 0',
-        }}
-      >
-        <CardContent>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Typography>ยอดขายสินค้าในร้าน</Typography>
+      <CardContent>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Typography>ยอดขายสินค้าในร้าน</Typography>
+        </div>
+      </CardContent>
+      <div>
+        {loading ? (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '2vh',
+            }}
+          >
+            <CircularProgress
+              variant="determinate"
+              value={100}
+              className={classes.top}
+              size={matches600down ? 60 : 120}
+              thickness={4}
+            />
+            <CircularProgress
+              variant="indeterminate"
+              disableShrink
+              className={classes.bottom}
+              size={matches600down ? 60 : 120}
+              thickness={4}
+            />
           </div>
-        </CardContent>
-        <div>
-          {loading ? (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                padding: '2vh',
-              }}
-            >
-              <CircularProgress
-                variant="determinate"
-                value={100}
-                className={classes.top}
-                size={matches600down ? 60 : 120}
-                thickness={4}
-              />
-              <CircularProgress
-                variant="indeterminate"
-                disableShrink
-                className={classes.bottom}
-                size={matches600down ? 60 : 120}
-                thickness={4}
-              />
-            </div>
-          ) : (
-            storeProductSaleData &&
-            catalogs.map((catalog) => {
-              let filterByCatalog = storeProductSaleData.filter(
-                (product) => product.catalog.id === catalog.id
-              );
-              return (
-                <MotionSlider
-                  padding={30}
-                  gap={30}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100%',
-                  }}
-                  key={catalog.id}
-                >
-                  {filterByCatalog.map((product) => (
-                    <div key={product.id}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'center',
+        ) : (
+          storeProductSaleData &&
+          catalogs.map((catalog) => {
+            let filterByCatalog = storeProductSaleData.filter(
+              (product) => product.catalog.id === catalog.id
+            );
+            return (
+              <MotionSlider
+                padding={30}
+                gap={30}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100%',
+                }}
+                key={catalog.id}
+              >
+                {filterByCatalog.map((product) => (
+                  <div key={product.id}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Badge
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'left',
+                        }}
+                        color="primary"
+                        badgeContent={product.totalSales}
+                        classes={{
+                          colorPrimary: classes.BadgeColor,
+                          anchorOriginTopLeftRectangle: classes.topLeft10,
                         }}
                       >
-                        <Badge
-                          anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'left',
+                        <div
+                          style={{
+                            background: `url(${product.pictureUrl})`,
+                            backgroundSize: 'cover',
+                            height: matches450down ? '100px' : '150px',
+                            width: matches450down ? '100px' : '150px',
+                            borderRadius: '50%',
                           }}
-                          color="primary"
-                          badgeContent={product.totalSales}
-                          classes={{
-                            colorPrimary: classes.BadgeColor,
-                            anchorOriginTopLeftRectangle: classes.topLeft10,
-                          }}
-                        >
-                          <div
-                            style={{
-                              background: `url(${product.pictureUrl})`,
-                              backgroundSize: 'cover',
-                              height: matches450down ? '100px' : '150px',
-                              width: matches450down ? '100px' : '150px',
-                              borderRadius: '50%',
-                            }}
-                          />
-                        </Badge>
-                      </div>
-                      <Typography align="center" color="secondary">
-                        {product.name}
-                      </Typography>
+                        />
+                      </Badge>
                     </div>
-                  ))}
-                </MotionSlider>
-              );
-            })
-          )}
-        </div>
+                    <Typography align="center" color="secondary">
+                      {product.name}
+                    </Typography>
+                  </div>
+                ))}
+              </MotionSlider>
+            );
+          })
+        )}
       </div>
     </React.Fragment>
   );

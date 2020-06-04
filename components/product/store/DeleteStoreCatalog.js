@@ -66,7 +66,7 @@ const DeleteStoreCatalog = ({ setRerender }) => {
       }}
     >
       {catalogs.map((catalog) => (
-        <Card
+        <div
           key={catalog.id}
           style={{
             display: 'flex',
@@ -86,7 +86,7 @@ const DeleteStoreCatalog = ({ setRerender }) => {
           >
             <HighlightOffIcon />
           </IconButton>
-        </Card>
+        </div>
       ))}
       <Dialog
         open={open}

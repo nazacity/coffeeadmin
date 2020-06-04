@@ -510,7 +510,8 @@ const StockTable = ({ stock, branchId, setRerender }) => {
           }),
         ]}
         style={{
-          boxShadow: matches1024down ? 'none' : theme.common.shadow.main1,
+          maxWidth: theme.layer.maxwidth,
+          margin: 'auto',
           marginBottom: '100px',
         }}
       />

@@ -107,10 +107,9 @@ const CreateStoreProductCatalog = ({ setRerender }) => {
         gridTemplateColumns: '1.4fr 0.6fr',
       }}
     >
-      <Card
+      <div
         style={{
           margin: '2vh 0',
-          boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
         }}
       >
         <Typography align="center">เพิ่มประเภทสินค้าในร้าน</Typography>
@@ -191,7 +190,7 @@ const CreateStoreProductCatalog = ({ setRerender }) => {
             </Button>
           </CardActions>
         </form>
-      </Card>
+      </div>
       <DeleteStoreCatalog setRerender={setRerender} />
     </div>
   );

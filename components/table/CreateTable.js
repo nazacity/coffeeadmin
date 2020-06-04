@@ -95,13 +95,8 @@ const CreateTable = ({ setRerender }) => {
     }
   };
   return (
-    <div
-      style={{
-        maxWidth: matches1024down ? undefined : theme.layer.maxwidth,
-        margin: 'auto',
-      }}
-    >
-      <Card style={{ margin: '2vh', boxShadow: theme.common.shadow.main1 }}>
+    <React.Fragment>
+      <div style={{ margin: '2vh' }}>
         <Typography align="center">เพิ่มโต๊ะ</Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent>
@@ -201,8 +196,8 @@ const CreateTable = ({ setRerender }) => {
             </Button>
           </CardActions>
         </form>
-      </Card>
-    </div>
+      </div>
+    </React.Fragment>
   );
 };
 

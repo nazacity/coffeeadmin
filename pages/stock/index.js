@@ -19,7 +19,7 @@ import CreateStockCatalog from '../../components/stock/CreateStockCatalog';
 import StockTable from '../../components/stock/StockTable';
 
 // MUI
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
@@ -27,8 +27,7 @@ import SwipeableViews from 'react-swipeable-views';
 const Stock = ({ user, branch, stockCatalog }) => {
   const action = useDispatch();
   const branchs = useSelector((state) => state.store.branch);
-  const matches600down = useMediaQuery('(max-width:600px)');
-  const matches1200down = useMediaQuery('(max-width:1200px)');
+  const theme = useTheme();
 
   const [state, setState] = useState(0);
   useEffect(() => {
@@ -53,7 +52,18 @@ const Stock = ({ user, branch, stockCatalog }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <Tabs value={state} variant="fullWidth" onChange={handleChange}>
+      <Tabs
+        value={state}
+        variant="fullWidth"
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        style={{
+          maxWidth: theme.layer.maxwidth,
+          margin: '0 auto',
+          boxShadow: theme.common.shadow.black,
+        }}
+      >
         {branchs.map((branch) => (
           <Tab label={branch.branch} key={branch.id} />
         ))}

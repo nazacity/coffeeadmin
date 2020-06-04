@@ -8,16 +8,10 @@ import moment from 'moment';
 import 'moment/locale/th';
 moment.locale('th');
 
-// Next
-import Head from 'next/head';
-
 // MUI
 import { useTheme } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Card from '@material-ui/core/Card';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -31,9 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderTable = () => {
-  const matches1024down = useMediaQuery('(max-width:1024px)');
   const theme = useTheme();
-  const classes = useStyles();
 
   const columnTitle = [
     {
@@ -99,17 +91,6 @@ const OrderTable = () => {
 
   return (
     <React.Fragment>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
-        />
-      </Head>
       <MaterialTable
         title="รายการสินค้า"
         columns={columnTitle}
@@ -175,8 +156,7 @@ const OrderTable = () => {
           },
         }}
         style={{
-          boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
-          marginBottom: '100px',
+          marginBottom: '150px',
         }}
         detailPanel={(rowData) => {
           return (
