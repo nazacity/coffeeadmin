@@ -4,9 +4,6 @@ import React, { useEffect } from 'react';
 import Link from '../../src/Link';
 import { useRouter } from 'next/router';
 
-// Framer-motion
-import { motion } from 'framer-motion';
-
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { setMenuIndex } from '../../redux/actions/layoutActions';
@@ -18,7 +15,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -211,131 +207,122 @@ const TopNavbar = () => {
 
   return (
     <React.Fragment>
-      <motion.div
-        initial={{ opacity: 0, y: '-100%' }}
-        animate={{ opacity: 1, y: '0%' }}
-        transition={{
-          duration: 2,
-          ease: [0.43, 0.13, 0.23, 0.96],
-        }}
-      >
-        <AppBar position="static" classes={{ root: classes.navbar }}>
-          <Toolbar>
-            <div className={classes.title}>
-              <Link href="/">
-                <Typography
-                  variant="h6"
-                  style={{ color: theme.common.color.white }}
-                >
-                  Coffee Shop
-                </Typography>
-              </Link>
-            </div>
-            <div>
-              {user.state == 'admin' &&
-                adminMenuOptions.map((menu) => (
-                  <IconButton
-                    component={!menu.action ? Link : undefined}
-                    href={!menu.action ? menu.link : undefined}
-                    key={menu.name}
-                    style={{
-                      color:
-                        menuIndex === menu.selectedIndex
-                          ? theme.palette.primary.main
-                          : '#ffffff',
-                      marginRight: '2em',
-                    }}
-                    onClick={
-                      menu.action
-                        ? menu.action
-                        : () => action(setMenuIndex(menu.selectedIndex))
-                    }
-                  >
-                    {menu.icon}
-                  </IconButton>
-                ))}
-              {user.state == 'employee' &&
-                employeeMenuOptions.map((menu) => {
-                  if (menu.position.includes(user.employee.position)) {
-                    return (
-                      <Link
-                        href={menu.link}
-                        style={{ marginRight: '2em' }}
-                        key={menu.name}
-                        onClick={() => setMenuIndex(menu.selectedIndex)}
-                      >
-                        <IconButton
-                          style={{
-                            color:
-                              menuIndex === menu.selectedIndex
-                                ? theme.palette.primary.main
-                                : '#ffffff',
-                          }}
-                        >
-                          {menu.icon}
-                        </IconButton>
-                      </Link>
-                    );
-                  }
-
-                  return null;
-                })}
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={
-                  user.state === 'guess' && userLoading === false
-                    ? () => {
-                        route.push('/');
-                      }
-                    : user.state === 'client0' && userLoading === false
-                    ? () => {
-                        route.push('/user');
-                      }
-                    : userLoading === true
-                    ? () => {}
-                    : handleMenu
-                }
+      <AppBar position="static" classes={{ root: classes.navbar }}>
+        <Toolbar>
+          <div className={classes.title}>
+            <Link href="/">
+              <Typography
+                variant="h6"
+                style={{ color: theme.common.color.white }}
               >
-                {userLoading ? (
-                  <div style={{ position: 'relative' }}>
-                    <CircularProgress
-                      variant="determinate"
-                      value={100}
-                      className={classes.top}
-                      size={24}
-                      thickness={4}
-                    />
-                    <CircularProgress
-                      variant="indeterminate"
-                      disableShrink
-                      className={classes.bottom}
-                      size={24}
-                      thickness={4}
-                    />
-                  </div>
-                ) : user.state !== 'guess' ? (
-                  <Avatar
-                    alt="line logo"
-                    src={user.pictureUrl}
-                    className={classes.userlogo}
+                Coffee Shop
+              </Typography>
+            </Link>
+          </div>
+          <div>
+            {user.state == 'admin' &&
+              adminMenuOptions.map((menu) => (
+                <IconButton
+                  component={!menu.action ? Link : undefined}
+                  href={!menu.action ? menu.link : undefined}
+                  key={menu.name}
+                  style={{
+                    color:
+                      menuIndex === menu.selectedIndex
+                        ? theme.palette.primary.main
+                        : '#ffffff',
+                    marginRight: '2em',
+                  }}
+                  onClick={
+                    menu.action
+                      ? menu.action
+                      : () => action(setMenuIndex(menu.selectedIndex))
+                  }
+                >
+                  {menu.icon}
+                </IconButton>
+              ))}
+            {user.state == 'employee' &&
+              employeeMenuOptions.map((menu) => {
+                if (menu.position.includes(user.employee.position)) {
+                  return (
+                    <Link
+                      href={menu.link}
+                      style={{ marginRight: '2em' }}
+                      key={menu.name}
+                      onClick={() => setMenuIndex(menu.selectedIndex)}
+                    >
+                      <IconButton
+                        style={{
+                          color:
+                            menuIndex === menu.selectedIndex
+                              ? theme.palette.primary.main
+                              : '#ffffff',
+                        }}
+                      >
+                        {menu.icon}
+                      </IconButton>
+                    </Link>
+                  );
+                }
+
+                return null;
+              })}
+            <IconButton
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={
+                user.state === 'guess' && userLoading === false
+                  ? () => {
+                      route.push('/');
+                    }
+                  : user.state === 'client0' && userLoading === false
+                  ? () => {
+                      route.push('/user');
+                    }
+                  : userLoading === true
+                  ? () => {}
+                  : handleMenu
+              }
+            >
+              {userLoading ? (
+                <div style={{ position: 'relative' }}>
+                  <CircularProgress
+                    variant="determinate"
+                    value={100}
+                    className={classes.top}
+                    size={24}
+                    thickness={4}
                   />
-                ) : (
-                  <AccountCircleIcon
-                    style={{ fontSize: 40, color: theme.common.color.white }}
+                  <CircularProgress
+                    variant="indeterminate"
+                    disableShrink
+                    className={classes.bottom}
+                    size={24}
+                    thickness={4}
                   />
-                )}
-              </IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
-        <UserMenu
-          state={user.state}
-          anchorEl={anchorEl}
-          handleClose={handleClose}
-        />
-      </motion.div>
+                </div>
+              ) : user.state !== 'guess' ? (
+                <Avatar
+                  alt="line logo"
+                  src={user.pictureUrl}
+                  className={classes.userlogo}
+                />
+              ) : (
+                <AccountCircleIcon
+                  style={{ fontSize: 40, color: theme.common.color.white }}
+                />
+              )}
+            </IconButton>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <UserMenu
+        state={user.state}
+        anchorEl={anchorEl}
+        handleClose={handleClose}
+      />
     </React.Fragment>
   );
 };
