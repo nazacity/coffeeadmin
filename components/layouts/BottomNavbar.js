@@ -112,7 +112,7 @@ const BottomNavbar = () => {
     {
       name: 'โต๊ะ',
       link: `/branch/table?branch=${user?.employee?.branch.id}`,
-      position: ['waiter', 'manager'],
+      position: ['waiter', 'chef', 'manager'],
       selectedIndex: 1,
       icon: (
         <Icon
@@ -125,7 +125,7 @@ const BottomNavbar = () => {
     {
       name: 'ห้องครัว',
       link: `/branch/kitchen?branch=${user?.employee?.branch.id}`,
-      position: ['chef', 'manager'],
+      position: ['waiter', 'chef', 'manager'],
       selectedIndex: 2,
       icon: (
         <Icon
@@ -190,6 +190,11 @@ const BottomNavbar = () => {
     }
     if (user.state === 'employee') {
       switch (route.pathname) {
+        case `/`:
+          if (menuIndex !== 0) {
+            action(setMenuIndex(0));
+          }
+          break;
         case `/branch/table`:
           if (menuIndex !== 1) {
             action(setMenuIndex(1));

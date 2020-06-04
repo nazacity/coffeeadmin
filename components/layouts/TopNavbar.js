@@ -183,6 +183,11 @@ const TopNavbar = () => {
     }
     if (user.state === 'employee') {
       switch (route.pathname) {
+        case `/`:
+          if (menuIndex !== 0) {
+            action(setMenuIndex(0));
+          }
+          break;
         case `/branch/table`:
           if (menuIndex !== 1) {
             action(setMenuIndex(1));
@@ -216,10 +221,7 @@ const TopNavbar = () => {
       >
         <AppBar position="static" classes={{ root: classes.navbar }}>
           <Toolbar>
-            <div
-              onClick={() => action(setMenuIndex(0))}
-              className={classes.title}
-            >
+            <div className={classes.title}>
               <Link href="/">
                 <Typography
                   variant="h6"
@@ -246,7 +248,7 @@ const TopNavbar = () => {
                     onClick={
                       menu.action
                         ? menu.action
-                        : () => setMenuIndex(menu.selectedIndex)
+                        : () => action(setMenuIndex(menu.selectedIndex))
                     }
                   >
                     {menu.icon}

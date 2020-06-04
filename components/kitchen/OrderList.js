@@ -74,7 +74,7 @@ const OrderList = ({ order, branchId }) => {
         </div>
         <div style={{ margin: '1vh auto' }}>
           <Typography align="center" variant="body2" style={{ color: 'green' }}>
-            *เลื่อนไปด้านซ้ายเมื่อเมนูเรียบร้อย
+            *เลื่อนไปด้านซ้ายเมื่อเสิร์ฟเมนูเรียบร้อย
           </Typography>
           <Typography align="center" variant="body2" style={{ color: 'red' }}>
             *เลื่อนไปด้านขวาเพื่อยกเลิกเมนู

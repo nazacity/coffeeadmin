@@ -30,6 +30,7 @@ const BranchKitchen = ({ user }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      style={{ marginBottom: 150 }}
     >
       {branch && <OrderView branch={branch} />}
     </motion.div>

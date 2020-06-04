@@ -62,7 +62,7 @@ const DeleteOnlineCatalog = ({ setRerender }) => {
       style={{
         display: matches600down ? 'grid' : undefined,
         gridTemplateColumns: '1fr 1fr',
-        margin: 'auto 1vh',
+        margin: 'auto 0 auto 1vh',
       }}
     >
       {catalogs.map((catalog) => (
@@ -72,7 +72,7 @@ const DeleteOnlineCatalog = ({ setRerender }) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            margin: '1vh',
+            margin: '1vh 0',
             boxShadow: theme.common.shadow.black,
           }}
         >

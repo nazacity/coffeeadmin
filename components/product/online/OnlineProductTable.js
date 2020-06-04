@@ -433,7 +433,6 @@ const OnlineProductTable = ({ setRerender }) => {
         ]}
         style={{
           boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
-          width: matches1024down ? undefined : '80%',
           margin: '0 auto 150px auto',
         }}
       />

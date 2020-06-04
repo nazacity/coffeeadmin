@@ -20,6 +20,10 @@ import { firestore } from '../../firebase';
 // Components
 import DeliveryList from '../../components/branch/DeliveryList';
 
+// Mui
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
+
 const BranchDelivery = ({ user }) => {
   const action = useDispatch();
   const [state, setState] = useState([]);
@@ -28,6 +32,8 @@ const BranchDelivery = ({ user }) => {
   }, [user]);
   const router = useRouter();
   const [branch, setBranch] = useState({ id: router.query.branch });
+  const theme = useTheme();
+  const matches600down = useMediaQuery('max-width:600px');
 
   useEffect(() => {
     firestore
@@ -89,6 +95,15 @@ const BranchDelivery = ({ user }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        maxWidth: theme.layer.maxwidth,
+        width: '100%',
+        margin: 'auto',
+        marginBottom: 150,
+      }}
     >
       {state &&
         state.map((order) => (

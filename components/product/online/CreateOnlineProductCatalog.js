@@ -108,7 +108,7 @@ const CreateOnlineProductCatalog = ({ setRerender }) => {
     >
       <Card
         style={{
-          margin: '2vh',
+          margin: '2vh 0',
           boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
         }}
       >

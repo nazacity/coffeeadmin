@@ -12,18 +12,21 @@ import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 // Firebase
 import { firestore } from '../../firebase';
 
 const DeliveryList = ({ order, branchId }) => {
   const theme = useTheme();
+  const matches600down = useMediaQuery('max-width:600px');
   return (
     <Card
       key={order.id}
       style={{
         margin: '3vh 1vh',
-        display: 'flex',
+        display: matches600down ? 'grid' : 'flex',
+        gridTemplateColumns: '0.8fr 1fr 0.5fr',
         padding: '1vh',
       }}
     >
@@ -108,9 +111,5 @@ const DeliveryList = ({ order, branchId }) => {
     </Card>
   );
 };
-
-// <a href="https://www.google.co.th/maps/place/13.7684655,100.5443287">
-// test
-// </a>
 
 export default DeliveryList;

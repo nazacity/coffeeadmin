@@ -84,7 +84,7 @@ const OrderView = ({ branch }) => {
       exit={{ opacity: 0 }}
       style={{
         maxWidth: theme.layer.maxwidth,
-        width: matches600down ? '100%' : '80%',
+        width: '100%',
         margin: 'auto',
       }}
     >

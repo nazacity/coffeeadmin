@@ -103,7 +103,7 @@ const UserMenu = ({ state, anchorEl, handleClose }) => {
                   fontSize="small"
                 />
               </ListItemIcon>
-              <Typography variant="inherit">สินค้าในร้านออนไลน์</Typography>
+              <Typography variant="inherit">สินค้าออนไลน์</Typography>
             </MenuItem>
           </Link>
           <Divider style={{ width: '60%', margin: '0px auto' }} />

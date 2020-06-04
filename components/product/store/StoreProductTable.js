@@ -22,9 +22,6 @@ import moment from 'moment';
 import 'moment/locale/th';
 moment.locale('th');
 
-// Next
-import Head from 'next/head';
-
 // MUI
 import { useTheme } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
@@ -293,17 +290,6 @@ const StoreProductTable = ({ setRerender }) => {
 
   return (
     <React.Fragment>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
-        />
-      </Head>
       <input
         type="file"
         ref={imageInput}
@@ -432,7 +418,6 @@ const StoreProductTable = ({ setRerender }) => {
         ]}
         style={{
           boxShadow: matches1024down ? 'none' : theme.common.shadow.black,
-          width: matches1024down ? undefined : '80%',
           margin: '0 auto 150px auto',
         }}
       />

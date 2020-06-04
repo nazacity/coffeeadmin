@@ -16,7 +16,7 @@ import {
 } from '../../apollo/db';
 
 // MUI
-import Hidden from '@material-ui/core/Hidden';
+import { useTheme } from '@material-ui/core/styles';
 
 // framer motion
 import { motion } from 'framer-motion';
@@ -35,11 +35,13 @@ const StoreProduct = ({ storeProductCatalogs, storeProduct, user }) => {
     action(setUser(user ? user : null));
   }, [storeProductCatalogs, user]);
   const [rerendet, setRerender] = useState(false);
+  const theme = useTheme();
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      style={{ maxWidth: theme.layer.maxwidth, margin: 'auto' }}
     >
       <CreateStoreProductCatalog setRerender={setRerender} />
       <StoreProductTable setRerender={setRerender} />

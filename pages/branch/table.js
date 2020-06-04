@@ -30,6 +30,7 @@ const BranchTable = ({ user }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      style={{ marginBottom: 150 }}
     >
       <TablePage setRerender={setRerender} />
     </motion.div>
