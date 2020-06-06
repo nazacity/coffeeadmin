@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 // Next
 import Link from '../../src/Link';
@@ -148,12 +148,13 @@ const BottomNavbar = () => {
   ];
 
   const handleChange = (event, activeIndex) => {
+    console.log(activeIndex);
     action(setMenuIndex(activeIndex));
   };
 
   const route = useRouter();
 
-  const checkRoute = () => {
+  useEffect(() => {
     if (user.state === 'admin') {
       adminMenuOptions.forEach((menu) => {
         switch (route.pathname) {
@@ -211,13 +212,12 @@ const BottomNavbar = () => {
           break;
       }
     }
-  };
+  }, [menuIndex, window.location.pathname]);
 
   return (
     <React.Fragment>
       <div
         className={classes.root}
-        onAnimationStart={checkRoute}
         style={{ zIndex: 2, width: '100vw', zIndex: 10 }}
       >
         <BottomNavigation
@@ -249,7 +249,6 @@ const BottomNavbar = () => {
                   root: classes.bottomnavroot,
                   selected: classes.selected,
                 }}
-                onClick={menu.action}
               />
             ))}
           {user.state == 'employee' &&
