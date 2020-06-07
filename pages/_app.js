@@ -64,11 +64,6 @@ const MyApp = ({ Component, pageProps, apollo }) => {
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
-        />
         <script
           src="https://kit.fontawesome.com/20efa4bcb4.js"
           crossOrigin="anonymous"
