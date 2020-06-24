@@ -66,6 +66,7 @@ const OnlineProductSale = ({ branchId }) => {
     MUTATION_SALEONLINEPRODUCT,
     {
       onCompleted: (data) => {
+        console.log(data.saleOnlineProduct);
         setOnlineProductSaleData(data.saleOnlineProduct);
       },
     }

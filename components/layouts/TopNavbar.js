@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 // Next
 import Link from '../../src/Link';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 // Redux
@@ -207,6 +208,12 @@ const TopNavbar = () => {
 
   return (
     <React.Fragment>
+      <Head>
+        <script
+          src="https://kit.fontawesome.com/20efa4bcb4.js"
+          crossOrigin="anonymous"
+        ></script>
+      </Head>
       <AppBar position="static" classes={{ root: classes.navbar }}>
         <Toolbar>
           <div className={classes.title}>
