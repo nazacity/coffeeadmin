@@ -24,6 +24,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
 
 // Toast
 import { useToasts } from 'react-toast-notifications';
@@ -288,13 +289,12 @@ const CreateOnlineProduct = ({ handleAddProductDialogClose }) => {
               );
             })}
           </div>
-          <Card
+          <div
             style={{
               display: 'flex',
               flexDirection: 'column',
               padding: '2vh',
               marginLeft: '2vh',
-              boxShadow: theme.common.shadow.black,
             }}
           >
             <Button
@@ -333,7 +333,7 @@ const CreateOnlineProduct = ({ handleAddProductDialogClose }) => {
                 </div>
               )}
             </Button>
-          </Card>
+          </div>
         </div>
       </form>
     </div>
